@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <Box>
       <Navbar />
-      {/* <HomeCard type={HomeDetails} />
+       <HomeCard type={HomeDetails} />
       <HomeCard1 type={HomeDetails1} />
       <Image
         src="https://static1.lenskart.com/media/desktop/img/Apr22/Bannerforexport.jpg"
@@ -212,7 +212,7 @@ const Home = () => {
       <br />
       <HomeCard5c type={HomeDetails14} heading="MEET OUR HAPPY CUSTOMERS" />
       <HomeCard7 />
-      <HomeCard8 type={HomeDetails15} /> */}
+      <HomeCard8 type={HomeDetails15} /> 
       <Footer />
     </Box>
   );
