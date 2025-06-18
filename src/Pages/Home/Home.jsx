@@ -15,8 +15,6 @@ const Home = () => {
   return (
     <Box>
       <Navbar />
-      <HomeCard type={HomeDetailsLayer1Images} />
-      <HomeCardCourousel1 type={HomeDetails1} />
       <Image
         src="https://static1.lenskart.com/media/desktop/img/Apr22/Bannerforexport.jpg"
         alt="img"

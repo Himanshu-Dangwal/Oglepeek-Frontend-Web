@@ -10,29 +10,41 @@ import { TbArrowsUpDown } from "react-icons/tb";
 import { Box, Flex, Select, Switch, Text, Image } from "@chakra-ui/react";
 import {
   Gender,
-  ProductTypes,
-  FrameColor,
-  Frame1,
-  Frame2
+  FrameStyle,
+  LensType,
+  FrameMaterial
 } from "./FilterDetails";
 
 const NewProduct = () => {
+  // const [products, setProducts] = useState([]);
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [types, setTypes] = useState("");
+  // const [page, setPage] = useState(0);
+  // const [sort, setSort] = useState("");
+  // const [gender, setGender] = useState("");
+  // const [productRef, setProductRef] = useState("");
   const [products, setProducts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [types, setTypes] = useState("");
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState("");
   const [gender, setGender] = useState("");
-  const [productRef, setProductRef] = useState("");
+  const [style, setStyle] = useState("");
+  const [lens, setLens] = useState("");
+  const [material, setMaterial] = useState("");
 
   const fetchproduct = async () => {
     setIsLoaded(true);
     try {
+      const queryParams = new URLSearchParams({
+        gender,
+        style,
+        lens,
+        material
+      }).toString();
+  
       const response = await fetch(
-        `https://harlequin-fawn-tutu.cyclic.app/product?sort=${sort}&productRefLink=${productRef}&productType=${types}&gender=${gender}&page=${page}`
+        `http://localhost:8000/api/product?${queryParams}`
       );
       const postData = await response.json();
-      setProducts(postData);
+      setProducts(postData.products||[]);
       setIsLoaded(false);
     } catch (error) {
       console.log(error);
@@ -42,15 +54,15 @@ const NewProduct = () => {
 
   useEffect(() => {
     fetchproduct();
-  }, [page, sort, gender, types, productRef]);
+  }, [gender, style, lens, material]);
 
-  const handleClick = (value) => {
-    setProductRef(value);
-  };
+  // const handleClick = (value) => {
+  //   setProductRef(value);
+  // };
 
-  const handleClick2 = (value) => {
-    setProductRef(value);
-  };
+  // const handleClick2 = (value) => {
+  //   setProductRef(value);
+  // };
 
   return (
     <>
@@ -69,31 +81,35 @@ const NewProduct = () => {
             display={{ base: "none", xl: "inherit" }}
             flexDirection="column"
           >
-            <ProdFrame
-              heading={"FRAME TYPE"}
-              type={Frame1}
-              filter={handleClick}
-            />
-
-            <ProdFrame
-              heading={"FRAME SHAPE"}
-              type={Frame2}
-              filter={handleClick2}
-            />
+            
 
             <ProdFilter
               type={Gender}
-              heading={"GENDER"}
+              heading="Gender"
               handlechange={setGender}
               val={gender}
-              type1={ProductTypes}
-              heading1={"PRODUCT TYPE"}
-              handlechange1={setTypes}
-              val1={types}
-              type2={FrameColor}
-              heading2={"FRAME COLOR"}
-              handlechange2={setProductRef}
-              val2={productRef}
+              type1={FrameStyle}
+              heading1="Style"
+              handlechange1={setStyle}
+              val1={style}
+              type2={LensType}
+              heading2="Lens"
+              handlechange2={setLens}
+              val2={lens}
+            />
+            <ProdFilter
+              type={FrameMaterial}
+              heading="Frame Material"
+              handlechange={setMaterial}
+              val={material}
+              type1={[]}
+              heading1=""
+              handlechange1={() => {}}
+              val1={""}
+              type2={[]}
+              heading2=""
+              handlechange2={() => {}}
+              val2={""}
             />
 
             <hr />
