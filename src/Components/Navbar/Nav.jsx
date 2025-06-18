@@ -4,6 +4,7 @@ import Signup from "../../Pages/Signup/Signup";
 import { AuthContext } from "../../ContextApi/AuthContext";
 import { Link, Navigate } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import Oglepeek from './Oglepeek.jpeg';
 import {
   DrawerCloseButton,
   Button,
@@ -47,8 +48,9 @@ function Nav() {
         <Box w={{ lg: "20%", md: "20%", sm: "22%", base: "30%" }}>
           <Link to="/">
             <Image
-              src="https://i.imgur.com/OHxtfjd.png"
+              src={Oglepeek}
               alt="logo"
+              style={{ width: '40%', height: 'auto', marginLeft: "10%" }}
               w={{ lg: "75%", md: "100%", sm: "100%", base: "100%" }}
             />
           </Link>
@@ -280,7 +282,7 @@ function Nav() {
                             textAlign="left"
                             fontWeight="500"
                           >
-                            Kids
+                            Unisex
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
@@ -298,7 +300,7 @@ function Nav() {
                     </AccordionItem>
                   </Accordion>
                 </Box>
-                <Heading mt="15%" color="black" fontSize="15px" mb="5%">
+                {/* <Heading mt="15%" color="black" fontSize="15px" mb="5%">
                   Our Services
                 </Heading>
                 <Box display="flex" flexDirection="column" fontSize="16px">
@@ -335,7 +337,7 @@ function Nav() {
                       Store Locator
                     </Box>
                   </Link>
-                </Box>
+                </Box> */}
                 <Heading mt="15%" color="black" mb="5%" fontSize="15px">
                   HIGHLIGHTS
                 </Heading>
@@ -351,7 +353,7 @@ function Nav() {
                       Check Frame Size
                     </Box>
                   </Link>
-                  <Link>
+                  {/* <Link>
                     <Box
                       borderBottom="0.1px solid gray"
                       p="5% 0%"
@@ -361,7 +363,7 @@ function Nav() {
                     >
                       Gold Membership
                     </Box>
-                  </Link>
+                  </Link> */}
                   <Link>
                     <Box
                       borderBottom="0.1px solid gray"
@@ -370,7 +372,7 @@ function Nav() {
                       _hover={{ fontWeight: "bold" }}
                       fontSize="15px"
                     >
-                      Try Frames in 3D
+                      Try Frames in 3D [Coming Soon!]
                     </Box>
                   </Link>
                   <Link>
@@ -381,7 +383,7 @@ function Nav() {
                       _hover={{ fontWeight: "bold" }}
                       fontSize="15px"
                     >
-                      Dowloads Apps
+                      Dowloads Apps [Coming Soon!]
                     </Box>
                   </Link>
                 </Box>

@@ -1,7 +1,7 @@
 import React from "react";
 import Login from "../../Pages/Login/Login";
 import Signup from "../../Pages/Signup/Signup";
-import NavbarCard5 from "./NavbarCard5";
+import NavbarCardCategories from "./NavbarCardCategories";
 import { NavbarDetail1 } from "./NavbarDetail";
 import { Link, Navigate } from "react-router-dom";
 import { useContext } from "react";
@@ -11,6 +11,7 @@ import { FiPhoneCall } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
 import { CgShoppingCart } from "react-icons/cg";
 import { TriangleDownIcon } from "@chakra-ui/icons";
+import Oglepeek from './Oglepeek.jpeg';
 import {
   Box,
   Text,
@@ -43,7 +44,7 @@ export const NavbarCard1 = () => {
   );
 };
 
-export const NavbarCard2 = () => {
+export const NavbarCardTopmost = () => {
   const { isAuth, setisAuth, Authdata } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ export const NavbarCard2 = () => {
       <HStack m="auto">
         <Box w="20%">
           <Link to="/">
-            <Image src="https://i.imgur.com/OHxtfjd.png" alt="logo" w="75%" />
+            <Image src={Oglepeek} alt="logo" style={{ width: '40%', height: 'auto', marginLeft: "10%" }} />
           </Link>
         </Box>
         <HStack w="85%" m="auto">
@@ -156,31 +157,11 @@ export const NavbarCard2 = () => {
   );
 };
 
-export const NavbarCard4 = () => {
+export const NavbarCardCategoryList = () => {
   return (
     <Box cursor="pointer" bg="#fbf9f7" p={2.5}>
       <Flex gap={4} pl={5} pt={2} justifyContent="space-between">
-        <NavbarCard5 />
-        <HStack w="20%" ml="5%" justifyContent="right">
-          <Image
-            src="https://static1.lenskart.com/media/desktop/img/May22/3dtryon1.png"
-            alt="img1"
-            w="70px"
-            borderRadius="base"
-          />
-          <Image
-            src="https://static1.lenskart.com/media/desktop/img/Mar22/13-Mar/blulogo.png"
-            alt="img1"
-            w="70px"
-            borderRadius="base"
-          />
-          <Image
-            src="https://static.lenskart.com/media/desktop/img/Feb22/18-Feb/goldlogo.jpg"
-            alt="img1"
-            w="70px"
-            borderRadius="base"
-          />
-        </HStack>
+        <NavbarCardCategories />
       </Flex>
     </Box>
   );

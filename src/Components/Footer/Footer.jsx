@@ -1,13 +1,14 @@
 import React from "react";
 import { Box, Grid, Center } from "@chakra-ui/react";
-import { FooterCard1, FooterCard2, FooterCard } from "./FooterCard";
+import { FooterCardColumn, FooterCardDisplayingDownloadLink, FooterCardLastRow } from "./FooterCard";
 import { services, about, helps } from "./FooterDetails";
 
 const Footer = () => {
   return (
     <Box
-      bgColor="#000042"
-      color="whiteAlpha.900"
+      bgColor="#eeeeee"
+      color="blackAlpha.800"
+      fontFamily={"'Poppins', sans-serif"}
       p={{ lg: "0", md: "5", base: "5" }}
     >
       <Grid
@@ -31,17 +32,17 @@ const Footer = () => {
             }}
             gap="5"
           >
-            <FooterCard1 type={services} heading="Services" />
-            <FooterCard1 type={about} heading="About Us" />
-            <FooterCard1 type={helps} heading="Help" />
+            <FooterCardColumn type={services} heading="Services" />
+            <FooterCardColumn type={about} heading="About Us" />
+            <FooterCardColumn type={helps} heading="Help" />
           </Grid>
         </Box>
         <Center>
-          <FooterCard2 />
+          <FooterCardDisplayingDownloadLink />
         </Center>
       </Grid>
       <hr />
-      <FooterCard />
+      <FooterCardLastRow />
     </Box>
   );
 };

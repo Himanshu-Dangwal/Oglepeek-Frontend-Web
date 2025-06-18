@@ -26,86 +26,16 @@ const AllRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/products" element={<Product />} />
       <Route path="/products/:id" element={<SingleProduct />} />
-      <Route
-        path="/cart"
-        element={
-          <Privateroutes>
-            <Cart />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/shipping"
-        element={
-          <Privateroutes>
-            <Shipping />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/checkout"
-        element={
-          <Privateroutes>
-            <Checkout />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/payment"
-        element={
-          <Privateroutes>
-            <Payment />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/confirm"
-        element={
-          <Privateroutes>
-            <Confirm />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/orderhistory"
-        element={
-          <Privateroutes>
-            <OrderHistory />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/wishlist"
-        element={
-          <Privateroutes>
-            <Wishlist />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/productlist"
-        element={
-          <Privateroutes>
-            <Productlist />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/productpost"
-        element={
-          <Privateroutes>
-            <ProductPost />
-          </Privateroutes>
-        }
-      />
-      <Route
-        path="/editproduct/:id"
-        element={
-          <Privateroutes>
-            <EditProduct />
-          </Privateroutes>
-        }
-      />
+      <Route path="/cart" element={<Privateroutes><Cart /></Privateroutes>} />
+      <Route path="/shipping" element={<Privateroutes><Shipping /></Privateroutes>} />
+      <Route path="/checkout" element={<Privateroutes><Checkout /></Privateroutes>} />
+      <Route path="/payment" element={<Privateroutes><Payment /></Privateroutes>} />
+      <Route path="/confirm" element={<Privateroutes><Confirm /></Privateroutes>} />
+      <Route path="/orderhistory" element={<Privateroutes><OrderHistory /></Privateroutes>} />
+      <Route path="/wishlist" element={<Privateroutes><Wishlist /></Privateroutes>} />
+      <Route path="/productlist" element={<Privateroutes><Productlist /></Privateroutes>} />
+      <Route path="/productpost" element={<Privateroutes><ProductPost /></Privateroutes>} />
+      <Route path="/editproduct/:id" element={<Privateroutes><EditProduct /></Privateroutes>} />
     </Routes>
   );
 };

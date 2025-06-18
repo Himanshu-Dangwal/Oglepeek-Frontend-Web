@@ -18,7 +18,7 @@ export const about = [
     labels: "About Us",
   },
   {
-    labels: "Oglepeek Coupons",
+    labels: "Oglepeek",
   },
 ];
 
