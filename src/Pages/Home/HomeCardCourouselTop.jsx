@@ -3,7 +3,7 @@ import { Box, Image } from "@chakra-ui/react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 
-const HomeCard1 = ({ type }) => {
+const HomeCardCourouselTop = ({ type }) => {
   return (
     <Box cursor="pointer" p="-1">
       <Box>
@@ -19,4 +19,4 @@ const HomeCard1 = ({ type }) => {
   );
 };
 
-export default HomeCard1;
+export default HomeCardCourouselTop;
