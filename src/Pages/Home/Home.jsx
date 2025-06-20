@@ -2,12 +2,12 @@ import React from "react";
 import HomeCard from "./HomeCard";
 import HomeCardCourousel1 from "./HomeCardCourouselTop";
 import HomeCardGlassesStyle from "./HomeCardGlassesStyle";
-import { HomeCard4 } from "./HomeCard4";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
-import backgroundVideo from "./backgroundVideo.mp4";
-import backgroundVideo2 from "./backgroundVideo2.mp4";
-import backgroundVideo3 from "./backgroundVideo3.mp4";
+import backgroundVideo4 from "./backgroundVideo4.webm";
+import backgroundVideo5 from "./backgroundVideo5.webm";
+import backgroundVideo2 from "./backgroundVideo2.webm";
+import backgroundVideo3 from "./backgroundVideo3.webm";
 
 
 import {
@@ -31,6 +31,7 @@ const Home = () => {
       <Flex justify="center" gap={4} flexWrap="wrap">
         <Box w={["100%", "48%"]}>
           <video
+            loading="lazy"
             src={backgroundVideo2}
             autoPlay
             loop
@@ -46,7 +47,8 @@ const Home = () => {
         </Box>
         <Box w={["100%", "48%"]}>
           <video
-            src={backgroundVideo3}
+            loading="lazy"
+            src={backgroundVideo4}
             autoPlay
             loop
             muted
@@ -70,14 +72,11 @@ const Home = () => {
       <br />
       <br />
       <br />
-      {/* <HomeCard4
-        text="Trending Sunglasses"
-        src="https://static1.lenskart.com/media/desktop/img/Jan23/sunglasses/Sun-Banner-web.gif"
-      /> */}
       <Flex justify="center" gap={4} flexWrap="wrap">
         <Box w={["100%", "48%"]}>
           <video
-            src={backgroundVideo2}
+            loading="lazy"
+            src={backgroundVideo3}
             autoPlay
             loop
             muted
@@ -92,7 +91,8 @@ const Home = () => {
         </Box>
         <Box w={["100%", "48%"]}>
           <video
-            src={backgroundVideo3}
+            loading="lazy"
+            src={backgroundVideo5}
             autoPlay
             loop
             muted
@@ -113,14 +113,6 @@ const Home = () => {
         width="100%"
         height="cover"
       />
-
-      {/* <HomeCard4
-        text="Discover your signature style with us!"
-        src="https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif"
-      /> */}
-
-
-
 
       <Footer />
     </Box>
