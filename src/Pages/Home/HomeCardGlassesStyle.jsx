@@ -2,12 +2,12 @@ import React from "react";
 import { Box, Flex, Image, Spacer } from "@chakra-ui/react";
 import Slider from "./Slider";
 
-const HomeCard2 = ({ type, src }) => {
+const HomeCardGlassesStyle = ({ type, src }) => {
   return (
-    <Box justifyContent="left" w="95%" m="auto" mt="6" cursor="pointer">
-      <Flex mt="7">
+    <Box justifyContent="left" w="auto" m="auto" mt="0" cursor="pointer" mb="0">
+      <Flex>
         <Box
-          boxSize="sm"
+          boxSize="200px"
           w={{
             xs: "none",
             sm: "none",
@@ -17,7 +17,7 @@ const HomeCard2 = ({ type, src }) => {
             base: "none"
           }}
           cursor="pointer"
-          pr={{ lg: "4", sm: "0", base: "0" }}
+          pr={{ lg: "0", sm: "0", base: "0" }}
         >
           <Image
             src={src}
@@ -35,7 +35,7 @@ const HomeCard2 = ({ type, src }) => {
         </Box>
         <Spacer />
         <Box
-          w={{ sm: "100%", md: "100%", lg: "100%", xl: "75%", base: "100%" }}
+          w={{ sm: "67%", md: "100%", lg: "100%", xl: "80%", base: "50%" }}
         >
           <Slider type={type} />
         </Box>
@@ -44,4 +44,4 @@ const HomeCard2 = ({ type, src }) => {
   );
 };
 
-export default HomeCard2;
+export default HomeCardGlassesStyle;

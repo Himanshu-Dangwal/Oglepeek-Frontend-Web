@@ -23,40 +23,40 @@ const NewProduct = () => {
   // const [sort, setSort] = useState("");
   // const [gender, setGender] = useState("");
   // const [productRef, setProductRef] = useState("");
-  const [products, setProducts] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [gender, setGender] = useState("");
-  const [style, setStyle] = useState("");
-  const [lens, setLens] = useState("");
-  const [material, setMaterial] = useState("");
+  // const [products, setProducts] = useState([]);
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [gender, setGender] = useState("");
+  // const [style, setStyle] = useState("");
+  // const [lens, setLens] = useState("");
+  // const [material, setMaterial] = useState("");
 
-  const fetchproduct = async () => {
-    setIsLoaded(true);
-    try {
-      const queryParams = new URLSearchParams({
-        gender,
-        style,
-        lens,
-        material
-      }).toString();
-  
-      const response = await fetch(
-        `http://localhost:8000/api/product?${queryParams}`
-      );
-      const postData = await response.json();
-      setProducts(postData.products||[]);
-      setIsLoaded(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoaded(false);
-    }
-  };
+  // const fetchproduct = async () => {
+  //   setIsLoaded(true);
+  //   try {
+  //     const queryParams = new URLSearchParams({
+  //       gender,
+  //       style,
+  //       lens,
+  //       material
+  //     }).toString();
 
-  useEffect(() => {
-    fetchproduct();
-  }, [gender, style, lens, material]);
+  //     const response = await fetch(
+  //       `http://localhost:8000/api/product?${queryParams}`
+  //     );
+  //     const postData = await response.json();
+  //     setProducts(postData.products || []);
+  //     setIsLoaded(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setIsLoaded(false);
+  //   }
+  // };
 
-  // const handleClick = (value) => {
+  // useEffect(() => {
+  //   fetchproduct();
+  // }, [gender, style, lens, material]);
+
+  // // const handleClick = (value) => {
   //   setProductRef(value);
   // };
 
@@ -66,7 +66,7 @@ const NewProduct = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar />
       <Box>
         <Image
           src="https://static1.lenskart.com/media/desktop/img/Mar23/spring/home/PLP%20Camapaign%20-%20WEB_1.jpg"
@@ -192,7 +192,7 @@ const NewProduct = () => {
         </Flex>
         <Pagination current={page} onChange={(value) => setPage(value)} />
       </Box>
-      <Footer />
+      <Footer /> */}
     </>
   );
 };
