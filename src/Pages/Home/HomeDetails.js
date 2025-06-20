@@ -4,6 +4,13 @@ import image4 from "./oglepeekMan.jpeg";
 import image5 from "./OglepeekMan2.jpeg";
 import image7 from "./7.jpeg";
 import image8 from "./8.jpeg";
+import topCorouselImage1 from "./topCorouselImage1.jpeg";
+import topCorouselImage2 from "./topCorouselImage2.jpeg";
+import topCorouselImage5 from "./topCorouselImage5.jpeg";
+import topCorouselImage7 from "./topCorouselImage7.jpeg";
+
+
+
 
 
 
@@ -40,67 +47,28 @@ export const HomeDetailsLayer1Images = [
   }
 ];
 
-export const HomeDetails1 = [
+export const HomeDetailsCourouselTop = [
+
   {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Dec22/blend-edit/web.jpg",
-    caption: "Slide 1"
+    img: topCorouselImage1,
+    caption: "Slide 1",
   },
   {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Nov22/airplay/desk-play.jpg",
-    caption: "Slide 2"
+    img: topCorouselImage2,
+    caption: "Slide 2",
   },
   {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Nov22/LK-Airflex-desktop-banner.gif",
-    caption: "Slide 3"
+    img: topCorouselImage7,
+    caption: "Slide 3",
   },
   {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Nov22/tinted/launch-desk.gif",
-    caption: "Slide 4"
-  },
-  {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Oct22/kiara/Refresh-Banner-Web.gif",
-    caption: "Slide 5"
-  },
-  {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Nov22/mens-edit/desktop.jpg",
-    caption: "Slide 1"
-  },
-  {
-    img: "https://static1.lenskart.com/media/desktop/img/Oct22/at/web.jpg",
-    caption: "Slide 2"
-  },
-  {
-    img: "https://static1.lenskart.com/media/desktop/img/Nov22/trans1.gif",
-    caption: "Slide 3"
-  },
-  {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Jan23/23jan/hooper/hooper-web.jpg",
-    caption: "Slide 4"
-  },
-  {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif",
-    caption: "Slide 5"
-  },
-  {
-    img: "https://static1.lenskart.com/media/desktop/img/Jan23/desktoop.gif",
-    caption: "Slide 1"
-  },
-  {
-    img:
-      "https://static1.lenskart.com/media/desktop/img/Dec22/new-collection/desktop.gif",
-    caption: "Slide 2"
+    img: topCorouselImage5,
+    caption: "Slide 5",
   }
+
 ];
 
-export const HomeDetails2 = [
+export const DetailsSunglassesStyles = [
   {
     name: "Blend Edit",
     img: "https://static1.lenskart.com/media/desktop/img/Sep21/blend.jpg",
