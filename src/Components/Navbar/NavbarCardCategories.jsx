@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import image1 from "../../Pages/Home/oglepeekMan.jpeg";
-import image2 from "../../Pages/Home/oglepeekGirl.jpeg";
-import image3 from "../../Pages/Home/OglepeekMan2.jpeg";
+import image1 from "../../Pages/Home/images/oglepeekMan.jpeg";
+import image2 from "../../Pages/Home/images/oglepeekGirl.jpeg";
+import image3 from "../../Pages/Home/images/OglepeekMan2.jpeg";
 
 import {
   Avatar,

@@ -1,9 +1,20 @@
-// ProductCard.jsx
 import { Link } from "react-router-dom";
 import { Box, Flex, Grid, GridItem, Text, Image } from "@chakra-ui/react";
 import { AiFillStar } from "react-icons/ai";
+import { useState } from "react";
+
 
 const ProductCard = ({ type }) => {
+  const [peekCoins, setPeekCoins] = useState(0);
+
+  const getPeekCoins = (price) => {
+    const coins = price;
+    if (coins > 0.1 * price) {
+      setPeekCoins(0.1 * price);
+    } else {
+      setPeekCoins(price);
+    }
+  }
   return (
     <Grid
       m="20px 10px"
@@ -38,7 +49,7 @@ const ProductCard = ({ type }) => {
                   {ele.name}
                 </Text>
                 <Text mt="5px" fontWeight="400" color="gray.400" fontSize="14px">
-                  Style: {ele.style}
+                  Style: {ele.frameStyle}
                 </Text>
                 <Text mt="5px" fontWeight="bold" color="#gray.700" fontSize="15px">
                   ₹{ele.variants?.[0]?.price}
@@ -51,8 +62,19 @@ const ProductCard = ({ type }) => {
                 padding="2"
                 fontWeight="bold"
                 bgGradient="linear(to-r,  #f8f2e0, yellow.50)"
+                calculatePeekCoins={() => getPeekCoins(ele.variants?.[0]?.price)}
               >
-                
+                BUY10 GET1 Free
+                <br />
+                <Text as="span" color="orange.400">
+                  Earn{" "}
+                  {Math.floor(
+                    (ele.variants?.[0]?.price || 0) > 0.1 * (ele.variants?.[0]?.price || 0)
+                      ? 0.1 * (ele.variants?.[0]?.price || 0)
+                      : ele.variants?.[0]?.price || 0
+                  )}{" "}
+                  Peek Coins
+                </Text>
               </Box>
             </Box>
           </Link>

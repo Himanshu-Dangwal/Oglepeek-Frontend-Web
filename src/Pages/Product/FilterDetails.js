@@ -4,14 +4,68 @@ export const Gender = [
   },
   {
     title: "Women"
+  },
+  {
+    title: "Unisex"
   }
 ];
 
+export const ProductTypes = [
+  {
+    name: "Eye Glasses",
+    title: "eyeglasses"
+  },
+  {
+    name: "Sun Glasses",
+    title: "sunglasses"
+  }
+];
 
+export const FrameColor = [
+  {
+    title: "Black"
+  },
+  {
+    title: "Blue"
+  },
+  {
+    title: "White"
+  },
+  {
+    title: "Gold"
+  },
+  {
+    title: "Silver"
+  },
+  {
+    title: "Green"
+  },
+  {
+    title: "All"
+  }
+];
 
+export const Frame1 = [
+  {
+    src: "https://static.lenskart.com/images/cust_mailer/Eyeglass/FullRim.png",
+    title: "Full Rim",
+    name: "Full Rim"
+  },
 
+  {
+    src: "https://static.lenskart.com/images/cust_mailer/Eyeglass/HalfRim.png",
+    title: "Half Rim",
+    name: "Half Rim"
+  },
 
-export const FrameStyle = [
+  {
+    src: "https://static.lenskart.com/images/cust_mailer/Eyeglass/Rimless.png",
+    title: "Rimless",
+    name: "Rimless"
+  }
+];
+
+export const Frame2 = [
   {
     src:
       "https://static.lenskart.com/images/cust_mailer/Eyeglass/Rectangle.png",
@@ -71,11 +125,29 @@ export const FrameStyle = [
   }
 ];
 
+
+// curl 'https://harlequin-fawn-tutu.cyclic.app/product?sort=&productRefLink=&productType=&gender=Men&page=0' \
+
 export const Material = [
   {
-    title: "Metal"
+    title: "Plastic"
   },
   {
-    title: "Glass"
+    title: "Metal"
+  }
+];
+
+export const Lens = [
+  {
+    title: "UV-400"
+  },
+  {
+    title: "Polarized"
+  },
+  {
+    title: "Photochromatic"
+  },
+  {
+    title: "Progressive"
   }
 ];

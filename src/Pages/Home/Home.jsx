@@ -1,13 +1,13 @@
 import React from "react";
 import HomeCard from "./HomeCard";
-import HomeCardCourousel1 from "./HomeCardCourouselTop";
+import HomeCardCourouselTop from "./HomeCardCourouselTop";
 import HomeCardGlassesStyle from "./HomeCardGlassesStyle";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
-import backgroundVideo4 from "./backgroundVideo4.webm";
-import backgroundVideo5 from "./backgroundVideo5.webm";
-import backgroundVideo2 from "./backgroundVideo2.webm";
-import backgroundVideo3 from "./backgroundVideo3.webm";
+import backgroundVideo4 from "./videos/backgroundVideo4.webm";
+import backgroundVideo5 from "./videos/backgroundVideo5.webm";
+import backgroundVideo2 from "./videos/backgroundVideo2.webm";
+import backgroundVideo3 from "./videos/backgroundVideo3.webm";
 
 
 import {
@@ -21,13 +21,8 @@ const Home = () => {
     <Box>
       <Navbar />
       <HomeCard type={HomeDetailsLayer1Images} />
-      <HomeCardCourousel1 type={HomeDetailsCourouselTop} />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      <HomeCardCourouselTop type={HomeDetailsCourouselTop} />
+      <br /><br /><br /><br /><br /><br />
       <Flex justify="center" gap={4} flexWrap="wrap">
         <Box w={["100%", "48%"]}>
           <video
@@ -62,16 +57,9 @@ const Home = () => {
           />
         </Box>
       </Flex>
-
-      <br />
-      <br />
-      <br />
-      <br />
+      <br /><br /><br /><br />
       <HomeCardGlassesStyle type={DetailsSunglassesStyles} src="https://i.imgur.com/Gry0Q5D.png" />
-      <br />
-      <br />
-      <br />
-      <br />
+      <br /><br /><br /><br />
       <Flex justify="center" gap={4} flexWrap="wrap">
         <Box w={["100%", "48%"]}>
           <video

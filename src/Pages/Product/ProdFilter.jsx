@@ -11,126 +11,93 @@ import {
   AccordionIcon
 } from "@chakra-ui/react";
 
+const FilterSection = ({ heading, options, value, onChange }) => (
+  <AccordionItem>
+    <h2>
+      <AccordionButton>
+        <Box
+          as="span"
+          flex="1"
+          textAlign="left"
+          fontWeight="500"
+          color="gray.500"
+        >
+          <Text
+            fontWeight="bold"
+            mb="3px"
+            color="gray.600"
+            fontSize="15px"
+          >
+            {heading}
+          </Text>
+        </Box>
+        <AccordionIcon />
+      </AccordionButton>
+    </h2>
+    <AccordionPanel pb={4} color="gray.500" p="2">
+      <RadioGroup onChange={onChange} value={value}>
+        <Stack direction="column" gap="2">
+          {options.map((item, i) => (
+            <Radio value={item.title} key={i}>
+              {item.name || item.title}
+            </Radio>
+          ))}
+        </Stack>
+      </RadioGroup>
+    </AccordionPanel>
+  </AccordionItem>
+);
+
 const ProdFilter = ({
-  type,
-  heading,
-  handlechange,
-  val,
-  type1,
-  heading1,
-  handlechange1,
-  val1,
-  type2,
-  heading2,
-  handlechange2,
-  val2
+  genderOptions,
+  genderValue,
+  onGenderChange,
+  productTypeOptions,
+  productTypeValue,
+  onProductTypeChange,
+  frameColorOptions,
+  frameColorValue,
+  onFrameColorChange,
+  lensOptions,
+  lensValue,
+  onLensChange,
+  materialOptions,
+  materialValue,
+  onMaterialChange
 }) => {
   return (
-    <Box>
-      <br />
-      <Accordion defaultIndex={[0]} allowMultiple w="100%" m="auto" mt="-1%">
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="left"
-                fontWeight="500"
-                color="gray.500"
-              >
-                <Text
-                  fontWeight="bold"
-                  mb="3px"
-                  color="gray.600"
-                  fontSize="15px"
-                >
-                  {heading}
-                </Text>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} color="gray.500" p="2">
-            <RadioGroup onChange={handlechange} value={val}>
-              <Stack direction="column" gap="2">
-                {type.map((ele, i) => (
-                  <Radio value={ele.title} key={i}>
-                    {ele.title}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="left"
-                fontWeight="500"
-                color="gray.500"
-              >
-                <Text
-                  fontWeight="bold"
-                  mb="3px"
-                  color="gray.600"
-                  fontSize="15px"
-                >
-                  {heading1}
-                </Text>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} color="gray.500" p="2">
-            <RadioGroup onChange={handlechange1} value={val1}>
-              <Stack direction="column" gap="2">
-                {type1.map((el, i) => (
-                  <Radio value={el.title} key={i}>
-                    {el.name}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box
-                as="span"
-                flex="1"
-                textAlign="left"
-                fontWeight="500"
-                color="gray.500"
-              >
-                <Text
-                  fontWeight="bold"
-                  mb="3px"
-                  color="gray.600"
-                  fontSize="15px"
-                >
-                  {heading2}
-                </Text>
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} color="gray.500" p="2">
-            <RadioGroup onChange={handlechange2} value={val2}>
-              <Stack direction="column" gap="2">
-                {type2.map((ele, i) => (
-                  <Radio value={ele.title} key={i}>
-                    {ele.title}
-                  </Radio>
-                ))}
-              </Stack>
-            </RadioGroup>
-          </AccordionPanel>
-        </AccordionItem>
+    <Box mt="-1%">
+      <Accordion defaultIndex={[0]} allowMultiple w="100%" m="auto">
+        <FilterSection
+          heading="Gender"
+          options={genderOptions}
+          value={genderValue}
+          onChange={onGenderChange}
+        />
+        <FilterSection
+          heading="Product Type"
+          options={productTypeOptions}
+          value={productTypeValue}
+          onChange={onProductTypeChange}
+        />
+        <FilterSection
+          heading="Frame Color"
+          options={frameColorOptions}
+          value={frameColorValue}
+          onChange={onFrameColorChange}
+        />
+        <FilterSection
+          heading="Lens Type"
+          options={lensOptions}
+          value={lensValue}
+          onChange={onLensChange}
+        />
+        <FilterSection
+          heading="Material"
+          options={materialOptions}
+          value={materialValue}
+          onChange={onMaterialChange}
+        />
       </Accordion>
     </Box>
   );
