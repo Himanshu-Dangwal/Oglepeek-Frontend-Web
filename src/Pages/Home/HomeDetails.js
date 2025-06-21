@@ -8,6 +8,14 @@ import topCorouselImage1 from "./images/topCorouselImage1.jpeg";
 import topCorouselImage2 from "./images/topCorouselImage2.jpeg";
 import topCorouselImage5 from "./images/topCorouselImage5.jpeg";
 import topCorouselImage7 from "./images/topCorouselImage7.jpeg";
+import detailSunglassesStyle1 from "./images/detailSunglassesStyle1.jpeg";
+import detailSunglassesStyle2 from "./images/detailSunglassesStyle2.jpeg";
+import detailSunglassesStyle3 from "./images/detailSunglassesStyle3.jpeg";
+import detailSunglassesStyle4 from "./images/detailSunglassesStyle4.jpeg";
+import detailSunglassesStyle5 from "./images/detailSunglassesStyle5.jpeg";
+import detailSunglassesStyle6 from "./images/detailSunglassesStyle6.jpeg";
+import detailSunglassesStyle7 from "./images/detailSunglassesStyle7.jpeg";
+import detailSunglassesStyle8 from "./images/detailSunglassesStyle8.jpeg";
 
 export const HomeDetailsLayer1Images = [
   {
@@ -66,62 +74,42 @@ export const HomeDetailsCourouselTop = [
 export const DetailsSunglassesStyles = [
   {
     name: "Blend Edit",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/blend.jpg",
+    img: detailSunglassesStyle1,
     caption: "Slide 1"
   },
   {
     name: "Air Clip On",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/clipon.jpg",
+    img: detailSunglassesStyle2,
     caption: "Slide 2"
   },
   {
     name: "Air Flex",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/airflex.jpg",
+    img: detailSunglassesStyle3,
     caption: "Slide 3"
   },
   {
     name: "Retro Aviator",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/aviator.jpg",
+    img: detailSunglassesStyle8,
     caption: "Slide 4"
   },
   {
     name: "Round",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/image179.png",
+    img: detailSunglassesStyle4,
     caption: "Slide 1"
   },
   {
     name: "Cat-Eye",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/cateeye.jpg",
+    img: detailSunglassesStyle5,
     caption: "Slide 1"
   },
   {
     name: "Clubmaster",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/clubmaster.jpg",
+    img: detailSunglassesStyle6,
     caption: "Slide 1"
   },
   {
     name: "Transparent",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/trans.jpg",
-    caption: "Slide 1"
-  },
-  {
-    name: "Blend Edit",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/blend.jpg",
-    caption: "Slide 1"
-  },
-  {
-    name: "Air Clip On",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/clipon.jpg",
-    caption: "Slide 1"
-  },
-  {
-    name: "Air Flex",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/airflex.jpg",
-    caption: "Slide 1"
-  },
-  {
-    name: "Retro Aviator",
-    img: "https://static1.lenskart.com/media/desktop/img/Sep21/aviator.jpg",
+    img: detailSunglassesStyle7,
     caption: "Slide 1"
   }
 ];

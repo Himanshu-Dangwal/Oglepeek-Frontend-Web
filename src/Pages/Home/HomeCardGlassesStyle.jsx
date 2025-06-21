@@ -21,16 +21,10 @@ const HomeCardGlassesStyle = ({ type, src }) => {
         >
           <Image
             src={src}
-            boxSize="700px"
-            h="200px"
-            w={{
-              xs: "80%",
-              sm: "80%",
-              md: "80%",
-              lg: "100%",
-              xl: "100%",
-              base: "none"
-            }}
+            w="100%"
+            h="auto"
+            objectFit="contain" // or try "cover" if you prefer
+            borderRadius="md"
           />
         </Box>
         <Spacer />
@@ -45,3 +39,6 @@ const HomeCardGlassesStyle = ({ type, src }) => {
 };
 
 export default HomeCardGlassesStyle;
+
+
+
