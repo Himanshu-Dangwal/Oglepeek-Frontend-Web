@@ -1,20 +1,8 @@
 import { Link } from "react-router-dom";
-import { Box, Flex, Grid, GridItem, Text, Image } from "@chakra-ui/react";
-import { AiFillStar } from "react-icons/ai";
-import { useState } from "react";
-
+import { Box, Grid, GridItem, Text, Image } from "@chakra-ui/react";
 
 const ProductCard = ({ type }) => {
-  const [peekCoins, setPeekCoins] = useState(0);
 
-  const getPeekCoins = (price) => {
-    const coins = price;
-    if (coins > 0.1 * price) {
-      setPeekCoins(0.1 * price);
-    } else {
-      setPeekCoins(price);
-    }
-  }
   return (
     <Grid
       m="20px 10px"
@@ -62,7 +50,6 @@ const ProductCard = ({ type }) => {
                 padding="2"
                 fontWeight="bold"
                 bgGradient="linear(to-r,  #f8f2e0, yellow.50)"
-                calculatePeekCoins={() => getPeekCoins(ele.variants?.[0]?.price)}
               >
                 BUY10 GET1 Free
                 <br />

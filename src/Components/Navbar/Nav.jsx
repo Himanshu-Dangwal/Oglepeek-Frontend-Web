@@ -27,15 +27,17 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Flex
+  Flex,
+  useBreakpointValue
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 function Nav() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
-  const { isAuth, setisAuth, Authdata } = useContext(AuthContext);
+  const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
+  const placeholder = useBreakpointValue({ sm: "What are you looking for", base: "Search for products" });
 
   return (
     <Box
@@ -55,9 +57,9 @@ function Nav() {
             />
           </Link>
         </Box>
-        <Box w="70%" display={{ sm: "inherit", base: "none" }}>
+        <Box w="70%" display={{ sm: "inherit", base: "inherit" }}>
           <Input
-            placeholder="What are you looking for"
+            placeholder={placeholder}
             border="1px solid black"
             w="90%"
             fontSize="16px"
@@ -101,7 +103,7 @@ function Nav() {
                         alignItems="flex-start"
                       >
                         <Text mt="10px" fontSize="20px" color="blackAlpha.900">
-                          {Authdata[0].first_name}
+                          {Authdata.firstName}
                         </Text>
                         <Text color="gray.500" mt="5%" fontSize="sm">
                           Enjoy Buy 1 Get 1 offer for 365 days
@@ -438,6 +440,9 @@ function Nav() {
                     _hover={{ bg: "blue.200" }}
                     onClick={() => {
                       setisAuth(false);
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("firstName");
+                      setAuthData(null);
                       return <Navigate to="/" />;
                     }}
                   >

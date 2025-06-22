@@ -2,7 +2,7 @@ import React from "react";
 import {
   Box,
   Image,
-  Square,
+  // Square,
   Link,
   Text,
   Button,
@@ -14,8 +14,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
+import { useNavigate } from "react-router-dom";
 
 const Slider = ({ type }) => {
+  const navigate = useNavigate();
   return (
     <Swiper
       modules={[Navigation, Autoplay]}
@@ -52,14 +54,24 @@ const Slider = ({ type }) => {
         <Box key={i}>
           <SwiperSlide>
             <Link to={i.linked}>
-              <Square m="auto">
+              {/* <Square m="auto">
                 <Image
                   src={`${i.img}`}
                   alt={i.name}
                   boxSize={{ base: "100px" }}
                   w="80%"
                 />
-              </Square>
+              </Square> */}
+              <Box w="100%" display="flex" justifyContent="center">
+                <Image
+                  src={`${i.img}`}
+                  alt={i.name}
+                  maxW="100%"
+                  maxH="100px"
+                  objectFit="contain"
+                  borderRadius="md"
+                />
+              </Box>
             </Link>
             <VStack m="auto">
               <Center>
@@ -73,7 +85,7 @@ const Slider = ({ type }) => {
                   {i.name}
                 </Text>
               </Center>
-              <Button p="20px 40px" colorScheme="teal" m="auto" fontSize="17px">
+              <Button p="20px 40px" colorScheme="teal" m="auto" fontSize="17px" onClick={() => navigate("/products")}>
                 Explore
               </Button>
             </VStack>

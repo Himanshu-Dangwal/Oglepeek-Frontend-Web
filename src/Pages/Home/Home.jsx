@@ -8,6 +8,7 @@ import backgroundVideo4 from "./videos/backgroundVideo4.webm";
 import backgroundVideo5 from "./videos/backgroundVideo5.webm";
 import backgroundVideo2 from "./videos/backgroundVideo2.webm";
 import backgroundVideo3 from "./videos/backgroundVideo3.webm";
+import OglepeekLogo from "../../Components/Navbar/Oglepeek.jpeg";
 
 
 import {
@@ -58,7 +59,7 @@ const Home = () => {
         </Box>
       </Flex>
       <br /><br /><br /><br />
-      <HomeCardGlassesStyle type={DetailsSunglassesStyles} src="https://i.imgur.com/Gry0Q5D.png" />
+      <HomeCardGlassesStyle type={DetailsSunglassesStyles} src={OglepeekLogo} />
       <br /><br /><br /><br />
       <Flex justify="center" gap={4} flexWrap="wrap">
         <Box w={["100%", "48%"]}>

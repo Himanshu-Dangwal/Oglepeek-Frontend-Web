@@ -45,7 +45,7 @@ export const NavbarCard1 = () => {
 };
 
 export const NavbarCardTopmost = () => {
-  const { isAuth, setisAuth, Authdata } = useContext(AuthContext);
+  const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
@@ -57,10 +57,10 @@ export const NavbarCardTopmost = () => {
           </Link>
         </Box>
         <HStack w="85%" m="auto">
-          <Box w="15%">
-            <HStack fontSize="18px" fontWeight="bold">
+          <Box w="20%">
+            <HStack fontSize="15px" fontWeight="bold">
               <FiPhoneCall />
-              <Text>1800-111-111</Text>
+              <Text>+(977)-986-8956905</Text>
             </HStack>
           </Box>
           <Box w="55%">
@@ -89,11 +89,11 @@ export const NavbarCardTopmost = () => {
                     fontWeight={"600"}
                     fontSize="15px"
                     m="auto"
-                    mt="-2px"
+                    mt="20px"
                     w="90px"
                     textAlign="center"
                   >
-                    {Authdata[0].first_name}
+                    {Authdata.firstName}
                     <TriangleDownIcon
                       ml="2px"
                       fontSize={"9px"}
@@ -115,6 +115,9 @@ export const NavbarCardTopmost = () => {
                       color="#333368"
                       onClick={() => {
                         setisAuth(false);
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("firstName");
+                        setAuthData(null);
                         return <Navigate to="/" />;
                       }}
                     >

@@ -39,24 +39,25 @@ const NewProduct = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const fetchproduct = async () => {
-    setIsLoaded(true);
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}`
-      );
-      const postData = await response.json();
-      setProducts(postData);
-      setIsLoaded(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoaded(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchproduct = async () => {
+      setIsLoaded(true);
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}`
+        );
+        const postData = await response.json();
+        setProducts(postData);
+        setIsLoaded(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoaded(false);
+      }
+    };
+
     fetchproduct();
   }, [page, sort, gender, productType, frameColor, frameType, frameStyle, lens, material]);
+
 
   const handleClickFrameStyle = (value) => setFrameStyle(value);
   const handleClickFrameType = (value) => setFrameType(value);
