@@ -2,10 +2,9 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../ContextApi/AuthContext";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import formImage from "../Home/images/topCorouselImage1.jpeg";
 import {
-  Checkbox,
   useDisclosure,
-  Link,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -16,275 +15,151 @@ import {
   Box,
   Heading,
   Input,
-  HStack,
-  Flex,
   Center,
   InputGroup,
-  InputRightElement
+  InputRightElement,
+  Text
 } from "@chakra-ui/react";
 
-const Login = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [btn, setbtn] = useState();
+const Login = () => {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [pass, setpass] = useState(false);
-  const [show, setShow] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const { setisAuth, setAuthData } = useContext(AuthContext);
-  const [incorrect, setinCorrect] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-  let res1 = [];
 
-  const handlechange = (e) => {
-    setinCorrect(false);
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
-
-    const buton = (
-      <Box
-        fontSize={"14px"}
-        mt="5px"
-        color={"#ff1f1f"}
-        fontWeight="500"
-        letterSpacing={"-0.4px"}
-      >
-        Please enter a valid Email or Mobile Number.
-      </Box>
-    );
-    setbtn(buton);
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+    setErrorMsg("");
   };
 
-  const getData = async () => {
+  const handleLogin = async () => {
+    if (!loginData.email || !loginData.password) {
+      setErrorMsg("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
     try {
-      setLoading(true);
-      setinCorrect(false);
-      if (loginData.email !== "" && loginData.password !== "") {
-        const res = await fetch(
-          "https://harlequin-fawn-tutu.cyclic.app/user/login",
-          {
-            method: "POST",
-            body: JSON.stringify(loginData),
-            headers: {
-              "Content-type": "application/json"
-            }
-          }
-        );
-        let data = await res.json();
-        if (res) {
-          const credential = await fetch(
-            "https://harlequin-fawn-tutu.cyclic.app/user"
-          );
-          let cred = await credential.json();
-          localStorage.setItem("token", data.token);
-          res1 = cred.filter((el) => el.email === loginData.email);
-          setisAuth(true);
-          setAuthData(res1);
-          if (loginData.email.includes(process.env.admin)) {
-            setLoading(false);
-            setinCorrect(false);
-            onClose();
-            navigate("/productlist");
-          } else {
-            setLoading(false);
-            setinCorrect(false);
-            onClose();
-          }
-        } else {
-          setLoading(false);
-          setinCorrect(true);
+      const res = await fetch("http://localhost:8000/api/auth/login/email/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        const { authToken, firstName } = data;
+
+        localStorage.setItem("token", authToken);
+        localStorage.setItem("firstName", firstName);
+        setisAuth(true);
+        setAuthData({ token: authToken, firstName });
+
+        onClose();
+
+        if (loginData.email === process.env.REACT_APP_ADMIN_EMAIL) {
+          navigate("/productlist");
         }
+      } else {
+        setErrorMsg(data.message || "Invalid credentials");
       }
     } catch (error) {
+      setErrorMsg("Server error. Please try again.");
+    } finally {
       setLoading(false);
-      setinCorrect(true);
-      console.log("An error occurred. Please try again later.");
-    }
-  };
-
-  const handleClick = () => {
-    loginData.password = "";
-    setpass(false);
-  };
-
-  const handlesign = () => {
-    setpass(true);
-    if (loginData.password.length > 6) {
-      getData(loginData);
     }
   };
 
   return (
     <div>
-      <Center onClick={onOpen} fontWeight={"400"} fontSize="15px" w="80px">
+      <Center onClick={onOpen} fontWeight="400" fontSize="15px" w="80px">
         Sign In
       </Center>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        size={{ xl: "md", lg: "md", md: "md", sm: "md", base: "sm" }}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="sm">
         <ModalOverlay />
         <ModalContent rounded="3xl">
-          <ModalCloseButton
-            borderRadius={"50%"}
-            bg="white"
-            m={"10px 10px 0px 0px"}
-          />
-
-          <ModalBody p={"0px 0px "} borderRadius={"15px 15px 15px 15px "}>
+          <ModalCloseButton bg="white" m="10px 10px 0px 0px" />
+          <ModalBody p="0px">
             <Image
-              src="https://static1.lenskart.com/media/desktop/img/DesignStudioIcons/DesktopLoginImage.svg"
-              alt="pic"
-              borderRadius={"10px 10px 0px 0px "}
+              src={formImage}
+              alt="Login Image"
+              borderRadius="10px 10px 0px 0px"
+              objectFit="cover"
+              objectPosition="center top 10%" // Crop from bottom (i.e., keep top visible)
+              width="100%"
+              height={{ base: "auto", sm: "300px", md: "300px", lg: "300px" }} // Responsive heights
+              maxH="300px"
             />
-            <Box m={"34px 45px 50px 45px"}>
-              <Heading
-                fontFamily={" Times, serif"}
-                fontWeight="100"
-                fontSize={"28px"}
-                mb="24px"
-                color={"#333368"}
-              >
+
+            <Box m="34px 45px 50px 45px">
+              <Heading fontWeight="100" fontSize="28px" mb="24px" color="#333368">
                 Sign In
               </Heading>
 
-              {pass === false ? (
+              <Input
+                name="email"
+                type="email"
+                placeholder="Email"
+                h="50px"
+                fontSize="16px"
+                onChange={handleChange}
+                value={loginData.email}
+                rounded="2xl"
+                mb="15px"
+              />
+
+              <InputGroup>
                 <Input
-                  name="email"
-                  placeholder="Email"
-                  h={"50px"}
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  h="50px"
                   fontSize="16px"
-                  focusBorderColor="rgb(206, 206, 223)"
-                  borderColor={"rgb(206, 206, 223)"}
-                  onChange={handlechange}
+                  onChange={handleChange}
+                  value={loginData.password}
                   rounded="2xl"
                 />
-              ) : (
-                <Box>
-                  <Box fontSize={"17px"} color="#66668e">
-                    Enter password for
-                  </Box>
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)} bg="white">
+                    {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
 
-                  <Flex
-                    justifyContent={"space-between"}
-                    fontFamily={" sans-serif"}
-                    mb="22px"
-                    color={"#000042"}
-                  >
-                    <Box fontSize="18px">{loginData.email}</Box>
-                    <Box
-                      fontSize={"14px"}
-                      textDecoration="underline"
-                      onClick={handleClick}
-                      cursor="pointer"
-                    >
-                      Edit
-                    </Box>
-                  </Flex>
-
-                  <InputGroup>
-                    <Input
-                      type={show ? "text" : "password"}
-                      name="password"
-                      placeholder="Enter password"
-                      h={"50px"}
-                      fontSize="16px"
-                      focusBorderColor="rgb(206, 206, 223)"
-                      borderColor={"rgb(206, 206, 223)"}
-                      onChange={handlechange}
-                      rounded="2xl"
-                    />
-
-                    <InputRightElement width="6.5rem" size="lg">
-                      <Button
-                        size="md"
-                        borderRadius="3xl"
-                        mt="10%"
-                        onClick={() => setShow(!show)}
-                        bg="white"
-                      >
-                        {show ? <ViewOffIcon /> : <ViewIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-
-                  {incorrect === true ? (
-                    <Box
-                      fontSize={"14px"}
-                      m="3px 0px 3px 0px"
-                      color={"#ff1f1f"}
-                      fontWeight="500"
-                      ml="2"
-                      letterSpacing={"-0.4px"}
-                    >
-                      Wrong email or password
-                    </Box>
-                  ) : (
-                    ""
-                  )}
-                </Box>
+              {errorMsg && (
+                <Text mt="2" color="red.500" fontSize="sm" textAlign="center">
+                  {errorMsg}
+                </Text>
               )}
-              <Box
-                textDecoration={"underline"}
-                m="15px 0px 0px 0px"
-                color="#000042"
-                fontSize="15px"
+
+              <Button
+                isLoading={loading}
+                onClick={handleLogin}
+                bgColor="#11daac"
+                color="white"
+                width="100%"
+                mt="25px"
+                h="50px"
+                fontSize="18px"
+                borderRadius="35px"
+                _hover={{ bgColor: "#11daac" }}
               >
-                Forget Password
-              </Box>
-              {loginData.email.includes("@") && loginData.email.includes(".com")
-                ? ""
-                : btn}
+                Sign In
+              </Button>
 
-              <HStack fontSize="16px">
-                <Checkbox mb={"20px"} mt="20px" size="sm">
-                  Get Update on whatsapp
-                </Checkbox>
-                <Image
-                  src="https://static.lenskart.com/media/desktop/img/25-July-19/whatsapp.png"
-                  w={"22px"}
-                  h="22px"
-                />
-              </HStack>
-              {loginData.email.includes("@") &&
-              loginData.email.includes(".com") ? (
-                <Button
-                  isLoading={loading}
-                  onClick={handlesign}
-                  bgColor={"#11daac"}
-                  width="100%"
-                  borderRadius={"35px/35px"}
-                  h="50px"
-                  fontSize="18px"
-                  _hover={{ backgroundColor: "#11daac" }}
-                >
-                  Sign In
-                </Button>
-              ) : (
-                <Button
-                  bgColor={"#cccccc"}
-                  width="100%"
-                  borderRadius={"35px/35px"}
-                  fontSize="18px"
-                  h="50px"
-                  _hover={{ backgroundColor: "#cccccc" }}
-                >
-                  Sign In
-                </Button>
-              )}
-
-              <HStack spacing={"0px"} mt="19px" gap="2">
-                <Box fontSize={"14px"}> New member?</Box>
-                <Link
-                  fontSize={"15px"}
-                  fontWeight="500"
-                  textDecoration={"underline"}
-                >
+              {/* <HStack spacing="0px" mt="20px" gap="2" justify="center">
+                <Box fontSize="14px">New member?</Box>
+                <Button variant="link" fontSize="15px" color="blue.500">
                   Create an Account
-                </Link>
-              </HStack>
+                </Button>
+              </HStack> */}
             </Box>
           </ModalBody>
         </ModalContent>

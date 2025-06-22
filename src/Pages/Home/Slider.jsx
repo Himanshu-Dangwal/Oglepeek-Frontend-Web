@@ -2,7 +2,7 @@ import React from "react";
 import {
   Box,
   Image,
-  Square,
+  // Square,
   Link,
   Text,
   Button,

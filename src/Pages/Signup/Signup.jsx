@@ -1,387 +1,315 @@
 import React, { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
-  Center,
-  Heading,
-  HStack,
-  InputGroup,
-  InputLeftAddon,
-  useDisclosure,
-  Image,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  Box,
-  Input,
-  Checkbox,
-  InputRightElement,
-  Text
+  ViewIcon, ViewOffIcon
+} from "@chakra-ui/icons";
+import {
+  Center, Heading, InputGroup, InputLeftAddon, useDisclosure,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
+  Button, Box, Input, InputRightElement, Text
 } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext } from "../../ContextApi/AuthContext";
 
 const Signup = () => {
-  const init = {
-    first_name: "",
-    last_name: "",
-    ph_no: "",
-    email: "",
-    password: ""
-  };
+  const [userData, setUserData] = useState({
+    firstName: "", lastName: "", phone: "", email: "", password: ""
+  });
+  const { setisAuth, setAuthData } = useContext(AuthContext);
 
-  const [userData, setUserData] = useState(init);
-  const [first, setFirst] = useState();
-  const [last, setLast] = useState();
-  const [ph, setPh] = useState();
-  const [mail, setMail] = useState();
-  const [pass, setPass] = useState();
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [show, setShow] = useState(false);
-  const [Auth, setAuth] = useState();
-  const [exist, setExist] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [emailForOtp, setEmailForOtp] = useState("");
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  var flag = false;
 
-  const Required = (props) => {
-    return (
-      <Box
-        fontSize={"14px"}
-        m="3px 0px 3px 0px"
-        color={"#ff1f1f"}
-        fontWeight="500"
-        letterSpacing={"-0.4px"}
-      >
-        {props.info}
-      </Box>
-    );
-  };
-
-  const handleChange = (e) => {
-    setExist(false);
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-
+  const validateField = (name, value) => {
+    let message = "";
     switch (name) {
-      case "first_name":
-        setFirst(
-          value === "" ? <Required info="This is a required feild" /> : ""
-        );
+      case "firstName":
+        if (!value) message = "This is a required field";
         break;
-
-      case "last_name":
-        setLast(
-          value === "" ? <Required info="This is a required feild" /> : ""
-        );
+      case "phone":
+        if (!value) message = "This is a required field";
+        else if (!/^[0-9]{10}$/.test(value)) message = "Enter valid 10-digit phone";
         break;
-
-      case "ph_no":
-        setPh(
-          value === "" ? (
-            <Required info="This is a required feild" />
-          ) : (
-            <Required info="Please enter a valid mobile number (eg. 9987XXXXXX)" />
-          )
-        );
-        break;
-
       case "email":
-        setMail(
-          value === "" ? (
-            <Required info="This is a required feild" />
-          ) : (
-            <Required info="Please enter a valid email address e.g. johndoe@domain.com." />
-          )
-        );
+        if (!value) message = "This is a required field";
+        else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) message = "Invalid email";
         break;
-
       case "password":
-        setPass(
-          value === "" ? (
-            <Required info="This is a required feild" />
-          ) : (
-            <Required info="Password should be more than 6 characters." />
-          )
-        );
+        if (!value) message = "This is a required field";
+        else if (value.length < 8) message = "Password must be at least 8 characters";
         break;
-
       default:
         break;
     }
+    return message;
   };
 
-  const getData = (body) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prev) => ({ ...prev, [name]: value }));
+    const err = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: err }));
+  };
+
+  const handleRegister = async () => {
+    const newErrors = {};
+    Object.entries(userData).forEach(([name, value]) => {
+      const err = validateField(name, value);
+      if (err) newErrors[name] = err;
+    });
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const payload = {
+      name: `${userData.firstName}`,
+      email: userData.email,
+      phone: userData.phone,
+      password: userData.password
+    };
+
     setLoading(true);
-
-    fetch(`https://harlequin-fawn-tutu.cyclic.app/user`)
-      .then((res) => res.json())
-      .then((res) => {
-        res.map((el) => {
-          if (el.email === body.email) {
-            flag = true;
-            setExist(true);
-            return el;
-          }
-          setLoading(false);
-        });
-      })
-      .then(() => {
-        if (flag === false) {
-          fetch(`https://harlequin-fawn-tutu.cyclic.app/user/register`, {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              setAuth(true);
-              setLoading(false);
-              setExist(false);
-            })
-            .catch((err) => setAuth(false))
-            .finally(() => setLoading(false))
-            .finally(() => setExist(false))
-            .finally(() => onClose());
-        } else {
-          setLoading(false);
-        }
+    try {
+      const res = await fetch("http://localhost:8000/api/auth/registerTest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+        setEmailForOtp(userData.email);
+        setOtpSent(true); // open OTP entry
+        onClose(); // close registration modal
+      } else if (res.status === 409) {
+        setErrors((prev) => ({ ...prev, email: "Email or phone already registered" }));
+      } else {
+        alert(data.message || "Registration failed");
+      }
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRegister = () => {
-    getData(userData);
+  const handleLogin = async () => {
+    if (!loginData.email || !loginData.password) {
+      return alert("Please enter email and password");
+    }
+    try {
+      const res = await fetch("http://localhost:8000/api/auth/login/email/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData)
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setAuthData({ token: data.authToken, firstName: data.firstName });
+        localStorage.setItem("token", data.authToken); // Store token in localStorage
+        localStorage.setItem("firstName", data.firstName); // Store first name
+        setisAuth(true);          // Mark user as logged in
+        onClose();                // Close modal
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      alert("Server error");
+    }
+  }
+
+  const handleVerifyOtp = async () => {
+    if (!otp) return alert("Please enter OTP");
+
+    try {
+      const res = await fetch("http://localhost:8000/api/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailForOtp, otp })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Account verified successfully!");
+        setOtpSent(false);
+        onOpen(); // Reopen modal for login
+        setShowLoginForm(true);
+        setLoginData({ email: emailForOtp, password: userData.password });
+      } else {
+        alert(data.message || "OTP verification failed");
+      }
+    } catch (err) {
+      alert("Server error during OTP verification");
+    }
   };
 
   return (
-    <div>
-      <Center onClick={onOpen} fontWeight={"400"} fontSize="15px" w="60px">
-        Sign Up
-      </Center>
+    <>
+      <Center onClick={onOpen} fontWeight="400" fontSize="15px" w="60px">Sign Up</Center>
 
+      {/* Sign Up + Login Modal */}
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="md">
         <ModalOverlay />
-        <ModalContent w="lg" pt="5" rounded="3xl">
+        <ModalContent pt="5" rounded="3xl">
           <ModalCloseButton />
+          <ModalBody p="0px">
+            {!showLoginForm ? (
+              <Box m="5px 45px 20px 45px">
+                <Heading fontSize="26px" mb="20px" color="#333368">Create an Account</Heading>
 
-          <ModalBody p={"0px 0px "}>
-            <Box m={"5px 45px 20px 45px"}>
-              <Heading
-                fontFamily={" Times, serif"}
-                fontWeight="100"
-                fontSize={"26px"}
-                mb="20px"
-                color={"#333368"}
-              >
-                Create an Account
-              </Heading>
+                <Input name="firstName" placeholder="First Name*" onChange={handleChange} rounded="2xl" />
+                <Text color="red.500" fontSize="sm">{errors.firstName}</Text>
 
-              <Input
-                type="text"
-                fontSize="16px"
-                onChange={handleChange}
-                focusBorderColor="rgb(206, 206, 223)"
-                name="first_name"
-                placeholder="First Name*"
-                h={"45px"}
-                borderColor={"rgb(206, 206, 223)"}
-                m={"8px 0px 15px 0px"}
-                rounded="2xl"
-              />
+                <Input name="lastName" placeholder="Last Name (optional)" onChange={handleChange} mt="10px" rounded="2xl" />
 
-              <Text mt="-2%" ml="2%">
-                {first}
-              </Text>
+                <InputGroup mt="10px">
+                  <InputLeftAddon children="+91" />
+                  <Input name="phone" type="number" placeholder="Mobile*" onChange={handleChange} rounded="2xl" />
+                </InputGroup>
+                <Text color="red.500" fontSize="sm">{errors.phone}</Text>
 
-              <Input
-                fontSize="16px"
-                onChange={handleChange}
-                name="last_name"
-                type="text"
-                placeholder="Last Name"
-                h={"45px"}
-                focusBorderColor="rgb(206, 206, 223)"
-                borderColor={"rgb(206, 206, 223)"}
-                m={"8px 0px 25px 0px"}
-                rounded="2xl"
-              />
-              <Text mt="-2%" ml="2%">
-                {last}
-              </Text>
+                <Input name="email" type="email" placeholder="Email*" onChange={handleChange} mt="10px" rounded="2xl" />
+                <Text color="red.500" fontSize="sm">{errors.email}</Text>
 
-              <InputGroup
-                w="100%"
-                h="50px"
-                fontSize="18px"
-                borderRadius="xl"
-                mb="14px"
-              >
-                <InputLeftAddon
-                  children="+91"
-                  h="45px"
-                  fontSize="18px"
-                  rounded="2xl"
-                  bg="whiteAlpha.900"
-                />
+                <InputGroup mt="10px">
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password*"
+                    onChange={handleChange}
+                    rounded="2xl"
+                  />
+                  <InputRightElement>
+                    <Button size="sm" onClick={() => setShowPassword(!showPassword)} bg="white">
+                      {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <Text color="red.500" fontSize="sm">{errors.password}</Text>
 
-                <Input
-                  onChange={handleChange}
-                  type="number"
-                  name="ph_no"
-                  placeholder=" Mobile*"
-                  w="100%"
-                  h="45px"
-                  fontSize="16px"
-                  focusBorderColor="rgb(206, 206, 223)"
-                  borderColor={"rgb(206, 206, 223)"}
-                  rounded="2xl"
-                />
-              </InputGroup>
-              <Text mt="-2%" ml="2%">
-                {userData.ph_no.length === 10 ? "" : ph}
-              </Text>
-
-              <Input
-                onChange={handleChange}
-                fontSize="16px"
-                name="email"
-                placeholder="Email*"
-                h={"45px"}
-                focusBorderColor="rgb(206, 206, 223)"
-                borderColor={"rgb(206, 206, 223)"}
-                m={"8px 0px 18px 0px"}
-                rounded="2xl"
-              />
-              <Text mt="-2%" ml="2%">
-                {userData.email.includes("@") && userData.email.includes(".com")
-                  ? ""
-                  : mail}
-              </Text>
-
-              <InputGroup mb="15px">
-                <Input
-                  onChange={handleChange}
-                  fontSize="16px"
-                  type={show ? "text" : "password"}
-                  name="password"
-                  placeholder="Password*"
-                  h={"45px"}
-                  focusBorderColor="rgb(206, 206, 223)"
-                  borderColor={"rgb(206, 206, 223)"}
-                  m={"8px 0px 8px 0px"}
-                  rounded="2xl"
-                />
-
-                <InputRightElement width="6.5rem" size="lg">
-                  <Button
-                    size="md"
-                    borderRadius="3xl"
-                    mt="20%"
-                    onClick={() => setShow(!show)}
-                    bg="white"
-                  >
-                    {show ? <ViewOffIcon /> : <ViewIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              {userData.password.length >= 6 ? "" : pass}
-
-              <HStack>
-                <Box
-                  textDecoration={"underline"}
-                  fontFamily={" sans-serif"}
-                  color={"#333368"}
-                  fontSize="14px"
-                >
-                  Got a Referral code?
-                </Box>
-
-                <Box fontFamily={" sans-serif"} color={"#333368"}>
-                  (Optional)
-                </Box>
-              </HStack>
-
-              <HStack>
-                <Checkbox
-                  mb={"20px"}
-                  mt="20px"
-                  size="sm"
-                  fontFamily={" sans-serif"}
-                >
-                  Get Update on whatsapp
-                </Checkbox>
-                <Image
-                  src="https://static.lenskart.com/media/desktop/img/25-July-19/whatsapp.png"
-                  w={"22px"}
-                  h="22px"
-                />
-              </HStack>
-              {exist === true ? (
-                <Required info="Email Id already exists" />
-              ) : (
-                ""
-              )}
-
-              <HStack spacing={"3px"} mb="10px">
-                <Box
-                  fontSize={"14px"}
-                  fontFamily={" sans-serif"}
-                  fontWeight="100"
-                  letterSpacing={"-0.4px"}
-                >
-                  By creating this account, you agree to our
-                </Box>
-                <Box fontSize={"15px"} textDecoration="underline">
-                  Privacy Policy
-                </Box>
-              </HStack>
-
-              {userData.email.includes("@") &&
-              userData.email.includes(".com") &&
-              userData.first_name.length >= 1 &&
-              userData.last_name.length >= 1 &&
-              userData.password.length >= 6 &&
-              userData.ph_no.length === 10 ? (
                 <Button
+                  mt="20px"
                   isLoading={loading}
                   onClick={handleRegister}
-                  bgColor={"#11daac"}
+                  bgColor="#11daac"
                   width="100%"
-                  borderRadius={"35px/35px"}
+                  borderRadius="35px"
                   h="50px"
-                  _hover={{ backgroundColor: "#11daac" }}
-                  fontFamily={" sans-serif"}
-                  fontWeight="300"
-                  fontSize="18px"
+                  color="white"
+                  fontWeight="bold"
                 >
                   Create an Account
                 </Button>
-              ) : (
-                <Button
-                  bgColor={"#cccccc"}
-                  width="100%"
-                  borderRadius={"35px/35px"}
-                  h="50px"
-                  fontFamily={" sans-serif"}
-                  fontWeight="300"
-                  fontSize="18px"
-                >
-                  Create an Account
-                </Button>
-              )}
 
-              <Center mt={"14px"} fontSize="15px" gap="2">
-                Have an account?{" "}
-                <Center fontWeight={"500"} textDecoration="underline">
-                  Sign In
+                <Center mt="4" fontSize="15px">
+                  Already have an account?{" "}
+                  <Text
+                    as="span"
+                    ml="1"
+                    color="blue.500"
+                    fontWeight="bold"
+                    cursor="pointer"
+                    onClick={() => setShowLoginForm(true)}
+                  >
+                    Login
+                  </Text>
                 </Center>
-              </Center>
-            </Box>
+              </Box>
+            ) : (
+              <Box m="5px 45px 20px 45px">
+                <Heading fontSize="26px" mb="20px" color="#333368">Sign In</Heading>
+
+                <Input
+                  name="loginEmail"
+                  type="email"
+                  placeholder="Email"
+                  value={loginData.email}
+                  onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                  mb="12px"
+                  rounded="2xl"
+                />
+
+                <InputGroup>
+                  <Input
+                    name="loginPassword"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    rounded="2xl"
+                  />
+                  <InputRightElement>
+                    <Button size="sm" onClick={() => setShowPassword(!showPassword)} bg="white">
+                      {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+
+                <Button
+                  mt="5"
+                  bgColor="#11daac"
+                  width="100%"
+                  borderRadius="35px"
+                  h="50px"
+                  color="white"
+                  fontWeight="bold"
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
+
+                <Center mt="4" fontSize="15px">
+                  Don’t have an account?{" "}
+                  <Text
+                    as="span"
+                    ml="1"
+                    color="blue.500"
+                    fontWeight="bold"
+                    cursor="pointer"
+                    onClick={() => setShowLoginForm(false)}
+                  >
+                    Sign Up
+                  </Text>
+                </Center>
+              </Box>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
-    </div>
+
+      {/* OTP Modal */}
+      <Modal isOpen={otpSent} onClose={() => setOtpSent(false)} isCentered size="sm">
+        <ModalOverlay />
+        <ModalContent rounded="xl" py="8" px="6">
+          <ModalCloseButton />
+          <Heading fontSize="lg" textAlign="center">Verify OTP</Heading>
+          <Text fontSize="sm" textAlign="center" mt="2" color="gray.600">
+            We have sent a 6-digit OTP to <b>{emailForOtp}</b>
+          </Text>
+          <Input
+            mt="4"
+            placeholder="Enter OTP"
+            onChange={(e) => setOtp(e.target.value)}
+            value={otp}
+            maxLength={6}
+            textAlign="center"
+            fontSize="xl"
+            letterSpacing="5px"
+          />
+          <Button mt="4" width="100%" colorScheme="teal" onClick={handleVerifyOtp}>
+            Verify
+          </Button>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 
