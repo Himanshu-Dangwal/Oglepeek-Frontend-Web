@@ -18,7 +18,7 @@ const HomeCard = ({ type }) => {
             >
                 {type.map((i) => (
                     <Box
-                        key={i}
+                        key={i.id}
                         border="1px"
                         borderColor="white"
                         flexDirection="column"

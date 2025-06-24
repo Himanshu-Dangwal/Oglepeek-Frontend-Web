@@ -1,45 +1,148 @@
+// import {
+//   applyCoupon,
+//   ADD_TO_CART,
+//   REMOVE_FROM_CART,
+//   INCREMENT,
+//   DECREMENT,
+//   RESET
+// } from "./actionType";
+
+// export const addToCart = (product) => {
+//   return {
+//     type: ADD_TO_CART,
+//     payload: product
+//   };
+// };
+
+// export const removeFromCart = (productId, variantId) => {
+//   return {
+//     type: REMOVE_FROM_CART,
+//     payload: { productId, variantId }
+//   };
+// };
+
+// export const increment = (productId, variantId) => {
+//   return {
+//     type: INCREMENT,
+//     payload: { productId, variantId }
+//   };
+// };
+
+// export const decrement = (productId, variantId) => {
+//   return {
+//     type: DECREMENT,
+//     payload: { productId, variantId }
+//   };
+// };
+
+
+
+import axios from "axios";
 import {
-  applyCoupon,
   ADD_TO_CART,
   REMOVE_FROM_CART,
   INCREMENT,
   DECREMENT,
-  RESET
+  RESET,
+  applyCoupon,
 } from "./actionType";
 
-export const addToCart = (product) => {
-  return {
-    type: ADD_TO_CART,
-    payload: product
-  };
+export const addToCart = (item) => async (dispatch) => {
+  try {
+    dispatch({ type: ADD_TO_CART, payload: item });
+
+    // ✅ Optimistically update backend
+    console.log("Adding to cart:, addToCartFunction", item);
+    await axios.post("http://localhost:8000/api/cart/", {
+      productId: item.productId,
+      variantId: item.variantId,
+      quantity: item.quantity || 1
+    }, { withCredentials: true });
+
+  } catch (err) {
+    console.error("Failed to sync cart", err);
+  }
 };
 
-export const removeFromCart = (item) => {
-  return {
+export const removeFromCart = (productId, variantId) => async (dispatch) => {
+  dispatch({
     type: REMOVE_FROM_CART,
-    payload: item
-  };
+    payload: { productId, variantId }
+  });
+
+  try {
+    await axios.delete("http://localhost:8000/api/cart/", {
+      productId, variantId
+    }, { withCredentials: true });
+  } catch (err) {
+    console.error("Failed to remove item", err);
+  }
 };
 
-export const increment = (id) => {
-  return {
+export const increment = (productId, variantId) => async (dispatch) => {
+  dispatch({
     type: INCREMENT,
-    payload: id
-  };
+    payload: { productId, variantId }
+  });
+
+  try {
+    await axios.post("http://localhost:8000/api/cart/", {
+      productId,
+      variantId,
+      quantityChange: +1
+    }, { withCredentials: true });
+  } catch (err) {
+    console.error("Failed to update quantity", err);
+  }
 };
 
-export const decrement = (id) => {
-  return {
+export const decrement = (productId, variantId) => async (dispatch) => {
+  dispatch({
     type: DECREMENT,
-    payload: id
-  };
+    payload: { productId, variantId }
+  });
+
+  try {
+    await axios.post("http://localhost:8000/api/cart/", {
+      productId,
+      variantId,
+      quantityChange: -1
+    }, { withCredentials: true });
+  } catch (err) {
+    console.error("Failed to update quantity", err);
+  }
 };
 
-export const cartReset = (id) => {
+
+export const loadCartFromBackend = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:8000/api/cart", {
+      withCredentials: true
+    });
+
+    const items = res.data?.items || [];
+    console.log("Loaded cart items from backend:", items);
+    items.forEach(item => {
+      dispatch({
+        type: ADD_TO_CART,
+        payload: {
+          productId: item.productId,
+          variantId: item.variantId,
+          quantity: item.quantity
+        }
+      });
+    });
+  } catch (err) {
+    console.error("Failed to load cart from backend", err);
+  }
+};
+
+export const cartReset = () => {
   return {
     type: RESET
   };
 };
+
 
 export const coupon = (couponCode) => (dispatch) => {
   if (couponCode === "MASAI40") {

@@ -1,117 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addToCart } from "../../redux/CartPage/action";
-// import { addToWishlist } from "../../redux/wishlist/wishlist.actions";
-// import Navbar from "../../Components/Navbar/Navbar";
-// import Footer from "../../Components/Footer/Footer";
-// import ProdCard from "./ProdCard";
-// import { Grid, GridItem, Image, Box, Select, Text } from "@chakra-ui/react";
-// import axios from "axios";
-
-// const SingleProduct = () => {
-// const { id } = useParams();
-// const [product, setProduct] = useState(null);
-// const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-// const navigate = useNavigate();
-// const dispatch = useDispatch();
-// const { cart } = useSelector((state) => state.CartReducer);
-
-// useEffect(() => {
-//   axios
-//     .get(`http://localhost:8000/api/product/${id}`)
-//     .then((res) => {
-//       setProduct(res.data);
-//     })
-//     .catch((err) => console.error("Error fetching product:", err));
-// }, [id]);
-
-// const handleAddToCart = () => {
-//   const variant = product.variants[selectedVariantIndex];
-//   const item = { ...product, ...variant };
-//   const exists = cart.find((c) => c._id === item._id);
-
-//   if (!exists) {
-//     item.quantity = 1;
-//     dispatch(addToCart(item));
-//     setTimeout(() => navigate("/cart"), 1000);
-//   } else {
-//     alert("Product already in cart");
-//   }
-// };
-
-// const handleAddToWishlist = () => {
-//   const item = { ...product, ...product.variants[selectedVariantIndex] };
-//   dispatch(addToWishlist(item));
-//   setTimeout(() => navigate("/wishlist"), 1000);
-// };
-
-//   if (!product) return null;
-//   const selectedVariant = product.variants[selectedVariantIndex];
-
-//   return (
-//     <>
-// <Navbar />
-// <br />
-// <br />
-
-//       <Grid
-//         gap={5}
-//         m="auto"
-//         w="95%"
-//         justifyContent="space-around"
-//         templateColumns={{
-//           base: "repeat(1,1fr)",
-//           sm: "repeat(1,1fr)",
-//           md: "repeat(2,1fr)",
-//           lg: "repeat(2,1fr)"
-//         }}
-//       >
-//         <GridItem>
-//           <Image
-//             src={selectedVariant.images[0]}
-//             alt={product.name}
-//             borderRadius="md"
-//             objectFit="cover"
-//             w="100%"
-//             maxH="500px"
-//           />
-//           <Box mt={4}>
-//             <Text fontWeight="bold" mb={2}>Select Frame Color</Text>
-//             <Select
-//               value={selectedVariantIndex}
-//               onChange={(e) => setSelectedVariantIndex(Number(e.target.value))}
-//             >
-//               {product.variants.map((v, i) => (
-//                 <option key={v._id} value={i}>
-//                   {v.frameColor} — ₹{v.price} ({v.size})
-//                 </option>
-//               ))}
-//             </Select>
-//           </Box>
-//         </GridItem>
-
-//         <GridItem>
-//           <ProdCard
-//             type={{
-//               ...product,
-//               ...selectedVariant
-//             }}
-// handleCart={handleAddToCart}
-// handleWishlist={handleAddToWishlist}
-//           />
-//         </GridItem>
-//       </Grid>
-
-//       <Footer />
-//     </>
-//   );
-// };
-
-// export default SingleProduct;
-
-
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -169,17 +55,24 @@ const SingleProductPage = () => {
 
   const handleAddToCart = () => {
     const variant = product.variants[selectedVariantIndex];
-    const item = { ...product, ...variant };
-    const exists = cart.find((c) => c._id === item._id);
+
+    const item = {
+      productId: product._id,
+      variantId: variant._id,
+      quantity,
+    };
+
+    const exists = cart.find(
+      (c) => c.productId === item.productId && c.variantId === item.variantId
+    );
 
     if (!exists) {
-      item.quantity = 1;
       dispatch(addToCart(item));
-      setTimeout(() => navigate("/cart"), 1000);
     } else {
       alert("Product already in cart");
     }
   };
+
 
   const handleAddToWishlist = () => {
     const item = { ...product, ...product.variants[selectedVariantIndex] };

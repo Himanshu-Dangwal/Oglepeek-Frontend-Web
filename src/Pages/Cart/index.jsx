@@ -10,26 +10,51 @@ import CartEmpty from "./CartEmpty";
 import CouponBox from "./CouponBox";
 import Footer from "../../Components/Footer/Footer";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+// import { Material } from "../Product/FilterDetails";
+
 
 const CartPage = () => {
   const { cart } = useSelector((state) => state.CartReducer);
+  const [detailedCartItems, setDetailedCartItems] = useState([]);
   const navigate = useNavigate();
 
-  const getTotalPrice = () => {
-    const totalPrice = cart.reduce(
-      (acc, item) => acc + item.mPrice * item.quantity,
-      0
-    );
-    return totalPrice;
-  };
+  useEffect(() => {
+    const fetchCartDetails = async () => {
+      try {
+        const promises = cart.map(async ({ productId, variantId, quantity }) => {
+          const { data: product } = await axios.get(`http://localhost:8000/api/product/${productId}`);
+          const variant = product.variants.find(v => v._id === variantId);
+          return {
+            productId,
+            variantId,
+            quantity,
+            name: product.name,
+            price: variant.price,
+            image: variant.images[0],
+            frameStyle: product.frameStyle,
+            frameColor: variant.frameColor,
+            description: product.description,
+            material: product.material,
+            lens: product.lens,
+            frameType: product.frameType,
+          };
+        });
 
-  const getdiscountPrice = () => {
-    const totalPrice = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    return totalPrice;
-  };
+        const results = await Promise.all(promises);
+        setDetailedCartItems(results);
+      } catch (err) {
+        console.error("Failed to load cart details:", err);
+      }
+    };
+
+    if (cart.length > 0) fetchCartDetails();
+    else setDetailedCartItems([]);
+  }, [cart]);
+
+  const getTotalPrice = () =>
+    detailedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <>
@@ -65,7 +90,7 @@ const CartPage = () => {
             }}
           >
             <CartLength cartLength={cart.length} />
-            <CartItem />
+            <CartItem detailedItems={detailedCartItems} />
           </Flex>
           <Flex
             flexDirection={"column"}
@@ -90,7 +115,7 @@ const CartPage = () => {
             </Text>
             <PriceDetail
               totalPrice={getTotalPrice()}
-              discountPrice={getdiscountPrice()}
+              discountPrice={0}
             />
             <SaleBox />
 

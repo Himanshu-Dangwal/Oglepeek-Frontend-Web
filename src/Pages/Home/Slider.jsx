@@ -51,17 +51,9 @@ const Slider = ({ type }) => {
       }}
     >
       {type.map((i) => (
-        <Box key={i}>
-          <SwiperSlide>
+        <Box key={i.id}>
+          <SwiperSlide key={i.id}>
             <Link to={i.linked}>
-              {/* <Square m="auto">
-                <Image
-                  src={`${i.img}`}
-                  alt={i.name}
-                  boxSize={{ base: "100px" }}
-                  w="80%"
-                />
-              </Square> */}
               <Box w="100%" display="flex" justifyContent="center">
                 <Image
                   src={`${i.img}`}

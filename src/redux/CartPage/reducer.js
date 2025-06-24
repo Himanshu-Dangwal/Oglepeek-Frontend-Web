@@ -7,7 +7,7 @@ import {
   applyCoupon
 } from "./actionType";
 
-let initialState = {
+const initialState = {
   loading: false,
   error: false,
   cart: [],
@@ -16,60 +16,77 @@ let initialState = {
 
 export const CartReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case applyCoupon: {
+    case applyCoupon:
       return {
         ...state,
         coupon: payload
       };
-    }
 
     case ADD_TO_CART: {
-      const { cart } = state;
-      const product = payload;
-      const existingItem = cart.findIndex((item) => item._id === product._id);
-      if (existingItem === -1) {
-        const newItem = {
-          ...product
-        };
-        return {
-          ...state,
-          cart: [...cart, newItem]
-        };
+      const item = payload;
+      const exists = state.cart.find(
+        (currItem) =>
+          currItem.productId === item.productId &&
+          currItem.variantId === item.variantId
+      );
+
+      console.log("Adding to cart:", item);
+      console.log("Current cart:", state.cart);
+
+      if (exists) {
+        alert("Product already in cart");
+        return state;
       }
-      return alert("Product Already Add");
-    }
-    case REMOVE_FROM_CART: {
+
       return {
-        cart: state.cart.filter((item) => item._id !== payload)
+        ...state,
+        cart: [...state.cart, { ...item }]
+      };
+    }
+
+    case REMOVE_FROM_CART: {
+      const { productId, variantId } = payload;
+      return {
+        ...state,
+        cart: state.cart.filter(
+          (item) =>
+            !(item._id === productId && item.variants._id === variantId)
+        )
       };
     }
 
     case INCREMENT: {
+      const { productId, variantId } = payload;
       return {
-        cart: state.cart.filter((item) => {
-          if (item.id === payload) {
-            return (item.quantity = +item.quantity + 1);
-          }
-          return item;
-        })
-      };
-    }
-    case DECREMENT: {
-      return {
-        cart: state.cart.filter((item) => {
-          if (item.id === payload) {
-            return (item.quantity = +item.quantity - 1);
-          }
-          return item;
-        })
+        ...state,
+        cart: state.cart.map((item) =>
+          item._id === productId && item.variants._id === variantId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
       };
     }
 
-    case RESET: {
+    case DECREMENT: {
+      const { productId, variantId } = payload;
       return {
-        cart: []
+        ...state,
+        cart: state.cart.map((item) =>
+          item._id === productId && item.variants._id === variantId
+            ? {
+              ...item,
+              quantity: item.quantity > 1 ? item.quantity - 1 : 1
+            }
+            : item
+        )
       };
     }
+
+    case RESET:
+      return {
+        ...state,
+        cart: []
+      };
 
     default:
       return state;
