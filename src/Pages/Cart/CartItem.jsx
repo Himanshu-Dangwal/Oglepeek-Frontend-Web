@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   removeFromCart,
   decrement,
@@ -14,10 +14,11 @@ import {
   Box,
   Grid
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
-const CartItem = () => {
+const CartItem = ({ detailedItems }) => {
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.CartReducer);
+  const Navigate = useNavigate();
 
   const handleDelete = (item) => {
     dispatch(removeFromCart(item));
@@ -37,151 +38,103 @@ const CartItem = () => {
 
   return (
     <Box>
-      {cart &&
-        cart &&
-        cart.map((item) => (
+      {detailedItems &&
+        detailedItems.map((item) => (
           <Grid
             templateColumns={{
               lg: "20% 80%",
-              md: "20% 80%",
-              base: "repeat(1, 1fr)"
+              md: "25% 75%",
+              base: "repeat(1, 1fr)",
             }}
             gap={6}
-            border={"0px solid grey"}
-            borderRadius="10px"
-            boxShadow={"lg"}
-            padding={"15px"}
+            border="1px solid #e2e8f0"
+            borderRadius="12px"
+            boxShadow="md"
+            p={5}
             w="100%"
-            justifyContent="space-between"
+            mb={6}
+            alignItems="center"
           >
+            {/* Product Image */}
             <Image
-              w={{
-                base: "60%",
-                sm: "50%",
+              src={item.image}
+              alt={item.name}
+              objectFit="contain"
+              onClick={() => Navigate(`/products/${item.productId}`)}
+              cursor="pointer"
+              borderRadius="lg"
+              boxSize={{
+                base: "200px",
+                sm: "150px",
                 md: "100%",
-                lg: "100%",
-                xl: "100%",
-                "2xl": "100%"
               }}
-              margin={{
-                base: "auto",
-                sm: "auto",
-                md: "auto",
-                lg: "unset",
-                xl: "unset",
-                "2xl": "unset"
-              }}
-              src={item.imageTsrc}
+              mx="auto"
             />
-            <Flex
-              flexDirection={"column"}
-              border={"0px solid blue"}
-              gap="4"
-              width={{
-                base: "90%",
-                sm: "90%",
-                md: "90%",
-                lg: "90%",
-                xl: "90%",
-                "2xl": "90%"
-              }}
-              margin={{
-                base: "auto",
-                sm: "auto",
-                md: "auto",
-                lg: "unset",
-                xl: "unset",
-                "2xl": "unset"
-              }}
-            >
-              <Flex
-                justifyContent={"space-between"}
-                border={"0px solid green"}
-                gap="20"
-                marginTop={5}
-              >
-                <Heading
-                  as="h1"
-                  fontSize={"18px"}
-                  lineHeight="22px"
-                  textTransform={"capitalize"}
-                  letterSpacing="-0.32px"
-                  fontWeight={500}
-                >
-                  {item.productRefLink}
-                </Heading>
-                <Flex gap={"2"}>
-                  <Text fontSize={"18px"} fontWeight="500" color="gray.600">
-                    ₹{item.mPrice}
-                  </Text>
-                </Flex>
-              </Flex>
-              <Box border={"1px dashed #CECEDF"}></Box>
-              <Flex justifyContent={"space-between"}>
-                <Heading
-                  as="h1"
-                  fontSize={"18px"}
-                  lineHeight="22px"
-                  textTransform={"capitalize"}
-                  fontWeight={500}
-                >
-                  Final Price
-                </Heading>
-                <Flex gap={"2"}>
-                  <Text fontSize={"18px"} fontWeight="500" color="gray.600">
-                    ₹{item.mPrice}
-                  </Text>
-                </Flex>
-              </Flex>
-              <Box border={"1px dashed #CECEDF"}></Box>
-              <Flex
-                border={"0px solid grey"}
-                gap="5"
-                justifyContent="space-between"
-              >
-                <Button
-                  backgroundColor={"white"}
-                  _hover={"backgroundColor:white"}
-                  textDecoration="underline"
-                  fontSize={"18"}
-                  ml="-1.5"
-                  onClick={() => handleDelete(item._id)}
-                >
-                  Remove
-                </Button>
 
-                <Flex
-                  align="center"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderRadius="3xl"
-                >
-                  <Button
-                    bg="whiteAlpha.900"
-                    size="md"
-                    borderRadius="50%"
-                    fontSize="20px"
-                    onClick={() =>
-                      handleDecrementChange(item.id, item.quantity)
-                    }
-                  >
-                    -
-                  </Button>
-
-                  <Box mx="2">{item.quantity}</Box>
-                  <Button
-                    bg="whiteAlpha.900"
-                    borderRadius="50%"
-                    fontSize="20px"
-                    size="md"
-                    onClick={() => handleIncrementChange(item.id)}
-                  >
-                    +
-                  </Button>
-                </Flex>
+            {/* Product Info & Actions */}
+            <Flex direction="column" justify="space-between" gap={4} w="100%">
+              <Flex justify="space-between" align="center" paddingRight={4}>
+                <Heading fontSize="20px" fontWeight="600" textTransform="capitalize">
+                  {item.name}
+                </Heading>
+                <Text fontSize="18px" color="gray.600" fontWeight="500">
+                  NPR {item.price}
+                </Text>
               </Flex>
+
+              <Text color="gray.500" fontSize="15px">
+                {item.description}
+              </Text>
+
+              <Grid templateColumns="repeat(2, 1fr)" gap={2} fontSize="14px" color="gray.700">
+                <Text><b>Style:</b> {item.frameStyle}</Text>
+                <Text><b>Color:</b> {item.frameColor}</Text>
+                <Text><b>Type:</b> {item.frameType}</Text>
+                <Text><b>Lens:</b> {item.lens}</Text>
+                <Text><b>Material:</b> {item.material}</Text>
+              </Grid>
+
+              <Flex justify="space-between" align="center" paddingRight={4}>
+                <Flex align="center" gap={4}>
+                  <Text fontSize="16px" fontWeight="500">
+                    Qty:
+                  </Text>
+                  <Flex align="center" border="1px" borderColor="gray.300" borderRadius="md">
+                    <Button
+                      size="sm"
+                      onClick={() => handleDecrementChange(item.productId, item.variantId, item.quantity)}
+                    >
+                      −
+                    </Button>
+                    <Box px={3}>{item.quantity}</Box>
+                    <Button
+                      size="sm"
+                      onClick={() => handleIncrementChange(item.productId, item.variantId)}
+                    >
+                      +
+                    </Button>
+                  </Flex>
+                </Flex>
+
+                <Text fontSize="16px" fontWeight="600" color="teal.600">
+                  Subtotal: NPR {item.price * item.quantity}
+                </Text>
+              </Flex>
+
+              <Button
+                variant="link"
+                color="red.500"
+                fontWeight="500"
+                onClick={() => handleDelete(item.productId, item.variantId)}
+                alignSelf="flex-end"
+                paddingRight={4}
+                textDecoration="underline"
+              >
+                Remove
+              </Button>
             </Flex>
           </Grid>
+
         ))}
     </Box>
   );

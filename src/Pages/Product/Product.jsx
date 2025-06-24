@@ -44,7 +44,7 @@ const NewProduct = () => {
       setIsLoaded(true);
       try {
         const response = await fetch(
-          `http://localhost:8000/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}`
+          `http://localhost:8000/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}&material=${material}&lens=${lens}`,
         );
         const postData = await response.json();
         setProducts(postData);

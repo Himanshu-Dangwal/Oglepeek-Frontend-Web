@@ -48,18 +48,16 @@ const Login = () => {
       const res = await fetch("http://localhost:8000/api/auth/login/email/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(loginData)
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        const { authToken, firstName } = data;
-
-        localStorage.setItem("token", authToken);
-        localStorage.setItem("firstName", firstName);
+        const { firstName } = data;
         setisAuth(true);
-        setAuthData({ token: authToken, firstName });
+        setAuthData({ firstName });
 
         onClose();
 

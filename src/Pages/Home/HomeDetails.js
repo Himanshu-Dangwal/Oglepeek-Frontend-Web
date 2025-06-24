@@ -21,32 +21,38 @@ export const HomeDetailsLayer1Images = [
   {
     img: image3,
     caption: "Slide 1",
-    title: "Eyeglasses"
+    title: "Eyeglasses",
+    id: 1
   },
   {
     img: image2,
     caption: "Slide 2",
-    title: "Sunglasses"
+    title: "Sunglasses",
+    id: 2
   },
   {
     img: image4,
     caption: "Slide 3",
-    title: "Computer Glasses"
+    title: "Computer Glasses",
+    id: 3
   },
   {
     img: image7,
     caption: "Slide 4",
-    title: "Contact lenses"
+    title: "Contact lenses",
+    id: 4
   },
   {
     img: image5,
     caption: "Slide 4",
-    title: "Power Sunglases"
+    title: "Power Sunglases",
+    id: 5
   },
   {
     img: image8,
     caption: "Slide 4",
-    title: "Progressive Lenses"
+    title: "Progressive Lenses",
+    id: 6
   }
 ];
 
@@ -75,42 +81,50 @@ export const DetailsSunglassesStyles = [
   {
     name: "Blend Edit",
     img: detailSunglassesStyle1,
-    caption: "Slide 1"
+    caption: "Slide 1",
+    id: 1
   },
   {
     name: "Air Clip On",
     img: detailSunglassesStyle2,
-    caption: "Slide 2"
+    caption: "Slide 2",
+    id: 2
   },
   {
     name: "Air Flex",
     img: detailSunglassesStyle3,
-    caption: "Slide 3"
+    caption: "Slide 3",
+    id: 3
   },
   {
     name: "Retro Aviator",
     img: detailSunglassesStyle8,
-    caption: "Slide 4"
+    caption: "Slide 4",
+    id: 4
   },
   {
     name: "Round",
     img: detailSunglassesStyle4,
-    caption: "Slide 1"
+    caption: "Slide 1",
+    id: 5
   },
   {
     name: "Cat-Eye",
     img: detailSunglassesStyle5,
-    caption: "Slide 1"
+    caption: "Slide 1",
+    id: 6
   },
   {
     name: "Clubmaster",
     img: detailSunglassesStyle6,
-    caption: "Slide 1"
+    caption: "Slide 1",
+    id: 7
   },
   {
     name: "Transparent",
     img: detailSunglassesStyle7,
-    caption: "Slide 1"
+    caption: "Slide 1",
+    id: 8
   }
 ];
 

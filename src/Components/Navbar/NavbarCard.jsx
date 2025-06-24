@@ -48,6 +48,15 @@ export const NavbarCardTopmost = () => {
   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await fetch("http://localhost:8000/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    setisAuth(false);
+    setAuthData(null);
+  }
+
   return (
     <Box cursor="pointer">
       <HStack m="auto">
@@ -114,10 +123,7 @@ export const NavbarCardTopmost = () => {
                     <Box
                       color="#333368"
                       onClick={() => {
-                        setisAuth(false);
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("firstName");
-                        setAuthData(null);
+                        handleLogout();
                         return <Navigate to="/" />;
                       }}
                     >
