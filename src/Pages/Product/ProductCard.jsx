@@ -55,12 +55,8 @@ const ProductCard = ({ type }) => {
                 <br />
                 <Text as="span" color="orange.400">
                   Earn{" "}
-                  {Math.floor(
-                    (ele.variants?.[0]?.price || 0) > 0.1 * (ele.variants?.[0]?.price || 0)
-                      ? 0.1 * (ele.variants?.[0]?.price || 0)
-                      : ele.variants?.[0]?.price || 0
-                  )}{" "}
-                  Peek Coins
+                  {ele.variants?.[0]?.price}{" "}
+                  PeekCoins
                 </Text>
               </Box>
             </Box>

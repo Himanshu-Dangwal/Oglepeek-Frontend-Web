@@ -12,6 +12,8 @@ import { CiHeart } from "react-icons/ci";
 import { CgShoppingCart } from "react-icons/cg";
 import { TriangleDownIcon } from "@chakra-ui/icons";
 import Oglepeek from './Oglepeek.jpeg';
+import { useSelector } from "react-redux";
+import { BsHeartFill } from "react-icons/bs";
 import {
   Box,
   Text,
@@ -45,6 +47,10 @@ export const NavbarCard1 = () => {
 };
 
 export const NavbarCardTopmost = () => {
+  const { cart } = useSelector((state) => state.CartReducer);
+  const { wishlist } = useSelector((state) => state.wishlistReducer);
+  // console.log("Printing", wishlist)
+
   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -98,7 +104,7 @@ export const NavbarCardTopmost = () => {
                     fontWeight={"600"}
                     fontSize="15px"
                     m="auto"
-                    mt="20px"
+                    mt="12px"
                     w="90px"
                     textAlign="center"
                   >
@@ -138,7 +144,38 @@ export const NavbarCardTopmost = () => {
                 <Signup />
               </Box>
             )}
-            <Button
+            <Box position="relative">
+              <Button
+                leftIcon={wishlist.length > 0 ? <BsHeartFill color="red" /> : <CiHeart />}
+                size="lg"
+                bg="whiteAlpha.900"
+                fontSize="14px"
+                fontWeight="400"
+                onClick={() => navigate("/wishlist")}
+              >
+                Wishlist
+              </Button>
+              {wishlist.length > 0 && (
+                <Box
+                  position="absolute"
+                  top="0"
+                  right="5"
+                  bg="red.500"
+                  color="white"
+                  fontSize="12px"
+                  borderRadius="full"
+                  px="2"
+                  h="18px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {wishlist.length}
+                </Box>
+              )}
+            </Box>
+
+            {/* <Button
               leftIcon={<CiHeart />}
               size="lg"
               bg="whiteAlpha.900"
@@ -147,8 +184,8 @@ export const NavbarCardTopmost = () => {
               onClick={() => navigate("/wishlist")}
             >
               Wishlist
-            </Button>
-            <Link to="/cart">
+            </Button> */}
+            {/* <Link to="/cart">
               <Button
                 leftIcon={<CgShoppingCart />}
                 size="lg"
@@ -158,7 +195,40 @@ export const NavbarCardTopmost = () => {
               >
                 Cart
               </Button>
+            </Link> */}
+            <Link to="/cart">
+              <Box position="relative">
+                <Button
+                  leftIcon={<CgShoppingCart />}
+                  size="lg"
+                  bg="whiteAlpha.900"
+                  fontSize="14px"
+                  fontWeight="400"
+                >
+                  Cart
+                </Button>
+                {cart.length > 0 && (
+                  <Box
+                    position="absolute"
+                    top="0"
+                    right="5"
+                    bg="red.500"
+                    color="white"
+                    fontSize="11px"
+                    borderRadius="full"
+                    px="1.5"
+                    minW="18px"
+                    h="18px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    zIndex="1"
+                  >
+                    {cart.length}
+                  </Box>)}
+              </Box>
             </Link>
+
           </HStack>
         </HStack>
       </HStack>

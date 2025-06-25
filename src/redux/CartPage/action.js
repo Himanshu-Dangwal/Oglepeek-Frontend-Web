@@ -1,42 +1,3 @@
-// import {
-//   applyCoupon,
-//   ADD_TO_CART,
-//   REMOVE_FROM_CART,
-//   INCREMENT,
-//   DECREMENT,
-//   RESET
-// } from "./actionType";
-
-// export const addToCart = (product) => {
-//   return {
-//     type: ADD_TO_CART,
-//     payload: product
-//   };
-// };
-
-// export const removeFromCart = (productId, variantId) => {
-//   return {
-//     type: REMOVE_FROM_CART,
-//     payload: { productId, variantId }
-//   };
-// };
-
-// export const increment = (productId, variantId) => {
-//   return {
-//     type: INCREMENT,
-//     payload: { productId, variantId }
-//   };
-// };
-
-// export const decrement = (productId, variantId) => {
-//   return {
-//     type: DECREMENT,
-//     payload: { productId, variantId }
-//   };
-// };
-
-
-
 import axios from "axios";
 import {
   ADD_TO_CART,
@@ -72,8 +33,9 @@ export const removeFromCart = (productId, variantId) => async (dispatch) => {
 
   try {
     await axios.delete("http://localhost:8000/api/cart/", {
-      productId, variantId
-    }, { withCredentials: true });
+      data: { productId, variantId }, // ✅ pass payload in `data`
+      withCredentials: true           // ✅ include cookies
+    });
   } catch (err) {
     console.error("Failed to remove item", err);
   }
@@ -89,7 +51,7 @@ export const increment = (productId, variantId) => async (dispatch) => {
     await axios.post("http://localhost:8000/api/cart/", {
       productId,
       variantId,
-      quantityChange: +1
+      quantity: +1
     }, { withCredentials: true });
   } catch (err) {
     console.error("Failed to update quantity", err);
@@ -106,7 +68,7 @@ export const decrement = (productId, variantId) => async (dispatch) => {
     await axios.post("http://localhost:8000/api/cart/", {
       productId,
       variantId,
-      quantityChange: -1
+      quantity: -1
     }, { withCredentials: true });
   } catch (err) {
     console.error("Failed to update quantity", err);
@@ -128,7 +90,16 @@ export const loadCartFromBackend = () => async (dispatch) => {
         payload: {
           productId: item.productId,
           variantId: item.variantId,
-          quantity: item.quantity
+          quantity: item.quantity,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          frameColor: item.frameColor,
+          frameStyle: item.frameStyle,
+          material: item.material,
+          lens: item.lens,
+          frameType: item.frameType,
+          description: item.description
         }
       });
     });

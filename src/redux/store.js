@@ -11,8 +11,8 @@ import { orderReducer } from "./order/order.reducer";
 
 const rootReducer = combineReducers({
   CartReducer,
-  wishlistManager: wishlistReducer,
-  orderManager: orderReducer
+  wishlistReducer,
+  orderReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
