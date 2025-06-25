@@ -30,8 +30,7 @@ export const CartReducer = (state = initialState, { type, payload }) => {
           currItem.variantId === item.variantId
       );
 
-      console.log("Adding to cart:", item);
-      console.log("Current cart:", state.cart);
+
 
       if (exists) {
         alert("Product already in cart");
@@ -50,37 +49,49 @@ export const CartReducer = (state = initialState, { type, payload }) => {
         ...state,
         cart: state.cart.filter(
           (item) =>
-            !(item._id === productId && item.variants._id === variantId)
+            !(item.productId === productId && item.variantId === variantId)
         )
       };
     }
 
     case INCREMENT: {
       const { productId, variantId } = payload;
+      // console.log(productId)
+      // console.log(variantId)
       return {
         ...state,
-        cart: state.cart.map((item) =>
-          item._id === productId && item.variants._id === variantId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
+        cart: state.cart.map((item) => {
+          // console.log(item)
+          if (item.productId === productId && item.variantId === variantId) {
+            return { ...item, quantity: item.quantity + 1 }
+          }
+
+          return item
+        })
       };
     }
 
     case DECREMENT: {
       const { productId, variantId } = payload;
+      console.log(productId)
+      console.log(variantId)
       return {
         ...state,
-        cart: state.cart.map((item) =>
-          item._id === productId && item.variants._id === variantId
-            ? {
-              ...item,
-              quantity: item.quantity > 1 ? item.quantity - 1 : 1
+        cart: state.cart
+          .map((item) => {
+            console.log(item)
+            if (item.productId === productId && item.variantId === variantId) {
+              return {
+                ...item,
+                quantity: item.quantity - 1
+              };
             }
-            : item
-        )
+            return item;
+          })
+          .filter((item) => item.quantity > 0) // remove items with 0 quantity
       };
     }
+
 
     case RESET:
       return {

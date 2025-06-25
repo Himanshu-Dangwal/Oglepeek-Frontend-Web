@@ -18,40 +18,30 @@ import axios from "axios";
 const CartPage = () => {
   const { cart } = useSelector((state) => state.CartReducer);
   const [detailedCartItems, setDetailedCartItems] = useState([]);
+  const [peekCoins, setPeekCoins] = useState(0);
+
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchCartDetails = async () => {
       try {
-        const promises = cart.map(async ({ productId, variantId, quantity }) => {
-          const { data: product } = await axios.get(`http://localhost:8000/api/product/${productId}`);
-          const variant = product.variants.find(v => v._id === variantId);
-          return {
-            productId,
-            variantId,
-            quantity,
-            name: product.name,
-            price: variant.price,
-            image: variant.images[0],
-            frameStyle: product.frameStyle,
-            frameColor: variant.frameColor,
-            description: product.description,
-            material: product.material,
-            lens: product.lens,
-            frameType: product.frameType,
-          };
+        const { data } = await axios.get("http://localhost:8000/api/cart", {
+          withCredentials: true,
         });
 
-        const results = await Promise.all(promises);
-        setDetailedCartItems(results);
+        if (data.success) {
+          setDetailedCartItems(data.items);
+          setPeekCoins(data.peekCoins || 0); // 👈 Save peekCoins
+        }
       } catch (err) {
         console.error("Failed to load cart details:", err);
       }
     };
 
-    if (cart.length > 0) fetchCartDetails();
-    else setDetailedCartItems([]);
-  }, [cart]);
+    fetchCartDetails();
+  }, []);
+
 
   const getTotalPrice = () =>
     detailedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -90,7 +80,7 @@ const CartPage = () => {
             }}
           >
             <CartLength cartLength={cart.length} />
-            <CartItem detailedItems={detailedCartItems} />
+            <CartItem />
           </Flex>
           <Flex
             flexDirection={"column"}
@@ -115,7 +105,8 @@ const CartPage = () => {
             </Text>
             <PriceDetail
               totalPrice={getTotalPrice()}
-              discountPrice={0}
+              discountPrice={getTotalPrice()}
+              peekCoins={peekCoins}
             />
             <SaleBox />
 

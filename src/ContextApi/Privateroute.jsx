@@ -7,7 +7,7 @@ export const Privateroutes = ({ children }) => {
   const { isAuth } = useContext(AuthContext);
 
   if (!isAuth) {
-    alert("Please login first");
+    // alert("Please login first");
     return <Navigate to="/" />;
   }
   return children;

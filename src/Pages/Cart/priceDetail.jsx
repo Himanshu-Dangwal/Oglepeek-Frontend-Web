@@ -1,8 +1,17 @@
 import { Box, Flex, Heading } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 
-function PriceDetail({ totalPrice, discountPrice }) {
+function PriceDetail({ totalPrice, discountPrice, peekCoins = 0 }) {
   const { coupon } = useSelector((state) => state.CartReducer);
+
+  const tax = Math.round(discountPrice * 0.10);
+  const maxRedeemAmount = discountPrice * 0.10; // 10% of cart total
+  const peekCoinValue = 0.025;
+  const peekCoinRedeemAmount = Math.min(peekCoins * peekCoinValue, maxRedeemAmount);
+  const peekCoinsUsed = Math.floor(peekCoinRedeemAmount / peekCoinValue); // Actual coins used
+
+  const totalPayable = discountPrice + tax - (coupon || 0) - peekCoinRedeemAmount;
+
   return (
     <Flex
       flexDirection={"column"}
@@ -13,201 +22,62 @@ function PriceDetail({ totalPrice, discountPrice }) {
       padding={"5px"}
       cursor={"pointer"}
     >
-      <Flex
-        gap={"4"}
-        flexDirection="column"
-        padding={"10px"}
-        border="0px solid red"
-      >
-        <Flex
-          gap="50px"
-          border="0px solid green"
-          justifyContent="space-between"
-        >
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Total Price
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            ₹ {totalPrice}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex gap="50px" border="0px solid blue" justifyContent="space-between">
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Total Discount
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            - ₹ {totalPrice - discountPrice}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex gap="50px" border="0px solid blue" justifyContent="space-between">
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Total{" "}
-            <span style={{ fontSize: "14px", fontWeight: "500" }} color="gray">
-              (Before Tax)
-            </span>
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            ₹ {discountPrice}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex gap="50px" border="0px solid blue" justifyContent="space-between">
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Tax Collected{" "}
-            <span style={{ fontSize: "14px", fontWeight: "500" }} color="gray">
-              (18%)
-            </span>
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            + ₹ {Math.round(discountPrice * 0.18)}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex gap="50px" border="0px solid blue" justifyContent="space-between">
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Total{" "}
-            <span style={{ fontSize: "14px", fontWeight: "500" }} color="gray">
-              (After Tax)
-            </span>
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            ₹ {discountPrice + Math.round(discountPrice * 0.18)}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex
-          gap="50px"
-          border="0px solid grey"
-          justifyContent={"space-between"}
-        >
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Coupon
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"15px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-            color="green.900"
-          >
-            ₹{coupon || 0}
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex
-          gap="50px"
-          border="0px solid grey"
-          justifyContent={"space-between"}
-        >
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-          >
-            Convenience Fees
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="500"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-            color="#0FBD95"
-          >
-            Free
-          </Heading>
-        </Flex>
-        <Box border={"1px dashed #CECEDF"}></Box>
-        <Flex
-          gap="50px"
-          border="0px solid grey"
-          justifyContent={"space-between"}
-        >
-          <Heading
-            as="p"
-            fontSize={"17px"}
-            fontWeight="600"
-            fontFamily={"Inter"}
-          >
-            Total payable
-          </Heading>
-          <Heading
-            as="p"
-            fontSize={"16px"}
-            fontWeight="600"
-            fontFamily={"Inter"}
-            justifyContent="flex-end"
-          >
-            ₹ {discountPrice + Math.round(discountPrice * 0.18) - (coupon || 0)}
-          </Heading>
-        </Flex>
+      <Flex flexDirection="column" padding={"10px"} gap="3">
+        {/* Total Price */}
+        <Row label="Total Price" value={`NPR ${totalPrice}`} />
+
+        {/* Discount */}
+        <Row label="Total Discount" value={`${totalPrice - discountPrice}`} />
+
+        {/* Subtotal */}
+        <Row label="Total (Before Tax)" value={`${discountPrice}`} />
+
+        {/* Tax */}
+        <Row label="Tax Collected (10%)" value={`${tax}`} />
+
+        {/* PeekCoins */}
+        <Row label={`PeekCoins Redeemed (${peekCoinsUsed})`} value={`${peekCoinRedeemAmount.toFixed(2)}`} />
+
+        {/* Coupon */}
+        <Row label="Coupon" value={`${coupon || 0}`} />
+
+        {/* Convenience Fee */}
+        <Row label="Convenience Fee" value="Free" color="#0FBD95" />
+
+        {/* Total Payable */}
+        <Row label="Total Payable" value={`NPR ${totalPayable.toFixed(2)}`} bold />
+
       </Flex>
     </Flex>
   );
 }
+
+// Reusable Row Component
+const Row = ({ label, value, bold, color }) => (
+  <>
+    <Flex justifyContent="space-between">
+      <Heading
+        as="p"
+        fontSize="16px"
+        fontWeight={bold ? "600" : "500"}
+        fontFamily="Inter"
+      >
+        {label}
+      </Heading>
+      <Heading
+        as="p"
+        fontSize="15px"
+        fontWeight={bold ? "600" : "500"}
+        fontFamily="Inter"
+        justifyContent="flex-end"
+        color={color}
+      >
+        {value}
+      </Heading>
+    </Flex>
+    <Box border={"1px dashed #CECEDF"} />
+  </>
+);
+
 
 export default PriceDetail;

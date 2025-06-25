@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   removeFromCart,
   decrement,
@@ -16,24 +17,24 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-const CartItem = ({ detailedItems }) => {
+const CartItem = () => {
+
+  const detailedItems = useSelector((state) => state.CartReducer.cart);
+  console.log(detailedItems)
+
   const dispatch = useDispatch();
   const Navigate = useNavigate();
 
-  const handleDelete = (item) => {
-    dispatch(removeFromCart(item));
+  const handleDelete = (productId, variantId) => {
+    dispatch(removeFromCart(productId, variantId));
   };
 
-  const handleDecrementChange = (id, qty) => {
-    if (qty < 1) {
-      dispatch(removeFromCart(id));
-    } else {
-      dispatch(decrement(id));
-    }
+  const handleDecrementChange = (productId, variantId) => {
+    dispatch(decrement(productId, variantId));
   };
 
-  const handleIncrementChange = (id) => {
-    dispatch(increment(id));
+  const handleIncrementChange = (productId, variantId) => {
+    dispatch(increment(productId, variantId));
   };
 
   return (
@@ -54,6 +55,7 @@ const CartItem = ({ detailedItems }) => {
             w="100%"
             mb={6}
             alignItems="center"
+            key={`${item.productId}-${item.variantId}`}
           >
             {/* Product Image */}
             <Image
@@ -92,6 +94,7 @@ const CartItem = ({ detailedItems }) => {
                 <Text><b>Type:</b> {item.frameType}</Text>
                 <Text><b>Lens:</b> {item.lens}</Text>
                 <Text><b>Material:</b> {item.material}</Text>
+                <Text as="span" color="orange.400" style={{ fontWeight: "bold" }}>Earn {item.price} PeekCoins</Text>
               </Grid>
 
               <Flex justify="space-between" align="center" paddingRight={4}>
@@ -102,7 +105,7 @@ const CartItem = ({ detailedItems }) => {
                   <Flex align="center" border="1px" borderColor="gray.300" borderRadius="md">
                     <Button
                       size="sm"
-                      onClick={() => handleDecrementChange(item.productId, item.variantId, item.quantity)}
+                      onClick={() => handleDecrementChange(item.productId, item.variantId)}
                     >
                       −
                     </Button>

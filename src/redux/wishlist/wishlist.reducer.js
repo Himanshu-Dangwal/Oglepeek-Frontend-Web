@@ -6,15 +6,24 @@ const wishlistInitalState = {
   wishlist: []
 };
 
-export const wishlistReducer = (state = wishlistInitalState, action) => {
-  const { type, payload } = action;
+export const wishlistReducer = (state = wishlistInitalState, { type, payload }) => {
+
   switch (type) {
     case ADD_TO_WISHLIST: {
+      const item = payload;
       const { wishlist } = state;
-      const product = payload;
+      const exists = state.wishlist.find(
+        (currItem) =>
+          currItem.productId === item.productId &&
+          currItem.variantId === item.variantId
+      );
 
+      if (exists) {
+        alert("Product already in cart");
+        return state;
+      }
       const newItem = {
-        ...product
+        ...item
       };
       return {
         ...state,
@@ -22,8 +31,9 @@ export const wishlistReducer = (state = wishlistInitalState, action) => {
       };
     }
     case REMOVE_FROM_WISHLIST: {
+      const { productId, variantId } = payload;
       return {
-        wishlist: state.wishlist.filter((item) => item._id !== payload)
+        wishlist: state.wishlist.filter((item) => !(item.productId === productId && item.variantId === variantId))
       };
     }
 

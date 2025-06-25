@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {
   Container, SimpleGrid, Box, Image, Wrap, Heading, Text,
@@ -14,9 +14,11 @@ import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
 import { addToCart } from "../../redux/CartPage/action";
 import { addToWishlist } from "../../redux/wishlist/wishlist.actions";
+import { useToast } from "@chakra-ui/react";
 
 const SingleProductPage = () => {
   const { id } = useParams();
+  const toast = useToast();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
@@ -26,7 +28,7 @@ const SingleProductPage = () => {
   const bgOnExpand = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.700", "gray.300");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
 
@@ -60,6 +62,15 @@ const SingleProductPage = () => {
       productId: product._id,
       variantId: variant._id,
       quantity,
+      name: product.name,
+      price: variant?.price,
+      image: variant?.images[0],
+      frameColor: variant?.frameColor,
+      frameStyle: product.frameStyle,
+      material: product.material,
+      lens: product.lens,
+      frameType: product.frameType,
+      description: product.description
     };
 
     const exists = cart.find(
@@ -68,16 +79,45 @@ const SingleProductPage = () => {
 
     if (!exists) {
       dispatch(addToCart(item));
+      toast({
+        title: "Added to Cart",
+        description: `${product.name} has been added to your cart.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+
     } else {
-      alert("Product already in cart");
+      toast({
+        title: "Already in Cart",
+        description: "This product is already in your cart.",
+        status: "info",
+        duration: 2500,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 
 
   const handleAddToWishlist = () => {
-    const item = { ...product, ...product.variants[selectedVariantIndex] };
+    const variant = product.variants[selectedVariantIndex];
+    const item = {
+      productId: product._id,
+      variantId: variant._id,
+      image: variant.images[0],
+      name: product.name,
+      price: variant.price,
+      frameStyle: product.frameStyle,
+      frameColor: variant.frameColor,
+      description: product.description,
+      material: product.material,
+      lens: product.lens,
+      frameType: product.frameType,
+    };
     dispatch(addToWishlist(item));
-    setTimeout(() => navigate("/wishlist"), 1000);
+    // setTimeout(() => navigate("/wishlist"), 1000);
   };
 
   return (

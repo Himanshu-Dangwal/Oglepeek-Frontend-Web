@@ -4,29 +4,61 @@ import { removeFromWishlist } from "../../redux/wishlist/wishlist.actions";
 import { addToCart } from "../../redux/CartPage/action";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react"
 
 const Wishlist = () => {
-  const wishlistItems = useSelector((store) => store.wishlistManager.wishlist);
+  const toast = useToast();
+  const { wishlist } = useSelector((state) => state.wishlistReducer);
   const { cart } = useSelector((state) => state.CartReducer);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleDelete = (item) => {
-    dispatch(removeFromWishlist(item));
+  const handleDelete = (productId, variantId) => {
+    dispatch(removeFromWishlist({ productId, variantId }));
   };
 
-  const handleAddToCart = (data) => {
-    const existingItem = cart.findIndex((item) => item._id === data._id);
-    if (existingItem === -1) {
-      data.quantity = 1;
-      dispatch(addToCart(data));
-      dispatch(removeFromWishlist(data._id));
-      setTimeout(() => {
-        navigate("/cart");
-      }, 1000);
+  const handleAddToCart = (wishlistItem) => {
+    const quantity = 1
+    const item = {
+      productId: wishlistItem.productId,
+      variantId: wishlistItem.variantId,
+      image: wishlistItem.image,
+      name: wishlistItem.name,
+      price: wishlistItem.price,
+      frameStyle: wishlistItem.frameStyle,
+      frameColor: wishlistItem.frameColor,
+      description: wishlistItem.description,
+      material: wishlistItem.material,
+      lens: wishlistItem.lens,
+      frameType: wishlistItem.frameType,
+      quantity
+    };
+
+    const exists = cart.find(
+      (c) => c.productId === item.productId && c.variantId === item.variantId
+    );
+    if (!exists) {
+      dispatch(addToCart(item));
+      dispatch(removeFromWishlist({ productId: item.productId, variantId: item.variantId }));
+      toast({
+        title: "Added to Cart",
+        description: `Item has been added to your cart.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
     } else {
-      alert("Product Already Add in Cart");
+      dispatch(removeFromWishlist(item.productId, item.variantId));
+      toast({
+        title: "Already in Cart",
+        description: "This product is already in your cart.",
+        status: "info",
+        duration: 2500,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 
@@ -51,7 +83,7 @@ const Wishlist = () => {
         >
           Wishlist
         </Heading>
-        {wishlistItems.length === 0 ? (
+        {wishlist.length === 0 ? (
           <Text
             textAlign="center"
             fontSize="28px"
@@ -64,9 +96,9 @@ const Wishlist = () => {
         ) : (
           <Box>
             <Grid templateColumns="repeat(1,1fr)" gap={18} w={"100%"}>
-              {wishlistItems &&
-                wishlistItems &&
-                wishlistItems.map((item) => (
+              {wishlist &&
+                wishlist &&
+                wishlist.map((item) => (
                   <Box
                     key={item.id}
                     borderWidth="1px"
@@ -94,7 +126,7 @@ const Wishlist = () => {
                         textTransform="capitalize"
                         mb={{ sm: "4", base: "4" }}
                       >
-                        {item.productRefLink}
+                        {item.name}
                       </Text>
                       <Grid
                         m={{ lg: "auto", sm: "left", base: "right" }}
@@ -117,7 +149,7 @@ const Wishlist = () => {
                         </Button>
                         <Button
                           colorScheme="red"
-                          onClick={() => handleDelete(item._id)}
+                          onClick={() => handleDelete(item.productId, item.variantId)}
                         >
                           Remove
                         </Button>
@@ -137,7 +169,7 @@ const Wishlist = () => {
                       mb="1"
                     >
                       <img
-                        src={item.imageTsrc}
+                        src={item.image}
                         alt={item.name}
                         boxSize="180px"
                         m="auto"
@@ -160,7 +192,7 @@ const Wishlist = () => {
                           {item.name}
                         </Text>
                         <Text fontSize="lg" fontWeight="bold">
-                          Price : ₹ {item.price}.00 /-
+                          Price : NPR {item.price}.00 /-
                         </Text>
                         <Text
                           fontSize="lg"
@@ -168,7 +200,7 @@ const Wishlist = () => {
                           color="gray.600"
                           textTransform="capitalize"
                         >
-                          {item.productType}
+                          {item.frameType}
                         </Text>
                         <Text
                           fontSize="lg"
@@ -176,7 +208,7 @@ const Wishlist = () => {
                           color="gray.600"
                           textTransform="capitalize"
                         >
-                          Colour : {item.colors}
+                          Colour : {item.color}
                         </Text>{" "}
                         <Text
                           fontSize="md"
@@ -184,7 +216,7 @@ const Wishlist = () => {
                           color="gray.600"
                           textTransform="capitalize"
                         >
-                          Shape : {item.shape}
+                          Style : {item.frameStyle}
                         </Text>
                       </Box>
                     </Grid>
