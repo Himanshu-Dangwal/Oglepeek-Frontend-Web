@@ -10,37 +10,40 @@ import CartEmpty from "./CartEmpty";
 import CouponBox from "./CouponBox";
 import Footer from "../../Components/Footer/Footer";
 import { Flex, Text, Button } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-// import { Material } from "../Product/FilterDetails";
+import { useContext } from "react";
+import { AuthContext } from "../../ContextApi/AuthContext";
+// import axios from "axios";
 
 
 const CartPage = () => {
-  const { cart } = useSelector((state) => state.CartReducer);
-  const [detailedCartItems, setDetailedCartItems] = useState([]);
-  const [peekCoins, setPeekCoins] = useState(0);
+  // const { cart } = useSelector((state) => state.CartReducer);
+  // const [detailedCartItems, setDetailedCartItems] = useState([]);
+  const { Authdata } = useContext(AuthContext);
+  const peekCoins = Authdata.peekCoins || 0;
+
 
   const navigate = useNavigate();
+  const detailedCartItems = useSelector((state) => state.CartReducer.cart);
 
 
-  useEffect(() => {
-    const fetchCartDetails = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:8000/api/cart", {
-          withCredentials: true,
-        });
+  // useEffect(() => {
+  //   const fetchCartDetails = async () => {
+  //     try {
+  //       const { data } = await axios.get("http://localhost:8000/api/cart", {
+  //         withCredentials: true,
+  //       });
 
-        if (data.success) {
-          setDetailedCartItems(data.items);
-          setPeekCoins(data.peekCoins || 0); // 👈 Save peekCoins
-        }
-      } catch (err) {
-        console.error("Failed to load cart details:", err);
-      }
-    };
+  //       if (data.success) {
+  //         setDetailedCartItems(data.items);
+  //         setPeekCoins(data.peekCoins || 0); // 👈 Save peekCoins
+  //       }
+  //     } catch (err) {
+  //       console.error("Failed to load cart details:", err);
+  //     }
+  //   };
 
-    fetchCartDetails();
-  }, []);
+  //   fetchCartDetails();
+  // }, []);
 
 
   const getTotalPrice = () =>
@@ -49,7 +52,7 @@ const CartPage = () => {
   return (
     <>
       <Navbar />
-      {cart.length > 0 ? (
+      {detailedCartItems.length > 0 ? (
         <Flex
           width={"90%"}
           margin="auto"
@@ -79,7 +82,7 @@ const CartPage = () => {
               "2xl": "65%"
             }}
           >
-            <CartLength cartLength={cart.length} />
+            <CartLength cartLength={detailedCartItems.length} />
             <CartItem />
           </Flex>
           <Flex
