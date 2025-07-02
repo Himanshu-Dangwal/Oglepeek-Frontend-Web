@@ -39,3 +39,11 @@
 .input:hover {
   outline: 2px solid black;
 }
+
+
+.slick-prev:before,
+.slick-next:before {
+  color: black !important;
+  /* Or white depending on your theme */
+  font-size: 30px;
+}

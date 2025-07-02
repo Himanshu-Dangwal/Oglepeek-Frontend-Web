@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { FaHeart } from 'react-icons/fa';
 import axios from 'axios';
+import Slider from "react-slick";
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
 import { addToCart } from "../../redux/CartPage/action";
@@ -17,18 +18,18 @@ import { addToWishlist } from "../../redux/wishlist/wishlist.actions";
 import { useToast } from "@chakra-ui/react";
 
 const SingleProductPage = () => {
+  const sliderRef = useRef(null);
   const { id } = useParams();
   const toast = useToast();
   const [product, setProduct] = useState(null);
-  const [mainImage, setMainImage] = useState("");
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgOnExpand = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.700", "gray.300");
 
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
 
@@ -37,7 +38,6 @@ const SingleProductPage = () => {
       try {
         const res = await axios.get(`http://localhost:8000/api/product/${id}`);
         setProduct(res.data);
-        setMainImage(res.data.variants[0]?.images[0]);
       } catch (error) {
         console.error("Failed to load product", error);
       }
@@ -48,16 +48,25 @@ const SingleProductPage = () => {
   if (!product) return <Spinner size="xl" mt={20} />;
 
   const variant = product.variants[selectedVariantIndex];
+  const imageSliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    adaptiveHeight: true,
+    beforeChange: (_, next) => setCurrentImageIndex(next),
+  };
 
   const handleVariantSelect = (index) => {
+    setCurrentImageIndex(0);
     setSelectedVariantIndex(index);
-    setMainImage(product.variants[index]?.images[0]);
     setQuantity(1);
   };
 
   const handleAddToCart = () => {
     const variant = product.variants[selectedVariantIndex];
-
     const item = {
       productId: product._id,
       variantId: variant._id,
@@ -87,7 +96,6 @@ const SingleProductPage = () => {
         isClosable: true,
         position: "top-right",
       });
-
     } else {
       toast({
         title: "Already in Cart",
@@ -99,7 +107,6 @@ const SingleProductPage = () => {
       });
     }
   };
-
 
   const handleAddToWishlist = () => {
     const variant = product.variants[selectedVariantIndex];
@@ -117,7 +124,6 @@ const SingleProductPage = () => {
       frameType: product.frameType,
     };
     dispatch(addToWishlist(item));
-    // setTimeout(() => navigate("/wishlist"), 1000);
   };
 
   return (
@@ -125,37 +131,57 @@ const SingleProductPage = () => {
       <Navbar />
       <Container maxW="container.xl" py={{ base: 6, md: 10 }}>
         <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, md: 10 }}>
-          {/* Image Section */}
+          {/* Image Carousel Section */}
           <Box>
-            <Box borderWidth="1px" borderColor={borderColor} borderRadius="md" p={4} mb={4}>
-              <Image
-                src={mainImage}
-                alt={product.name}
-                objectFit="cover"
-                w="100%"
-                h={{ base: "300px", sm: "400px", lg: "500px" }}
-                borderRadius="md"
-              />
+            <Box borderWidth="1px" borderColor={borderColor} borderRadius="md" p={0} mb={2}>
+              <Slider key={selectedVariantIndex} ref={sliderRef} {...imageSliderSettings}>
+                {variant?.images.map((img, idx) => (
+                  <Box key={idx} position="relative">
+                    <Image
+                      src={img}
+                      alt={`Variant image ${idx + 1}`}
+                      objectFit="cover"
+                      w="100%"
+                      h={{ base: "200px", sm: "300px", md: "400px", lg: "500px" }}
+                      borderRadius="md"
+                    />
+                    <Box
+                      position="absolute"
+                      top="2"
+                      right="2"
+                      bg="blackAlpha.600"
+                      color="white"
+                      px="2"
+                      py="1"
+                      borderRadius="md"
+                      fontSize="sm"
+                    >
+                      {currentImageIndex + 1} / {variant?.images.length}
+                    </Box>
+                  </Box>
+                ))}
+              </Slider>
             </Box>
-            {/* Variant Thumbnails (All Variant Images) */}
             <Wrap spacing={3} justify="center">
               {product.variants.map((v, vIdx) => (
-                v.images.map((img, iIdx) => (
-                  <Box
-                    key={`${v._id}-${iIdx}`}
-                    borderWidth={mainImage === img ? "2px" : "1px"}
-                    borderColor={mainImage === img ? "blue.500" : borderColor}
-                    borderRadius="md"
-                    p={1}
-                    cursor="pointer"
-                    onClick={() => {
-                      setMainImage(img);
-                      setSelectedVariantIndex(vIdx);
-                    }}
-                  >
-                    <Image src={img} alt={`Variant ${v.frameColor}`} boxSize="60px" objectFit="cover" borderRadius="md" />
-                  </Box>
-                ))
+                <Box
+                  key={v._id}
+                  borderWidth={selectedVariantIndex === vIdx ? "2px" : "1px"}
+                  borderColor={selectedVariantIndex === vIdx ? "blue.500" : borderColor}
+                  borderRadius="lg"
+                  p={1}
+                  cursor="pointer"
+                  _hover={{ transform: "scale(1.05)", transition: "all 0.2s" }}
+                  onClick={() => handleVariantSelect(vIdx)}
+                >
+                  <Image
+                    src={v.images[0]}
+                    alt={`Variant ${v.frameColor}`}
+                    boxSize="60px"
+                    objectFit="cover"
+                    borderRadius="lg"
+                  />
+                </Box>
               ))}
             </Wrap>
           </Box>
@@ -171,7 +197,6 @@ const SingleProductPage = () => {
               {variant.inStock < 5 ? `Hurry! Only ${variant.inStock} left` : 'In stock'}
             </Text>
 
-            {/* Quantity */}
             <HStack align="center">
               <Text>Quantity:</Text>
               <NumberInput
@@ -190,13 +215,11 @@ const SingleProductPage = () => {
               </NumberInput>
             </HStack>
 
-            {/* Actions */}
             <Stack direction={{ base: "column", md: "row" }} spacing={3}>
               <Button colorScheme="blue" flex={1} size="lg" onClick={handleAddToCart}>Add to Cart</Button>
               <IconButton aria-label="Add to wishlist" icon={<FaHeart />} variant="outline" colorScheme="pink" size="lg" onClick={handleAddToWishlist} />
             </Stack>
 
-            {/* Variant Swatches */}
             <Box>
               <Text fontWeight="semibold" mb={2}>Available Colors:</Text>
               <HStack spacing={3} wrap="wrap">
@@ -216,9 +239,7 @@ const SingleProductPage = () => {
               </HStack>
             </Box>
 
-            {/* Accordions */}
-            <Accordion allowToggle defaultIndex={[]} mt={4}>
-              {/* Description */}
+            <Accordion allowToggle mt={4}>
               <AccordionItem>
                 <h2>
                   <AccordionButton _expanded={{ bg: bgOnExpand, fontWeight: "bold" }}>
@@ -231,7 +252,6 @@ const SingleProductPage = () => {
                 </AccordionPanel>
               </AccordionItem>
 
-              {/* Specifications */}
               <AccordionItem>
                 <h2>
                   <AccordionButton _expanded={{ bg: bgOnExpand, fontWeight: "bold" }}>
@@ -251,7 +271,6 @@ const SingleProductPage = () => {
                 </AccordionPanel>
               </AccordionItem>
 
-              {/* Shipping Info - Placeholder */}
               <AccordionItem>
                 <h2>
                   <AccordionButton _expanded={{ bg: bgOnExpand, fontWeight: "bold" }}>
@@ -261,6 +280,25 @@ const SingleProductPage = () => {
                 </h2>
                 <AccordionPanel pb={4}>
                   <Text color={textColor}>Free shipping on orders over $50. 30-day returns available for all items unless marked final sale.</Text>
+                </AccordionPanel>
+              </AccordionItem>
+
+              <AccordionItem>
+                <h2>
+                  <AccordionButton _expanded={{ bg: bgOnExpand, fontWeight: "bold" }}>
+                    <Box flex="1" textAlign="left">Size Chart</Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <Image
+                    src="https://i.imgur.com/NkSyc4I.png"
+                    alt="Size Chart"
+                    maxH="400px"
+                    mx="auto"
+                    objectFit="contain"
+                    borderRadius="md"
+                  />
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>

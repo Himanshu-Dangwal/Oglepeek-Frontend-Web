@@ -83,6 +83,7 @@ export const loadCartFromBackend = () => async (dispatch) => {
     });
 
     const items = res.data?.items || [];
+    // const peekCoins = res.data?.peekCoins || 0;
     console.log("Loaded cart items from backend:", items);
     items.forEach(item => {
       dispatch({
