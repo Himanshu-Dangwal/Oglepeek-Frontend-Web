@@ -94,8 +94,8 @@ export const Frame2 = [
   {
     src:
       "https://static.lenskart.com/images/cust_mailer/Eyeglass/Geometric.png",
-    title: "Tinted ",
-    name: "Tinted "
+    title: "Tinted",
+    name: "Tinted"
   },
 
   {

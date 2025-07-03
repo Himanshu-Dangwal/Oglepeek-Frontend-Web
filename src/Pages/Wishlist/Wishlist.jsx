@@ -12,10 +12,13 @@ const Wishlist = () => {
   const { wishlist } = useSelector((state) => state.wishlistReducer);
   const { cart } = useSelector((state) => state.CartReducer);
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
 
+  //Need to remove from localStorage as well
   const handleDelete = (productId, variantId) => {
     dispatch(removeFromWishlist({ productId, variantId }));
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const updatedWishlist = wishlist.filter((item) => !(item.productId === productId && item.variantId === variantId));
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
   };
 
   const handleAddToCart = (wishlistItem) => {

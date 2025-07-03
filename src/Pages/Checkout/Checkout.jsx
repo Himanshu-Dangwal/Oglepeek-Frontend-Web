@@ -1,10 +1,11 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { React, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 import { useSelector, useDispatch } from "react-redux";
 import { cartReset } from "../../redux/CartPage/action";
 import { addToOrder } from "../../redux/order/order.actions";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -14,21 +15,39 @@ import {
   Spacer,
   Switch,
   Text,
-  Grid
+  Grid,
+  Spinner
 } from "@chakra-ui/react";
 
 const Orders = () => {
+  const location = useLocation();
+  const userData = location.state?.userData;
   const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
   const { cart, coupon } = useSelector((state) => state.CartReducer);
   const dispatch = useDispatch();
 
-  const getTotalPrice = () => {
-    const totalPrice = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    return totalPrice;
-  };
+  useEffect(() => {
+
+    const createOrder = async () => {
+      try {
+        const response = await axios.post("http://localhost:8000/api/orders/", {
+          userData
+        }, { withCredentials: true })
+        setOrder(response.data.order);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to create order", error);
+        setLoading(false);
+      }
+
+    }
+    createOrder();
+
+  }, [userData])
 
   const handleClick = () => {
     dispatch(addToOrder(cart));
@@ -41,6 +60,23 @@ const Orders = () => {
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const day = today.getDate().toString().padStart(2, "0");
   const currentDate = `${day}-${month}-${year}`;
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt="50px">
+        <Spinner size="xl" />
+        <Text mt="4">Creating your order...</Text>
+      </Box>
+    );
+  }
+
+  if (!order) {
+    return (
+      <Box textAlign="center" mt="50px" color="red.500">
+        <Text>Failed to create order. Please try again.</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box m="auto">
@@ -82,8 +118,8 @@ const Orders = () => {
                 gap={{ lg: "5", sm: "0", base: "0" }}
               >
                 <Flex>
-                  <Box fontSize={"15px"} fontWeight="400">
-                    Order ID :
+                  <Box fontSize={"14px"} fontWeight="400">
+                    OrderID:
                   </Box>
 
                   <Box
@@ -91,8 +127,9 @@ const Orders = () => {
                     ml="3px"
                     letterSpacing="1.5px"
                     fontWeight={"500"}
+                    color={"teal.500"}
                   >
-                    {Math.round(Math.random() * 1125452 + Math.random())}
+                    {order._id}
                   </Box>
                 </Flex>
 
@@ -140,8 +177,7 @@ const Orders = () => {
                     Total Price :{" "}
                     <strong>
                       ₹
-                      {Math.round(getTotalPrice() + getTotalPrice() * 0.18) -
-                        (coupon || 0)}
+                      {order.totalAmount}
                       .00
                     </strong>
                   </Box>
@@ -187,7 +223,7 @@ const Orders = () => {
                     letterSpacing="1.5px"
                     fontWeight={"500"}
                   >
-                    ₹{Math.round(getTotalPrice() + getTotalPrice() * 0.18)}.00
+                    ₹{order.totalAmount}.00
                   </Box>
                 </Flex>
               )}
@@ -274,7 +310,7 @@ const Orders = () => {
             </Box>
           </Box>
         </HStack>
-        {cart.map((el) => {
+        {cart.map((item) => {
           return (
             <Box border={"1px"} borderColor="gray.300">
               <Grid
@@ -291,7 +327,7 @@ const Orders = () => {
                 textAlign={{ md: "left", sm: "center", base: "center" }}
               >
                 <Image
-                  src={el.imageTsrc}
+                  src={item.image}
                   w={"200px"}
                   h="100px"
                   m={{
@@ -309,10 +345,10 @@ const Orders = () => {
                     color="gray.500"
                     fontWeight="bold"
                   >
-                    {el.productRefLink || "Vincent Chase Eyeglasses"}
+                    {item.name || "Vincent Chase Eyeglasses"}
                   </Box>
                   <Box fontSize="15px" mb="4px" fontWeight="500">
-                    + Hydrophobic Anti-Glare
+                    {item.description}
                   </Box>
                   <Box
                     fontSize="14px"
@@ -320,7 +356,7 @@ const Orders = () => {
                     color={"gray"}
                     fontWeight={"500"}
                   >
-                    Sold by Lenskart Pvt Ltd.
+                    Sold by Oglepeek
                   </Box>
                   <Flex
                     fontWeight={"500"}
@@ -332,7 +368,7 @@ const Orders = () => {
                     }}
                   >
                     <Text fontSize="18px">
-                      ₹{Math.round(el.price + el.price * 0.18)}.00
+                      ₹{item.price}.00
                     </Text>
 
                     <Text fontSize="sm" mt="1">
@@ -341,7 +377,7 @@ const Orders = () => {
                   </Flex>
                   <Box fontWeight={"500"} fontSize="16px" mb="5">
                     {" "}
-                    Qty : {el.quantity < 10 ? `0${el.quantity}` : el.quantity}
+                    Qty : {item.quantity < 10 ? `0${item.quantity}` : item.quantity}
                   </Box>
                 </Box>
               </Grid>

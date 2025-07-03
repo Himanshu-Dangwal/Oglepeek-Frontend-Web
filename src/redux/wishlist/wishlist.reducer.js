@@ -1,4 +1,4 @@
-import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST, RESET } from "./wishlist.types";
+import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST, RESET, LOAD_WISHLIST } from "./wishlist.types";
 
 const wishlistInitalState = {
   loading: false,
@@ -41,6 +41,10 @@ export const wishlistReducer = (state = wishlistInitalState, { type, payload }) 
       return {
         wishlist: []
       };
+    }
+
+    case LOAD_WISHLIST: {
+      return { ...state, wishlist: payload };
     }
 
     default: {
