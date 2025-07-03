@@ -1,4 +1,14 @@
-import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST, RESET } from "./wishlist.types";
+import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST, RESET, LOAD_WISHLIST } from "./wishlist.types";
+
+export const loadWishlistFromLocalStorage = () => (dispatch) => {
+  try {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    dispatch({ type: LOAD_WISHLIST, payload: wishlist });
+  } catch (err) {
+    console.error("Failed to load wishlist from localStorage:", err);
+  }
+};
+
 
 export const addToWishlist = (item) => async (dispatch) => {
   try {

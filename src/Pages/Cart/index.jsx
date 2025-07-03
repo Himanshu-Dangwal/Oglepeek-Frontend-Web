@@ -16,8 +16,6 @@ import { AuthContext } from "../../ContextApi/AuthContext";
 
 
 const CartPage = () => {
-  // const { cart } = useSelector((state) => state.CartReducer);
-  // const [detailedCartItems, setDetailedCartItems] = useState([]);
   const { Authdata } = useContext(AuthContext);
   const peekCoins = Authdata.peekCoins || 0;
 
@@ -25,30 +23,12 @@ const CartPage = () => {
   const navigate = useNavigate();
   const detailedCartItems = useSelector((state) => state.CartReducer.cart);
 
-
-  // useEffect(() => {
-  //   const fetchCartDetails = async () => {
-  //     try {
-  //       const { data } = await axios.get("http://localhost:8000/api/cart", {
-  //         withCredentials: true,
-  //       });
-
-  //       if (data.success) {
-  //         setDetailedCartItems(data.items);
-  //         setPeekCoins(data.peekCoins || 0); // 👈 Save peekCoins
-  //       }
-  //     } catch (err) {
-  //       console.error("Failed to load cart details:", err);
-  //     }
-  //   };
-
-  //   fetchCartDetails();
-  // }, []);
-
-
   const getTotalPrice = () =>
     detailedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+
+  let totalAmount = getTotalPrice();
+  totalAmount += 0.1 * totalAmount;
   return (
     <>
       <Navbar />
@@ -122,7 +102,7 @@ const CartPage = () => {
               fontSize={"16px"}
               height="56px"
               fontWeight={"700"}
-              onClick={() => navigate("/shipping")}
+              onClick={() => navigate("/shipping", { state: { totalAmount } })}
             >
               Proceed To Checkout
             </Button>

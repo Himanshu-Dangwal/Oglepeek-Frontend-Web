@@ -30,7 +30,7 @@ export default function CartItem() {
           </Text>
         </Box>
         <Box border="1px solid #ccc">
-          {cart.map((el) => (
+          {cart.map((item) => (
             <Box>
               <Grid
                 templateColumns={{
@@ -63,7 +63,7 @@ export default function CartItem() {
                       xl: "100%",
                       "2xl": "100%"
                     }}
-                    src={el.imageTsrc}
+                    src={item.image}
                     m="auto"
                   />
                 </Box>
@@ -87,7 +87,7 @@ export default function CartItem() {
                     <Text
                       textAlign={{ lg: "left", sm: "center", base: "center" }}
                     >
-                      {"Qty : " + el.quantity}
+                      {"Qty : " + item.quantity}
                     </Text>
                   </Box>
                   <Box>
@@ -95,15 +95,28 @@ export default function CartItem() {
                       gap={6}
                       m="auto"
                       textAlign={{ lg: "left", sm: "center", base: "center" }}
+                      flexDirection={{ base: "column", lg: "row" }} // Ensures vertical stack on small screens
                     >
-                      <Text color="#9999b3" fontWeight="500" fontSize="16px">
-                        <s>{"₹" + el.mPrice}</s>
-                      </Text>
-                      <Text color="#000042" fontWeight="700">
-                        {"₹" + el.price}
-                      </Text>
+                      <Box textAlign="left">
+                        <Text color="#9999b3" fontWeight="500" fontSize="16px">
+                          <s>{"₹" + item.price}</s>
+                        </Text>
+                        <Text color="teal.500" fontWeight="600" fontSize="14px" >
+                          Total:
+                        </Text>
+                      </Box>
+
+                      <Box textAlign="left">
+                        <Text color="#000042" fontWeight="700">
+                          {"₹" + item.price}
+                        </Text>
+                        <Text color="teal.500" fontWeight="600" fontSize="14px" >
+                          ₹{item.price * item.quantity}
+                        </Text>
+                      </Box>
                     </Flex>
                   </Box>
+
                 </Grid>
               </Grid>
 
@@ -120,7 +133,7 @@ export default function CartItem() {
           <Flex justifyContent={"space-between"} fontSize="15px" mb={2}>
             <Text fontWeight="bold">TAX COLLECTED</Text>
             <Text fontWeight="medium">
-              + ₹{Math.round((getTotalPrice() - (coupon || 0)) * 0.18)}.00
+              + ₹{Math.round((getTotalPrice() - (coupon || 0)) * 0.10)}.00
             </Text>
           </Flex>
           <Divider mb={2} border="1px solid" />
@@ -135,7 +148,7 @@ export default function CartItem() {
               </span>
             </Text>
             <Text fontWeight="medium">
-              ₹{Math.round(getTotalPrice() + getTotalPrice() * 0.18)}
+              ₹{Math.round(getTotalPrice() + getTotalPrice() * 0.10)}
               .00
             </Text>
           </Flex>
@@ -152,7 +165,7 @@ export default function CartItem() {
             </Text>
             <Text fontWeight="bold" fontSize="17px" color="#329BA9">
               ₹
-              {Math.round(getTotalPrice() + getTotalPrice() * 0.18) -
+              {Math.round(getTotalPrice() + getTotalPrice() * 0.10) -
                 (coupon || 0)}
               .00
             </Text>

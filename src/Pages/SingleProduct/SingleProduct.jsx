@@ -48,14 +48,15 @@ const SingleProductPage = () => {
   if (!product) return <Spinner size="xl" mt={20} />;
 
   const variant = product.variants[selectedVariantIndex];
+
   const imageSliderSettings = {
     dots: false,
-    infinite: true,
+    infinite: variant?.images.length > 1, // no infinite scroll if only one image
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
-    adaptiveHeight: true,
+    arrows: variant?.images.length > 1,
+    adaptiveHeight: variant?.images.length > 1,
     beforeChange: (_, next) => setCurrentImageIndex(next),
   };
 
@@ -108,6 +109,7 @@ const SingleProductPage = () => {
     }
   };
 
+  //Need to add the item to the local storage as well
   const handleAddToWishlist = () => {
     const variant = product.variants[selectedVariantIndex];
     const item = {
@@ -124,6 +126,9 @@ const SingleProductPage = () => {
       frameType: product.frameType,
     };
     dispatch(addToWishlist(item));
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist.push(item);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
   };
 
   return (
@@ -133,7 +138,8 @@ const SingleProductPage = () => {
         <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, md: 10 }}>
           {/* Image Carousel Section */}
           <Box>
-            <Box borderWidth="1px" borderColor={borderColor} borderRadius="md" p={0} mb={2}>
+            <Box borderWidth="1px" borderColor={borderColor} borderRadius="md" p={0} mb={2} height={variant.images.length === 1 ? { base: "200px", sm: "300px", md: "400px", lg: "500px" } : "auto"}
+              overflow="hidden">
               <Slider key={selectedVariantIndex} ref={sliderRef} {...imageSliderSettings}>
                 {variant?.images.map((img, idx) => (
                   <Box key={idx} position="relative">
@@ -279,7 +285,7 @@ const SingleProductPage = () => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <Text color={textColor}>Free shipping on orders over $50. 30-day returns available for all items unless marked final sale.</Text>
+                  <Text color={textColor}>Free shipping on orders over NPR 500. 30-day returns available for all items unless marked final sale.</Text>
                 </AccordionPanel>
               </AccordionItem>
 

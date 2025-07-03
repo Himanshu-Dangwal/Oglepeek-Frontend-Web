@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadCartFromBackend } from "../redux/CartPage/action";
+import { loadWishlistFromLocalStorage } from "../redux/wishlist/wishlist.actions";
 export const AuthContext = createContext();
 
 
@@ -24,6 +25,7 @@ const AuthProvider = ({ children }) => {
           setisAuth(true);
           setAuthData({ firstName: data.firstName, peekCoins: data.peekCoins });
           dispatch(loadCartFromBackend());
+          dispatch(loadWishlistFromLocalStorage());
         } else {
           setisAuth(false);
           setAuthData(null);

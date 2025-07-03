@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CartItem from "./CartItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 import {
@@ -18,8 +18,10 @@ import "../../App.css";
 
 function Shipping() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const totalAmount = location.state?.totalAmount;
 
-  const init = {
+  const init = JSON.parse(localStorage.getItem("shippingData")) || {
     first_name: "",
     last_name: "",
     phone: "",
@@ -27,15 +29,16 @@ function Shipping() {
     address: "",
     pincode: "",
     city: "",
-    country: "India",
-    state: ""
+    country: "Nepal",
+    state: "",
+    gender: "",
+    totalAmount: totalAmount || 0
   };
 
   const [userData, setUserData] = useState(init);
   const [first, setFirst] = useState();
   const [last, setLast] = useState();
   const [ph, setPh] = useState();
-  const [gender, setGender] = useState("Male");
   const [mail, setMail] = useState();
   const [add, setAdd] = useState();
   const [pin, setPin] = useState();
@@ -59,7 +62,9 @@ function Shipping() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    const updatedData = { ...userData, [name]: value };
+    setUserData(updatedData);
+    localStorage.setItem("shippingData", JSON.stringify(updatedData));
 
     switch (name) {
       case "first_name":
@@ -180,6 +185,7 @@ function Shipping() {
                     onChange={handleChange}
                     placeholder="First Name*"
                     className="input"
+                    value={userData.first_name}
                   />
                   <Box pl="6" mt="-4">
                     {first}
@@ -189,10 +195,11 @@ function Shipping() {
                   <input
                     type="text"
                     name="last_name"
-                    placeholder="Last Name*"
+                    placeholder="Last Name"
                     className="input"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.last_name}
                   />
                   <Box pl="6" mt="-4">
                     {last}
@@ -207,7 +214,10 @@ function Shipping() {
                 gap={{ lg: "4", sm: "1", base: "1" }}
               >
                 <Text>Gender</Text>
-                <RadioGroup onChange={setGender} value={gender} name={gender}>
+                <RadioGroup onChange={(value) =>
+                  setUserData((prev) => ({ ...prev, gender: value }))
+                }
+                  value={userData.gender}>
                   <Stack direction="row" gap={{ lg: "2", sm: "1", base: "1" }}>
                     <Radio value="Male">Male</Radio>
                     <Radio value="Female">Female</Radio>
@@ -234,6 +244,7 @@ function Shipping() {
                     borderRadius="20px"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.phone}
                   />
                   <Box pl="6" mt="-4">
                     {userData.phone.length === 10 ? "" : ph}
@@ -248,10 +259,11 @@ function Shipping() {
                     placeholder="Email*"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.email}
                   />
                   <Box pl="6" mt="-4">
                     {userData.email.includes("@") &&
-                    userData.email.includes(".com")
+                      userData.email.includes(".com")
                       ? ""
                       : mail}
                   </Box>
@@ -277,6 +289,7 @@ function Shipping() {
                     placeholder="Address Line 1*"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.address}
                   />
                   <Box pl="6" mt="-4">
                     {add}
@@ -311,6 +324,7 @@ function Shipping() {
                     placeholder="Zip/Postal Code*"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.pincode}
                   />
                   <Box pl="6" mt="-4">
                     {userData.pincode.length === 6 ? "" : pin}
@@ -324,6 +338,7 @@ function Shipping() {
                     name="city"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.city}
                   />
                   <Box pl="6" mt="-4">
                     {cities}
@@ -351,6 +366,7 @@ function Shipping() {
                     name="country"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.country}
                   />
                   <Box pl="6" mt="-4">
                     {countries}
@@ -364,6 +380,7 @@ function Shipping() {
                     name="state"
                     fontSize="16px"
                     onChange={handleChange}
+                    value={userData.state}
                   />
                   <Box pl="6" mt="-4">
                     {statess}
@@ -373,17 +390,17 @@ function Shipping() {
               <br />
 
               {userData.first_name.length >= 1 &&
-              userData.last_name.length >= 1 &&
-              userData.phone.length === 10 &&
-              userData.email.includes("@") &&
-              userData.email.includes(".com") &&
-              userData.address.length >= 1 &&
-              userData.pincode.length === 6 &&
-              userData.city.length >= 1 &&
-              userData.country.length >= 1 &&
-              userData.state.length >= 1 ? (
+                userData.last_name.length >= 1 &&
+                userData.phone.length === 10 &&
+                userData.email.includes("@") &&
+                userData.email.includes(".com") &&
+                userData.address.length >= 1 &&
+                userData.pincode.length === 6 &&
+                userData.city.length >= 1 &&
+                userData.country.length >= 1 &&
+                userData.state.length >= 1 ? (
                 <Button
-                  onClick={() => navigate("/checkout")}
+                  onClick={() => navigate("/checkout", { state: { userData } })}
                   bg="#00b9c6"
                   p="25px 20px"
                   color="#fff"
