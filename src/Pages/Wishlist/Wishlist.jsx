@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Text, Button, Heading, Grid } from "@chakra-ui/react";
+import { Box, Text, Button, Heading, Grid, useColorModeValue } from "@chakra-ui/react";
 import { removeFromWishlist } from "../../redux/wishlist/wishlist.actions";
 import { addToCart } from "../../redux/CartPage/action";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
-// import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react"
 
 const Wishlist = () => {
@@ -12,6 +11,8 @@ const Wishlist = () => {
   const { wishlist } = useSelector((state) => state.wishlistReducer);
   const { cart } = useSelector((state) => state.CartReducer);
   const dispatch = useDispatch();
+
+  const color = useColorModeValue("gray.600", "gray.400");
 
   //Need to remove from localStorage as well
   const handleDelete = (productId, variantId) => {
@@ -200,7 +201,7 @@ const Wishlist = () => {
                         <Text
                           fontSize="lg"
                           fontWeight="bold"
-                          color="gray.600"
+                          color={color}
                           textTransform="capitalize"
                         >
                           {item.frameType}
@@ -208,15 +209,15 @@ const Wishlist = () => {
                         <Text
                           fontSize="lg"
                           fontWeight="bold"
-                          color="gray.600"
+                          color={color}
                           textTransform="capitalize"
                         >
-                          Colour : {item.color}
+                          Colour : {item.frameColor}
                         </Text>{" "}
                         <Text
                           fontSize="md"
                           fontWeight="600"
-                          color="gray.600"
+                          color={color}
                           textTransform="capitalize"
                         >
                           Style : {item.frameStyle}
