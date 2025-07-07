@@ -33,9 +33,6 @@ const AllRoutes = () => {
       <Route path="/confirm" element={<Privateroutes><Confirm /></Privateroutes>} />
       <Route path="/orderhistory" element={<Privateroutes><OrderHistory /></Privateroutes>} />
       <Route path="/wishlist" element={<Privateroutes><Wishlist /></Privateroutes>} />
-      {/* <Route path="/productlist" element={<Privateroutes><Productlist /></Privateroutes>} />
-      <Route path="/productpost" element={<Privateroutes><ProductPost /></Privateroutes>} />
-      <Route path="/editproduct/:id" element={<Privateroutes><EditProduct /></Privateroutes>} /> */}
     </Routes>
   );
 };

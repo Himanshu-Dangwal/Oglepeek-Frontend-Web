@@ -9,7 +9,7 @@ import ProdFrame from "./ProdFrame";
 import { TbArrowsUpDown } from "react-icons/tb";
 import {
   Box, Flex, Select, Switch, Text, IconButton, Drawer, DrawerOverlay,
-  DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure, HStack
+  DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure, HStack, useColorModeValue
 } from "@chakra-ui/react";
 import {
   Gender,
@@ -22,9 +22,12 @@ import {
 } from "./FilterDetails";
 import { FiFilter } from "react-icons/fi";
 
-// const API_BASE_URL = import.meta.env.VITE_LOCAL_URL;
 
 const NewProduct = () => {
+  const textColor = useColorModeValue("gray.800", "gray.200")
+  const optionColor = useColorModeValue("gray.800", "gray.800")
+  const bgColorTop = useColorModeValue("#e2e8f0", "gray.800")
+  const searchColor = useColorModeValue("whiteAlpha.900", "gray.800")
   const [products, setProducts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [productType, setProductType] = useState("");
@@ -109,19 +112,19 @@ const NewProduct = () => {
             overflow="scroll"
             w={{ xl: "82%", base: "100%" }}
             borderLeft={{ xl: "1px solid", base: "none" }}
-            borderColor="gray.300"
+            borderColor="gray.200"
             m={0}
           >
-            <Flex justifyContent="space-between" alignItems="center" p="7px" bg="#e2e8f0">
-              <Text fontSize="15px" color="gray.600" fontWeight="500">
-                EYEGLASSES & SUNGLASSES
+            <Flex justifyContent="space-between" alignItems="center" p="7px" bg={bgColorTop}>
+              <Text fontSize="15px" color={textColor} fontWeight="500">
+                OGLEPEEK GLASSES
               </Text>
               <Flex alignItems="center" display={{ md: "inherit", base: "none" }}>
                 <Text fontWeight="bold" mr="5px" color="green" fontSize="15px">
                   VIEW FRAMES
                 </Text>
                 <Switch colorScheme="green" isChecked size="lg" />
-                <Text ml="5px" fontSize="15px">VIEW 3D TRY ON (Coming Soon)</Text>
+                <Text ml="5px" fontSize="15px" color={textColor}>VIEW 3D TRY ON (Coming Soon)</Text>
               </Flex>
               <Flex>
                 <Flex alignItems="center">
@@ -131,15 +134,15 @@ const NewProduct = () => {
                 <Select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  border="0.1px"
+                  border="1px solid blue.400"
                   borderRadius="3px"
-                  borderColor="black"
+                  borderColor="white"
                   ml="4px"
                   p="0px"
                   fontSize="16px"
-                  bg="whiteAlpha.900"
+                  bg={searchColor}
                 >
-                  <option value="">Select</option>
+                  <option value="" color={optionColor}>Select</option>
                   <option value="lowtohigh">Price : low to high</option>
                   <option value="hightolow">Price : high to low</option>
                 </Select>

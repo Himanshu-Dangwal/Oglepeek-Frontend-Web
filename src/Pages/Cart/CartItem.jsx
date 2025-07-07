@@ -13,7 +13,8 @@ import {
   Image,
   Text,
   Box,
-  Grid
+  Grid,
+  // useColorModeValue
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -79,7 +80,7 @@ const CartItem = () => {
                 <Heading fontSize="20px" fontWeight="600" textTransform="capitalize">
                   {item.name}
                 </Heading>
-                <Text fontSize="18px" color="gray.600" fontWeight="500">
+                <Text fontSize="18px" color="gray.400" fontWeight="500">
                   NPR {item.price}
                 </Text>
               </Flex>
@@ -88,7 +89,7 @@ const CartItem = () => {
                 {item.description}
               </Text>
 
-              <Grid templateColumns="repeat(2, 1fr)" gap={2} fontSize="14px" color="gray.700">
+              <Grid templateColumns="repeat(2, 1fr)" gap={2} fontSize="14px" color="gray.300">
                 <Text><b>Style:</b> {item.frameStyle}</Text>
                 <Text><b>Color:</b> {item.frameColor}</Text>
                 <Text><b>Type:</b> {item.frameType}</Text>

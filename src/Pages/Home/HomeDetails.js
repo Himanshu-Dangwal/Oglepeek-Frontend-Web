@@ -1,15 +1,15 @@
-import image2 from "./images/2.jpeg";
+import image2 from "./images/2.png";
 import image3 from "./images/oglepeekGirl.jpeg";
 import image4 from "./images/oglepeekMan.jpeg";
 import image5 from "./images/OglepeekMan2.jpeg";
-import image7 from "./images/7.jpeg";
-import image8 from "./images/8.jpeg";
+import image7 from "./images/7.png";
+// import image8 from "./images/8.jpeg";
 import topCorouselImage1 from "./images/topCorouselImage1.jpeg";
 import topCorouselImage2 from "./images/topCorouselImage2.jpeg";
 import topCorouselImage5 from "./images/topCorouselImage5.jpeg";
 import topCorouselImage7 from "./images/topCorouselImage7.jpeg";
 import detailSunglassesStyle1 from "./images/detailSunglassesStyle1.jpeg";
-import detailSunglassesStyle2 from "./images/detailSunglassesStyle2.jpeg";
+import detailSunglassesStyle2 from "./images/detailSunglassesStyle2.png";
 import detailSunglassesStyle3 from "./images/detailSunglassesStyle3.jpeg";
 import detailSunglassesStyle4 from "./images/detailSunglassesStyle4.jpeg";
 import detailSunglassesStyle5 from "./images/detailSunglassesStyle5.jpeg";
@@ -49,7 +49,7 @@ export const HomeDetailsLayer1Images = [
     id: 5
   },
   {
-    img: image8,
+    img: detailSunglassesStyle2,
     caption: "Slide 4",
     title: "Progressive Lenses",
     id: 6

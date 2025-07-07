@@ -16,6 +16,46 @@ import Footer from '../../Components/Footer/Footer';
 import { addToCart } from "../../redux/CartPage/action";
 import { addToWishlist } from "../../redux/wishlist/wishlist.actions";
 import { useToast } from "@chakra-ui/react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+
+const CustomNextArrow = ({ onClick }) => (
+  <Box
+    position="absolute"
+    right="10px"
+    top="50%"
+    transform="translateY(-50%)"
+    zIndex="2"
+    cursor="pointer"
+    bg="rgba(0, 0, 0, 0.5)"
+    borderRadius="full"
+    p={2}
+    _hover={{ bg: "rgba(0, 0, 0, 0.7)" }}
+    onClick={onClick}
+  >
+    <Image src="https://cdn-icons-png.flaticon.com/512/271/271228.png" alt="Next" boxSize="20px" />
+  </Box>
+);
+
+const CustomPrevArrow = ({ onClick }) => (
+  <Box
+    position="absolute"
+    left="10px"
+    top="50%"
+    transform="translateY(-50%)"
+    zIndex="2"
+    cursor="pointer"
+    bg="rgba(0, 0, 0, 0.5)"
+    borderRadius="full"
+    p={2}
+    _hover={{ bg: "rgba(0, 0, 0, 0.7)" }}
+    onClick={onClick}
+  >
+    <Image src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Prev" boxSize="20px" />
+  </Box>
+);
+
 
 const SingleProductPage = () => {
   const sliderRef = useRef(null);
@@ -51,14 +91,17 @@ const SingleProductPage = () => {
 
   const imageSliderSettings = {
     dots: false,
-    infinite: variant?.images.length > 1, // no infinite scroll if only one image
+    infinite: variant?.images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: variant?.images.length > 1,
-    adaptiveHeight: variant?.images.length > 1,
+    adaptiveHeight: true,
     beforeChange: (_, next) => setCurrentImageIndex(next),
+    nextArrow: <CustomNextArrow />,
+    prevArrow: <CustomPrevArrow />,
   };
+
 
   const handleVariantSelect = (index) => {
     setCurrentImageIndex(0);

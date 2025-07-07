@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import Login from "../../Pages/Login/Login";
 import Signup from "../../Pages/Signup/Signup";
 import { AuthContext } from "../../ContextApi/AuthContext";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import Oglepeek from './Oglepeek.jpeg';
+import Oglepeek from './Oglepeek.png';
 import {
   DrawerCloseButton,
   Button,
@@ -28,24 +28,29 @@ import {
   AccordionPanel,
   AccordionIcon,
   Flex,
-  useBreakpointValue
+  useBreakpointValue,
+  useColorModeValue,
+  useColorMode,
+  Switch
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 
 function Nav() {
+  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
   const placeholder = useBreakpointValue({ sm: "What are you looking for", base: "Search for products" });
 
+  // 🌙 Dark Mode Colors
+  const bgColor = useColorModeValue("#fbf9f7", "gray.600");
+  const drawerBg = useColorModeValue("whiteAlpha.900", "gray.900");
+  const textColor = useColorModeValue("black", "whiteAlpha.900");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const hoverFontWeight = useColorModeValue("bold", "bold");
+
   return (
-    <Box
-      display={{ lg: "inherit", xl: "none" }}
-      cursor="pointer"
-      bg="#fbf9f7"
-      p={2.5}
-    >
+    <Box display={{ lg: "inherit", xl: "none" }} cursor="pointer" bg={bgColor} p={2.5}>
       <HStack m="auto" justifyContent="space-between">
         <Box w={{ lg: "20%", md: "20%", sm: "22%", base: "30%" }}>
           <Link to="/">
@@ -60,10 +65,13 @@ function Nav() {
         <Box w="70%" display={{ sm: "inherit", base: "inherit" }}>
           <Input
             placeholder={placeholder}
-            border="1px solid black"
+            border="1px solid"
+            borderColor="black"
             w="90%"
             fontSize="16px"
             h="35px"
+            color={textColor}
+            bg={useColorModeValue("white", "gray.700")}
           />
         </Box>
 
@@ -79,12 +87,19 @@ function Nav() {
             onClose={onClose}
           >
             <DrawerOverlay />
-            <DrawerContent color="blackAlpha.900">
+            <DrawerContent color={textColor} bg={drawerBg}>
               <DrawerCloseButton />
-              <DrawerHeader bg="whiteAlpha.900">
+              <DrawerHeader>
+                <Flex justifyContent="flex-start" mb={2}>
+                  <Text fontSize="sm" mr={2}>
+                    {colorMode === "light" ? "Light Mode" : "Dark Mode"}
+                  </Text>
+                  <Switch isChecked={colorMode === "dark"} onChange={toggleColorMode} />
+                </Flex>
                 {isAuth ? (
                   <Flex
-                    borderBottom="2px solid #18CFA8"
+                    borderBottom="2px solid"
+                    borderColor="teal.400"
                     p="5%"
                     direction="column"
                     justifyContent="center"
@@ -102,10 +117,8 @@ function Nav() {
                         justifyContent="center"
                         alignItems="flex-start"
                       >
-                        <Text mt="10px" fontSize="20px" color="blackAlpha.900">
-                          {Authdata.firstName}
-                        </Text>
-                        <Text color="gray.500" mt="5%" fontSize="sm">
+                        <Text mt="10px" fontSize="20px">{Authdata.firstName}</Text>
+                        <Text color="gray.400" mt="5%" fontSize="sm">
                           Enjoy Buy 1 Get 1 offer for 365 days
                         </Text>
                       </Flex>
@@ -123,319 +136,135 @@ function Nav() {
                   </Flex>
                 ) : (
                   <Box
-                    style={{
-                      padding: "5%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      width: "100%"
-                    }}
+                    p="5%"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    w="100%"
                   >
                     <Box
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                        marginBottom: "-6%"
-                      }}
+                      w="100%"
+                      display="flex"
+                      justifyContent="space-evenly"
+                      mb="-6%"
                     >
-                      <Box
-                        bg="blue.500"
-                        p="10px 15px"
-                        rounded="lg"
-                        _hover={{ bg: "blue.200" }}
-                      >
+                      <Box bg="blue.500" p="10px 15px" rounded="lg" _hover={{ bg: "blue.200" }}>
                         <Login />
                       </Box>
-                      <Box
-                        bg="blue.500"
-                        p="10px 15px"
-                        rounded="lg"
-                        _hover={{ bg: "blue.200" }}
-                      >
+                      <Box bg="blue.500" p="10px 15px" rounded="lg" _hover={{ bg: "blue.200" }}>
                         <Signup />
                       </Box>
                     </Box>
                   </Box>
                 )}
               </DrawerHeader>
-              <DrawerBody borderBottomWidth="1px" bg="whiteAlpha.900">
+
+              <DrawerBody borderBottomWidth="1px">
                 <Box display="flex" flexDirection="column" fontSize="16px">
-                  <Link to="/orderhistory">
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      fontSize="15px"
-                      p="4% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      onClick={() => navigate("/orderhistory")}
-                    >
-                      My Orders
-                    </Box>
-                  </Link>
-                  <Link to="/cart">
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      fontSize="15px"
-                      p="4% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                    >
-                      Cart
-                    </Box>
-                  </Link>
-                  <Link to="/wishlist">
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      fontSize="15px"
-                      p="4% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                    >
-                      Wishlist
-                    </Box>
-                  </Link>
+                  {[
+                    { path: "/orderhistory", label: "My Orders" },
+                    { path: "/cart", label: "Cart" },
+                    { path: "/wishlist", label: "Wishlist" },
+                  ].map(({ path, label }) => (
+                    <Link to={path} key={path}>
+                      <Box
+                        borderBottom="1px solid"
+                        borderColor={borderColor}
+                        fontSize="15px"
+                        p="4% 0%"
+                        color={textColor}
+                        _hover={{ fontWeight: hoverFontWeight }}
+                      >
+                        {label}
+                      </Box>
+                    </Link>
+                  ))}
                   <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      fontSize="15px"
-                      p="4% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                    >
+                    <Box borderBottom="1px solid" borderColor={borderColor} fontSize="15px" p="4% 0%" _hover={{ fontWeight: hoverFontWeight }}>
                       Manage Notification
                     </Box>
                   </Link>
                   <Link>
-                    <Box
-                      borderBottom="1px solid white"
-                      fontSize="15px"
-                      p="4% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                    >
+                    <Box borderBottom="1px solid" borderColor={borderColor} fontSize="15px" p="4% 0%" _hover={{ fontWeight: hoverFontWeight }}>
                       Contact Us
                     </Box>
                   </Link>
                 </Box>
 
-                <Heading mt="15%" color="black" fontSize="15px" mb="5%">
-                  SHOP NOW
-                </Heading>
+                <Heading mt="15%" fontSize="15px" mb="5%">SHOP NOW</Heading>
                 <Box display="flex" flexDirection="column" fontSize="16px">
-                  <Accordion defaultIndex={[0]} allowMultiple w="100%" m="auto">
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box
-                            as="span"
-                            flex="1"
-                            textAlign="left"
-                            fontWeight="500"
-                          >
-                            Men
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <Link to="/products">
-                          <Box>
-                            <Text pb="2">EYEGLASSES</Text>
-                            <Text pb="2">COMPUTER GLASSES</Text>
-                            <Text pb="2">CONTACT LENSES</Text>
-                            <Text pb="2">SUN GLASSES</Text>
-                          </Box>
-                        </Link>
-                      </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box
-                            as="span"
-                            flex="1"
-                            textAlign="left"
-                            fontWeight="500"
-                          >
-                            Women
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={5}>
-                        <Link to="/products">
-                          <Box>
-                            <Text pb="2">EYEGLASSES</Text>
-                            <Text pb="2">COMPUTER GLASSES</Text>
-                            <Text pb="2">CONTACT LENSES</Text>
-                            <Text pb="2">SUN GLASSES</Text>
-                          </Box>
-                        </Link>
-                      </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box
-                            as="span"
-                            flex="1"
-                            textAlign="left"
-                            fontWeight="500"
-                          >
-                            Unisex
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <Link to="/products">
-                          <Box>
-                            <Text pb="2">EYEGLASSES</Text>
-                            <Text pb="2">COMPUTER GLASSES</Text>
-                            <Text pb="2">CONTACT LENSES</Text>
-                            <Text pb="2">SUN GLASSES</Text>
-                          </Box>
-                        </Link>
-                      </AccordionPanel>
-                    </AccordionItem>
+                  <Accordion allowMultiple w="100%" m="auto">
+                    {["Men", "Women", "Unisex"].map((category) => (
+                      <AccordionItem key={category}>
+                        <h2>
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left" fontWeight="500">
+                              {category}
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <Link to="/products">
+                            <Box>
+                              <Text pb="2">EYEGLASSES</Text>
+                              <Text pb="2">COMPUTER GLASSES</Text>
+                              <Text pb="2">CONTACT LENSES</Text>
+                              <Text pb="2">SUN GLASSES</Text>
+                            </Box>
+                          </Link>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    ))}
                   </Accordion>
                 </Box>
-                {/* <Heading mt="15%" color="black" fontSize="15px" mb="5%">
-                  Our Services
-                </Heading>
-                <Box display="flex" flexDirection="column" fontSize="16px">
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      fontSize="15px"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                    >
-                      Free Home Trail
-                    </Box>
-                  </Link>
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Home Eye check-up
-                    </Box>
-                  </Link>
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Store Locator
-                    </Box>
-                  </Link>
-                </Box> */}
-                <Heading mt="15%" color="black" mb="5%" fontSize="15px">
-                  HIGHLIGHTS
-                </Heading>
-                <Box display="flex" flexDirection="column" fontSize="16px">
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Check Frame Size
-                    </Box>
-                  </Link>
-                  {/* <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Gold Membership
-                    </Box>
-                  </Link> */}
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Try Frames in 3D [Coming Soon!]
-                    </Box>
-                  </Link>
-                  <Link>
-                    <Box
-                      borderBottom="1px solid white"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Dowloads Apps [Coming Soon!]
-                    </Box>
-                  </Link>
-                </Box>
-                <Heading mt="15%" color="black" fontSize="15px" mb="5%">
-                  FAQ's & POLICIES
-                </Heading>
-                <Box display="flex" flexDirection="column" fontSize="16px">
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Frequently Asked Questions
-                    </Box>
-                  </Link>
-                  <Link>
-                    <Box
-                      borderBottom="0.1px solid gray"
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Cancellation & Return Policy
-                    </Box>
-                  </Link>
-                  <Link>
-                    <Box
-                      p="5% 0%"
-                      color="black"
-                      _hover={{ fontWeight: "bold" }}
-                      fontSize="15px"
-                    >
-                      Cobrowsing
-                    </Box>
-                  </Link>
-                </Box>
 
-                <Accordion allowMultiple></Accordion>
+                <Heading mt="15%" mb="5%" fontSize="15px">HIGHLIGHTS</Heading>
+                {[
+                  "Check Frame Size",
+                  "Try Frames in 3D [Coming Soon!]",
+                  "Download Apps [Coming Soon!]"
+                ].map((text, i) => (
+                  <Link key={i}>
+                    <Box
+                      borderBottom="1px solid"
+                      borderColor={borderColor}
+                      p="5% 0%"
+                      _hover={{ fontWeight: hoverFontWeight }}
+                      fontSize="15px"
+                    >
+                      {text}
+                    </Box>
+                  </Link>
+                ))}
+
+                <Heading mt="15%" fontSize="15px" mb="5%">FAQ's & POLICIES</Heading>
+                {[
+                  "Frequently Asked Questions",
+                  "Cancellation & Return Policy",
+                  "Cobrowsing"
+                ].map((text, i) => (
+                  <Link key={i}>
+                    <Box
+                      borderBottom={i < 2 ? "1px solid" : "none"}
+                      borderColor={borderColor}
+                      p="5% 0%"
+                      _hover={{ fontWeight: hoverFontWeight }}
+                      fontSize="15px"
+                    >
+                      {text}
+                    </Box>
+                  </Link>
+                ))}
               </DrawerBody>
+
               {isAuth && (
-                <DrawerFooter bg="whiteAlpha.900">
+                <DrawerFooter>
                   <Button
                     mt="5%"
                     fontSize="18px"
                     colorScheme="blue"
-                    borderBottom="1px solid #526171"
                     p="6% 15%"
                     _hover={{ bg: "blue.200" }}
                     onClick={() => {
@@ -443,7 +272,7 @@ function Nav() {
                       localStorage.removeItem("token");
                       localStorage.removeItem("firstName");
                       setAuthData(null);
-                      return <Navigate to="/" />;
+                      navigate("/");
                     }}
                   >
                     Sign Out
