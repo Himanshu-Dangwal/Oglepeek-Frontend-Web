@@ -223,7 +223,7 @@ const Orders = () => {
                     letterSpacing="1.5px"
                     fontWeight={"500"}
                   >
-                    ₹{order.totalAmount}.00
+                    ₹{order.totalAmount.toFixed(2)}
                   </Box>
                 </Flex>
               )}

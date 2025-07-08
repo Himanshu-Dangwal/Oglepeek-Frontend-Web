@@ -18,7 +18,8 @@ import {
   Center,
   InputGroup,
   InputRightElement,
-  Text
+  Text,
+  useColorModeValue
 } from "@chakra-ui/react";
 
 const Login = () => {
@@ -30,6 +31,10 @@ const Login = () => {
   const { setisAuth, setAuthData } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+
+  const iconColor = useColorModeValue("gray.700", "gray.600");
+  const closeBg = useColorModeValue("white", "gray.700");
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +88,7 @@ const Login = () => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="sm">
         <ModalOverlay />
         <ModalContent rounded="3xl">
-          <ModalCloseButton bg="white" m="10px 10px 0px 0px" />
+          <ModalCloseButton bg={closeBg} m="10px 10px 0px 0px" />
           <ModalBody p="0px">
             <Image
               src={formImage}
@@ -126,7 +131,7 @@ const Login = () => {
                 />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)} bg="white">
-                    {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    {showPassword ? <ViewOffIcon color={iconColor} /> : <ViewIcon color={iconColor} />}
                   </Button>
                 </InputRightElement>
               </InputGroup>

@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Grid, Text, Image, Center, useColorModeValue } from "@chakra-ui/react";
+const { useNavigate } = require("react-router-dom");
 
 const HomeCard = ({ type }) => {
+    const navigate = useNavigate();
     const bg = useColorModeValue("#f5f5f5", "gray.700");
     const cardBg = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -31,9 +33,11 @@ const HomeCard = ({ type }) => {
                         bg={cardBg}
                         p="1"
                         pb="2.5"
+                        onClick={() => navigate('/products')}
+                        _hover={{ boxShadow: "lg", cursor: "pointer" }}
                     >
                         <Center>
-                            <Image src={i.img} alt={i.name} w="100%" />
+                            <Image src={i.img} alt={i.name} w="100%" border="1px" borderColor={borderColor} borderRadius="md" />
                         </Center>
                         <Center>
                             <Text color={textColor} fontSize="16px" fontWeight="500" p="1">
