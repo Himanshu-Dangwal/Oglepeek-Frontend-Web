@@ -15,6 +15,7 @@ import "../../App.css";
 
 function NavbarCardCategories() {
   const bgColor = useColorModeValue("white", "gray.700");
+  const bgKids = useColorModeValue("whiteAlpha.900", "gray.800");
   // const textColor = useColorModeValue("blackAlpha.800", "gray.200");
   return (
     <Flex bg={bgColor} cursor="pointer" gap="20">
@@ -196,7 +197,7 @@ function NavbarCardCategories() {
               justifyContent="center"
               p="5"
             >
-              <Box bg="whiteAlpha.900" h="250px" w="240px">
+              <Box bg={bgKids} h="250px" w="240px">
                 <img
                   className="navImg1"
                   src="https://static1.lenskart.com/media/desktop/img/May22/glasses.jpg"
@@ -206,7 +207,7 @@ function NavbarCardCategories() {
                   Eye Glasses
                 </Box>
               </Box>
-              <Box bg="whiteAlpha.900" h="250px" w="240px">
+              <Box bg={bgKids} h="250px" w="240px">
                 <img
                   className="navImg2"
                   src="https://static1.lenskart.com/media/desktop/img/May22/computer-glasses.jpg"
@@ -216,7 +217,7 @@ function NavbarCardCategories() {
                   Zero Power Computer Glasses
                 </Box>
               </Box>
-              <Box bg="whiteAlpha.900" h="250px" w="240px">
+              <Box bg={bgKids} h="250px" w="240px">
                 <img
                   className="navImg2"
                   src="https://static1.lenskart.com/media/desktop/img/May22/Sunnies.jpg"

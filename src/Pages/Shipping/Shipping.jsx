@@ -12,7 +12,9 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Flex
+  Flex,
+  useColorModeValue,
+  Input
 } from "@chakra-ui/react";
 import "../../App.css";
 
@@ -20,6 +22,13 @@ function Shipping() {
   const navigate = useNavigate();
   const location = useLocation();
   const totalAmount = location.state?.totalAmount;
+
+  const bg = useColorModeValue("white", "gray.700");
+  const color = useColorModeValue("gray.800", "gray.200");
+  const placeholderColor = useColorModeValue("gray.500", "gray.400");
+  const btnBg = useColorModeValue("gray.300", "gray.600");
+  const btnColor = useColorModeValue("gray.800", "white");
+  const btnHoverBg = useColorModeValue("gray.400", "gray.500");
 
   const init = JSON.parse(localStorage.getItem("shippingData")) || {
     first_name: "",
@@ -177,8 +186,9 @@ function Shipping() {
                 w="100%"
                 gap={{ sm: "4", base: "4" }}
               >
-                <Box>
-                  <input
+                <Box w="100%">
+                  <Input
+                    w="100%"
                     type="text"
                     name="first_name"
                     fontSize="16px"
@@ -186,13 +196,17 @@ function Shipping() {
                     placeholder="First Name*"
                     className="input"
                     value={userData.first_name}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {first}
                   </Box>
                 </Box>
-                <Box>
-                  <input
+                <Box w="100%">
+                  <Input
+                    w="100%"
                     type="text"
                     name="last_name"
                     placeholder="Last Name"
@@ -200,6 +214,9 @@ function Shipping() {
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.last_name}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {last}
@@ -235,16 +252,18 @@ function Shipping() {
                 }}
                 w="100%"
               >
-                <Box>
-                  <input
-                    className="input"
+                <Box >
+                  <Input
+                    className="Input"
                     type="number"
                     name="phone"
                     placeholder="Phone Number*"
-                    borderRadius="20px"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.phone}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {userData.phone.length === 10 ? "" : ph}
@@ -252,14 +271,17 @@ function Shipping() {
                 </Box>
 
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="email"
                     name="email"
                     placeholder="Email*"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.email}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {userData.email.includes("@") &&
@@ -282,25 +304,31 @@ function Shipping() {
                 w="100%"
               >
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     name="address"
                     placeholder="Address Line 1*"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.address}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {add}
                   </Box>
                 </Box>
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     placeholder="Address Line 2"
                     fontSize="16px"
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <br />
                 </Box>
@@ -317,28 +345,34 @@ function Shipping() {
                 w="100%"
               >
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     name="pincode"
                     placeholder="Zip/Postal Code*"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.pincode}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {userData.pincode.length === 6 ? "" : pin}
                   </Box>
                 </Box>
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     placeholder="City/District*"
                     name="city"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.city}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {cities}
@@ -359,28 +393,34 @@ function Shipping() {
                 w="100%"
               >
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     placeholder="Country*"
                     name="country"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.country}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {countries}
                   </Box>
                 </Box>
                 <Box>
-                  <input
-                    className="input"
+                  <Input
+                    className="Input"
                     type="text"
                     placeholder="State*"
                     name="state"
                     fontSize="16px"
                     onChange={handleChange}
                     value={userData.state}
+                    bg={bg}
+                    color={color}
+                    _placeholder={{ color: placeholderColor }}
                   />
                   <Box pl="6" mt="-4">
                     {statess}
@@ -398,6 +438,7 @@ function Shipping() {
                 userData.pincode.length === 6 &&
                 userData.city.length >= 1 &&
                 userData.country.length >= 1 &&
+                userData.gender.length >= 1 &&
                 userData.state.length >= 1 ? (
                 <Button
                   onClick={() => navigate("/checkout", { state: { userData } })}
@@ -414,14 +455,15 @@ function Shipping() {
                 </Button>
               ) : (
                 <Button
-                  bg="#cccccc"
+                  bg={btnBg}
+                  color={btnColor}
                   p="25px 20px"
-                  color="#fff"
                   textAlign="center"
                   fontWeight="bold"
                   borderRadius="5px"
                   fontSize="18px"
                   ml={{ lg: "80%", md: "72%", sm: "60%", base: "40%" }}
+                  _hover={{ bg: btnHoverBg }}
                 >
                   CONTINUE
                 </Button>

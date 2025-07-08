@@ -69,6 +69,7 @@ const SingleProductPage = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgOnExpand = useColorModeValue("gray.100", "gray.700");
   const textColor = useColorModeValue("gray.700", "gray.300");
+  const bgColor = useColorModeValue("gray.300", "gray.500");
 
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
@@ -193,7 +194,30 @@ const SingleProductPage = () => {
                       w="100%"
                       h={{ base: "200px", sm: "300px", md: "400px", lg: "500px" }}
                       borderRadius="md"
+                      backgroundColor={bgColor}
                     />
+                    <Wrap spacing={3} justify="center">
+                      {product.variants.map((v, vIdx) => (
+                        <Box
+                          key={v._id}
+                          borderWidth={selectedVariantIndex === vIdx ? "2px" : "1px"}
+                          borderColor={selectedVariantIndex === vIdx ? "blue.500" : borderColor}
+                          borderRadius="lg"
+                          p={1}
+                          cursor="pointer"
+                          _hover={{ transform: "scale(1.05)", transition: "all 0.2s" }}
+                          onClick={() => handleVariantSelect(vIdx)}
+                        >
+                          <Image
+                            src={v.images[0]}
+                            alt={`Variant ${v.frameColor}`}
+                            boxSize="60px"
+                            objectFit="cover"
+                            borderRadius="lg"
+                          />
+                        </Box>
+                      ))}
+                    </Wrap>
                     <Box
                       position="absolute"
                       top="2"
@@ -211,7 +235,7 @@ const SingleProductPage = () => {
                 ))}
               </Slider>
             </Box>
-            <Wrap spacing={3} justify="center">
+            {/* <Wrap spacing={3} justify="center">
               {product.variants.map((v, vIdx) => (
                 <Box
                   key={v._id}
@@ -232,7 +256,7 @@ const SingleProductPage = () => {
                   />
                 </Box>
               ))}
-            </Wrap>
+            </Wrap> */}
           </Box>
 
           {/* Product Info Section */}

@@ -1,255 +1,3 @@
-// import React, { useContext } from "react";
-// import Login from "../../Pages/Login/Login";
-// import Signup from "../../Pages/Signup/Signup";
-// import NavbarCardCategories from "./NavbarCardCategories";
-// import { NavbarDetail1 } from "./NavbarDetail";
-// import { Link, Navigate, useNavigate } from "react-router-dom";
-// import { AuthContext } from "../../ContextApi/AuthContext";
-// import { FiPhoneCall } from "react-icons/fi";
-// import { CiHeart } from "react-icons/ci";
-// import { CgShoppingCart } from "react-icons/cg";
-// import { TriangleDownIcon } from "@chakra-ui/icons";
-// import Oglepeek from './Oglepeek.png';
-// import { useSelector } from "react-redux";
-// import { BsHeartFill } from "react-icons/bs";
-// import {
-//   Box,
-//   Text,
-//   Flex,
-//   Spacer,
-//   Image,
-//   Input,
-//   Button,
-//   HStack,
-//   Popover,
-//   PopoverTrigger,
-//   PopoverContent,
-//   PopoverBody,
-//   useColorModeValue,
-//   useColorMode,
-//   Switch
-// } from "@chakra-ui/react";
-
-
-// export const NavbarCard1 = () => {
-//   const textColor = useColorModeValue("gray.800", "gray.200");
-//   return (
-//     <Box cursor="pointer">
-//       <Flex gap={2} pl={5} pt={2}>
-//         {NavbarDetail1.map((i, index) => (
-//           <Box key={index}>
-//             <Text fontSize="12px" color={textColor} _hover={{ textDecoration: "underline" }}>
-//               {i.labels}
-//             </Text>
-//             <Spacer />
-//           </Box>
-//         ))}
-//       </Flex>
-//     </Box>
-//   );
-// };
-
-// export const NavbarCardTopmost = () => {
-//   const bgColor = useColorModeValue("white", "gray.600");
-//   const buttonBg = useColorModeValue("whiteAlpha.900", "gray.700");
-//   const textColor = useColorModeValue("gray.800", "gray.200");
-//   const borderColor = useColorModeValue("blackAlpha.400", "whiteAlpha.300");
-//   const { colorMode, toggleColorMode } = useColorMode();
-
-
-//   const { cart } = useSelector((state) => state.CartReducer);
-//   const { wishlist } = useSelector((state) => state.wishlistReducer);
-
-//   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const handleLogout = async () => {
-//     await fetch("http://localhost:8000/api/auth/logout", {
-//       method: "POST",
-//       credentials: "include",
-//     });
-//     setisAuth(false);
-//     setAuthData(null);
-//   };
-
-//   return (
-//     <Box cursor="pointer" bg={bgColor} color={textColor}>
-//       <HStack m="auto">
-//         <Box w="12%">
-//           <Link to="/">
-//             <Image src={Oglepeek} alt="logo" w="40%" h="auto" ml="10%" />
-//           </Link>
-//         </Box>
-//         <HStack w="85%" m="auto">
-//           <Box w="20%">
-//             <HStack fontSize="15px" fontWeight="bold" color={textColor}>
-//               <FiPhoneCall />
-//               <Text>+(977)-986-8956905</Text>
-//             </HStack>
-//           </Box>
-//           <Box w="40%">
-//             <Input
-//               placeholder="What are you looking for"
-//               border={`1px solid ${borderColor}`}
-//               w="76%"
-//               fontSize="17px"
-//               h="35px"
-//               _focus={{ borderColor: "teal.400" }}
-//               bg={useColorModeValue("white", "gray.700")}
-//               color={textColor}
-//             />
-//             <Button
-//               colorScheme="teal"
-//               height="30px"
-//               ml="10px"
-//               mb="5px"
-//             >
-//               Search
-//             </Button>
-//           </Box>
-//           <Box display="flex" alignItems="center" w="auto" ml={2}>
-//             <Text fontSize="sm" mr={2}>
-//               {colorMode === "light" ? "☀️" : "🌙"}
-//             </Text>
-//             <Switch
-//               isChecked={colorMode === "dark"}
-//               onChange={toggleColorMode}
-//               colorScheme="teal"
-//             />
-//           </Box>
-
-//           <HStack w="35%">
-//             {isAuth == true ? (
-//               <Button
-//                 size="lg"
-//                 bg={buttonBg}
-//                 fontSize="14px"
-//                 fontWeight="400"
-//                 onClick={() => navigate("/orderhistory")}
-//               >
-//                 Track Order
-//               </Button>
-//             ) : <></>}
-
-//             {isAuth === true ? (
-//               <Popover trigger="hover">
-//                 <PopoverTrigger>
-//                   <Box
-//                     fontWeight="600"
-//                     fontSize="15px"
-//                     m="auto"
-//                     mt="12px"
-//                     w="90px"
-//                     textAlign="center"
-//                     cursor="pointer"
-//                   >
-//                     {Authdata.firstName}
-//                     <TriangleDownIcon
-//                       ml="2px"
-//                       fontSize="9px"
-//                       _hover={{ transform: "rotate(180deg)" }}
-//                     />
-//                   </Box>
-//                 </PopoverTrigger>
-//                 <PopoverContent
-//                   w="120px"
-//                   boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px"
-//                   bg={bgColor}
-//                   color={textColor}
-//                 >
-//                   <PopoverBody
-//                     h="40px"
-//                     pl="6"
-//                     fontSize="15px"
-//                     _hover={{ fontWeight: "bold", cursor: "pointer" }}
-//                   >
-//                     <Box
-//                       onClick={() => {
-//                         handleLogout();
-//                         return <Navigate to="/" />;
-//                       }}
-//                     >
-//                       Sign Out
-//                     </Box>
-//                   </PopoverBody>
-//                 </PopoverContent>
-//               </Popover>
-//             ) : (
-//               <Box display="flex">
-//                 <Login />
-//                 <Signup />
-//               </Box>
-//             )}
-//             <Box position="relative">
-//               <Button
-//                 leftIcon={wishlist.length > 0 ? <BsHeartFill color="red" /> : <CiHeart />}
-//                 size="lg"
-//                 bg={buttonBg}
-//                 fontSize="14px"
-//                 fontWeight="400"
-//                 onClick={() => navigate("/wishlist")}
-//               >
-//                 Wishlist
-//               </Button>
-//               {wishlist.length > 0 && (
-//                 <Box
-//                   position="absolute"
-//                   top="0"
-//                   right="5"
-//                   bg="red.500"
-//                   color="white"
-//                   fontSize="12px"
-//                   borderRadius="full"
-//                   px="2"
-//                   h="18px"
-//                   display="flex"
-//                   alignItems="center"
-//                   justifyContent="center"
-//                 >
-//                   {wishlist.length}
-//                 </Box>
-//               )}
-//             </Box>
-//             <Link to="/cart">
-//               <Box position="relative">
-//                 <Button
-//                   leftIcon={<CgShoppingCart />}
-//                   size="lg"
-//                   bg={buttonBg}
-//                   fontSize="14px"
-//                   fontWeight="400"
-//                 >
-//                   Cart
-//                 </Button>
-//                 {cart.length > 0 && (
-//                   <Box
-//                     position="absolute"
-//                     top="0"
-//                     right="5"
-//                     bg="red.500"
-//                     color="white"
-//                     fontSize="11px"
-//                     borderRadius="full"
-//                     px="1.5"
-//                     minW="18px"
-//                     h="18px"
-//                     display="flex"
-//                     alignItems="center"
-//                     justifyContent="center"
-//                     zIndex="1"
-//                   >
-//                     {cart.length}
-//                   </Box>
-//                 )}
-//               </Box>
-//             </Link>
-//           </HStack>
-//         </HStack>
-//       </HStack>
-//     </Box>
-//   );
-// };
-
 import React, { useContext } from "react";
 import Login from "../../Pages/Login/Login";
 import Signup from "../../Pages/Signup/Signup";
@@ -259,7 +7,7 @@ import { AuthContext } from "../../ContextApi/AuthContext";
 import { FiPhoneCall } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
 import { CgShoppingCart } from "react-icons/cg";
-import { TriangleDownIcon } from "@chakra-ui/icons";
+// import { TriangleDownIcon } from "@chakra-ui/icons";
 import Oglepeek from './Oglepeek.png';
 import { useSelector } from "react-redux";
 import { BsHeartFill } from "react-icons/bs";
@@ -271,10 +19,10 @@ import {
   Input,
   Button,
   HStack,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
+  // Popover,
+  // PopoverTrigger,
+  // PopoverContent,
+  // PopoverBody,
   useColorModeValue,
   useColorMode,
   Switch,
@@ -374,7 +122,7 @@ export const NavbarCardTopmost = () => {
               </Button>
             )}
 
-            {isAuth ? (
+            {/* {isAuth ? (
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box
@@ -403,6 +151,13 @@ export const NavbarCardTopmost = () => {
                 </PopoverContent>
               </Popover>
             ) : (
+              <Box display="flex">
+                <Login />
+                <Signup />
+              </Box>
+            )} */}
+
+            {!isAuth && (
               <Box display="flex">
                 <Login />
                 <Signup />

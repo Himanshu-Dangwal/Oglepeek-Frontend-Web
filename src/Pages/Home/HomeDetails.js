@@ -86,7 +86,7 @@ export const DetailsSunglassesStyles = [
   },
   {
     name: "Air Clip On",
-    img: detailSunglassesStyle2,
+    img: detailSunglassesStyle5,
     caption: "Slide 2",
     id: 2
   },
