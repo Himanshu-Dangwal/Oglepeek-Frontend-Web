@@ -1,21 +1,53 @@
-import { useSelector } from "react-redux";
-import { Box, Text, Stack, Heading, Image, Grid } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Text,
+  Stack,
+  Heading,
+  Image,
+  Grid,
+  useColorModeValue,
+  Flex,
+  Divider,
+} from "@chakra-ui/react";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 
 const OrderHistory = () => {
-  const orders = useSelector((store) => store.orderManager.order);
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, "0");
-  const day = today.getDate().toString().padStart(2, "0");
-  const currentDate = `${day}-${month}-${year}`;
+  const [orders, setOrders] = useState([]);
+
+  const bg = useColorModeValue("whiteAlpha.900", "gray.800");
+  // const boxBg = useColorModeValue("gray.50", "gray.700");
+  const textColor = useColorModeValue("gray.700", "gray.200");
+  const highlightColor = useColorModeValue("teal.600", "teal.300");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/orders", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          console.error("Failed to fetch orders");
+          return;
+        }
+
+        const data = await response.json();
+        setOrders(data.orders);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <Box>
       <Navbar />
-      <br />
       <Box
         minHeight="635"
         p={8}
@@ -32,6 +64,7 @@ const OrderHistory = () => {
         >
           Order History
         </Heading>
+
         {orders.length === 0 ? (
           <Text
             textAlign="center"
@@ -43,101 +76,95 @@ const OrderHistory = () => {
             No Order History Found
           </Text>
         ) : (
-          <Stack spacing={4}>
-            {orders &&
-              orders &&
-              orders.map(
-                (order, i) =>
-                  order.id && (
-                    <Grid
-                      key={order.id}
-                      borderRadius="20px 20px 20px 20px"
-                      fontSize="16px"
-                      textAlign="center"
+          <Stack spacing={6} mt={4}>
+            {orders.map((order) => {
+              const firstItem = order.cartId?.items?.[0];
+              const variant = firstItem?.variantId;
+              const product = firstItem?.productId;
+              const image = variant?.images?.[0] || "https://via.placeholder.com/150";
+
+              return (
+                <Grid
+                  key={order._id}
+                  templateColumns={{ base: "1fr", md: "30% 70%" }}
+                  bg={bg}
+                  border="1px solid"
+                  borderColor={borderColor}
+                  borderRadius="md"
+                  p={4}
+                  gap={6}
+                  boxShadow="md"
+                >
+                  {/* Image */}
+                  <Box display="flex" alignItems="center" justifyContent="center">
+                    <Box
+                      as="a"
+                      href={`/orders/${order._id}`}
+                      cursor="pointer"
+                      title="Show product details"
+                      _hover={{ transform: "scale(1.03)" }}
+                      transition="transform 0.2s"
                     >
-                      <Link to={`/products/${order.id}`}>
-                        <Grid
-                          m="auto"
-                          templateColumns={{
-                            base: "repeat(1,1fr)",
-                            md: "30% 60%",
-                            lg: "30% 60%",
-                            xl: "20% 60%"
-                          }}
-                          key={order.id + i + Math.random()}
-                          bg="whiteAlpha.900"
-                          p={4}
-                          boxShadow="dark-lg"
-                          gap="5"
-                          color="gray.600"
-                        >
-                          <Box>
-                            <Image
-                              src={order.imageTsrc}
-                              w={{
-                                base: "60%",
-                                sm: "50%",
-                                md: "100%",
-                                lg: "100%",
-                                xl: "100%",
-                                "2xl": "100%"
-                              }}
-                              m="auto"
-                            />
-                          </Box>
-                          <Box
-                            textAlign={{
-                              lg: "left",
-                              md: "left",
-                              sm: "center",
-                              base: "center"
-                            }}
-                          >
-                            <Text fontWeight="bold">
-                              Product ID: {order.productId}
-                            </Text>
-                            <Text fontWeight="600">
-                              Order Date : {currentDate}
-                            </Text>
-                            <Text
-                              fontSize="18px"
-                              fontWeight="bold"
-                              textTransform="capitalize"
-                            >
-                              {order.productRefLink}
-                            </Text>
-                            <Text
-                              textTransform="capitalize"
-                              fontWeight="500"
-                              fontSize="17px"
-                            >
-                              {order.productType}
-                            </Text>
-                            <Text fontWeight="bold" fontSize="18px">
-                              Price: ₹{" "}
-                              {Math.round(order.price + order.price * 0.18)}.00
-                              /-
-                            </Text>
-                            <Text fontWeight="500" fontSize="15px">
-                              Colors : {order.colors}
-                            </Text>
-                            <Text fontWeight="500" fontSize="15px">
-                              Dimension : {order.dimension}
-                            </Text>
-                            <Text fontWeight="500" fontSize="15px">
-                              Status : Completed
-                            </Text>
-                          </Box>
-                        </Grid>
-                      </Link>
-                    </Grid>
-                  )
-              )}
+                      <Image
+                        src={image}
+                        alt={product?.name || "Product"}
+                        borderRadius="md"
+                        maxW="150px"
+                        objectFit="cover"
+                      />
+                    </Box>
+
+                  </Box>
+
+                  {/* Order Details */}
+                  <Box color={textColor}>
+                    <Text fontWeight="bold" fontSize="lg" mb={2}>
+                      {product?.name || "Unnamed Product"}
+                    </Text>
+
+                    <Text fontSize="sm">
+                      <strong>Order ID:</strong> {order._id}
+                    </Text>
+                    <Text fontSize="sm">
+                      <strong>Status:</strong>{" "}
+                      <Text as="span" color={highlightColor}>
+                        {order.orderStatus}
+                      </Text>
+                    </Text>
+                    <Text fontSize="sm">
+                      <strong>Placed At:</strong>{" "}
+                      {new Date(order.placedAt).toLocaleDateString()}
+                    </Text>
+
+                    <Divider my={2} borderColor={borderColor} />
+
+                    <Text fontSize="sm">
+                      <strong>Shipping To:</strong>
+                      <br />
+                      {order.name}, {order.address}, {order.city}, {order.state},{" "}
+                      {order.country} - {order.pincode}
+                    </Text>
+                    <Text fontSize="sm">
+                      <strong>Phone:</strong> {order.phone}
+                    </Text>
+
+                    <Divider my={2} borderColor={borderColor} />
+
+                    <Flex align="center">
+                      <Text fontWeight="bold" fontSize="md">
+                        Total Paid: &nbsp;
+                      </Text>
+                      <Text fontWeight="bold" fontSize="lg" color={highlightColor}>
+                        ₹{Number(order.totalAmount).toFixed(2)}
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Grid>
+              );
+            })}
           </Stack>
         )}
       </Box>
-      <br />
-      <br />
       <Footer />
     </Box>
   );

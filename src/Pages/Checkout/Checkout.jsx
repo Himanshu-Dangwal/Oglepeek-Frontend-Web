@@ -31,7 +31,6 @@ const Orders = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     const createOrder = async () => {
       try {
         const response = await axios.post("http://localhost:8000/api/orders/", {
@@ -46,7 +45,6 @@ const Orders = () => {
 
     }
     createOrder();
-
   }, [userData])
 
   const handleClick = () => {
