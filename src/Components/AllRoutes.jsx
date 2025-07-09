@@ -11,6 +11,7 @@ import Payment from "../Pages/Payment/Payment";
 import Confirm from "../Pages/Confirm/Confirm";
 import OrderHistory from "../Pages/OrderHistory/OrderHistory";
 import Wishlist from "../Pages/Wishlist/Wishlist";
+import OrderDetails from "../Pages/OrderHistory/OrderDetails";
 // import Productlist from "../Pages/Admin/Productlist";
 // import ProductPost from "../Pages/Admin/ProductPost";
 // import EditProduct from "../Pages/Admin/EditProduct";
@@ -32,6 +33,7 @@ const AllRoutes = () => {
       <Route path="/payment" element={<Privateroutes><Payment /></Privateroutes>} />
       <Route path="/confirm" element={<Privateroutes><Confirm /></Privateroutes>} />
       <Route path="/orderhistory" element={<Privateroutes><OrderHistory /></Privateroutes>} />
+      <Route path="/orders/:orderId" element={<OrderDetails />} />
       <Route path="/wishlist" element={<Privateroutes><Wishlist /></Privateroutes>} />
     </Routes>
   );
