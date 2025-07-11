@@ -5,6 +5,11 @@ import { AuthContext } from "../../ContextApi/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Oglepeek from './Oglepeek.png';
+import { BsHeartFill } from "react-icons/bs";
+import { CiHeart } from "react-icons/ci";
+import { CgShoppingCart } from "react-icons/cg";
+import { useSelector } from "react-redux";
+
 import {
   DrawerCloseButton,
   Button,
@@ -12,7 +17,7 @@ import {
   useDisclosure,
   HStack,
   Image,
-  Input,
+  // Input,
   Drawer,
   DrawerHeader,
   DrawerOverlay,
@@ -40,7 +45,7 @@ function Nav() {
   const firstField = React.useRef();
   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
-  const placeholder = useBreakpointValue({ sm: "What are you looking for", base: "Search for products" });
+  // const placeholder = useBreakpointValue({ sm: "What are you looking for", base: "Search for products" });
 
   // 🌙 Dark Mode Colors
   const bgColor = useColorModeValue("#fbf9f7", "gray.600");
@@ -48,7 +53,16 @@ function Nav() {
   const textColor = useColorModeValue("black", "whiteAlpha.900");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const hoverFontWeight = useColorModeValue("bold", "bold");
+  const buttonBg = useColorModeValue("whiteAlpha.900", "gray.700");
 
+
+  //Breakpoint 
+  const buttonSize = useBreakpointValue({ base: "sm", md: "lg" });
+
+
+  //Cart and Wishlist
+  const { cart } = useSelector((state) => state.CartReducer);
+  const { wishlist } = useSelector((state) => state.wishlistReducer);
   return (
     <Box display={{ lg: "inherit", xl: "none" }} cursor="pointer" bg={bgColor} p={2.5}>
       <HStack m="auto" justifyContent="space-between">
@@ -62,18 +76,145 @@ function Nav() {
             />
           </Link>
         </Box>
-        <Box w="70%" display={{ sm: "inherit", base: "inherit" }}>
-          <Input
-            placeholder={placeholder}
-            border="1px solid"
-            borderColor="black"
-            w="90%"
-            fontSize="16px"
-            h="35px"
-            color={textColor}
-            bg={useColorModeValue("white", "gray.700")}
-          />
-        </Box>
+        {/* <Box w="70%" display="flex" justifyContent={{ base: "center", md: "flex-end" }} alignItems="flex-end" margin="0px">
+          <Box position="relative" margin={"auto"} >
+            <Button
+              leftIcon={wishlist.length > 0 ? <BsHeartFill color="red" /> : <CiHeart />}
+              size={buttonSize}
+              bg={buttonBg}
+              fontSize="10px"
+              fontWeight="400"
+              onClick={() => navigate("/wishlist")}
+            >
+              Wishlist
+            </Button>
+            {wishlist.length > 0 && (
+              <Box
+                position="absolute"
+                top="0"
+                right="5"
+                bg="red.500"
+                color="white"
+                fontSize="8px"
+                borderRadius="full"
+                px="2"
+                h="18px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {wishlist.length}
+              </Box>
+            )}
+          </Box>
+
+          <Link to="/cart">
+            <Box position="relative">
+              <Button
+                leftIcon={<CgShoppingCart />}
+                size={buttonSize}
+                bg={buttonBg}
+                fontSize="10px"
+                fontWeight="400"
+              >
+                Cart
+              </Button>
+              {cart.length > 0 && (
+                <Box
+                  position="absolute"
+                  top="0"
+                  right="5"
+                  bg="red.500"
+                  color="white"
+                  fontSize="8px"
+                  borderRadius="full"
+                  px="1.5"
+                  minW="18px"
+                  h="18px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  zIndex="1"
+                >
+                  {cart.length}
+                </Box>
+              )}
+            </Box>
+          </Link>
+        </Box> */}
+        <Flex
+          w="70%"
+          justify="flex-end"
+          align="center"
+          gap={2} // controls space between buttons
+          pr={2}
+        >
+          {/* Wishlist Button */}
+          <Box position="relative">
+            <Button
+              leftIcon={wishlist.length > 0 ? <BsHeartFill color="red" /> : <CiHeart />}
+              size={buttonSize}
+              bg={buttonBg}
+              fontSize="10px"
+              fontWeight="400"
+              onClick={() => navigate("/wishlist")}
+            >
+              Wishlist
+            </Button>
+            {wishlist.length > 0 && (
+              <Box
+                position="absolute"
+                top="0"
+                right="-5px"
+                bg="red.500"
+                color="white"
+                fontSize="8px"
+                borderRadius="full"
+                px="2"
+                h="18px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {wishlist.length}
+              </Box>
+            )}
+          </Box>
+
+          {/* Cart Button */}
+          <Box position="relative">
+            <Button
+              leftIcon={<CgShoppingCart />}
+              size={buttonSize}
+              bg={buttonBg}
+              fontSize="10px"
+              fontWeight="400"
+              onClick={() => navigate("/cart")}
+            >
+              Cart
+            </Button>
+            {cart.length > 0 && (
+              <Box
+                position="absolute"
+                top="0"
+                right="-5px"
+                bg="red.500"
+                color="white"
+                fontSize="8px"
+                borderRadius="full"
+                px="1.5"
+                minW="18px"
+                h="18px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                zIndex="1"
+              >
+                {cart.length}
+              </Box>
+            )}
+          </Box>
+        </Flex>
 
         <Box>
           <Button colorScheme="blue" p="0" onClick={onOpen}>
@@ -282,8 +423,8 @@ function Nav() {
             </DrawerContent>
           </Drawer>
         </Box>
-      </HStack>
-    </Box>
+      </HStack >
+    </Box >
   );
 }
 

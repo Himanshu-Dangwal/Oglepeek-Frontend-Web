@@ -127,7 +127,7 @@ import {
 const Home = () => {
   const bg = useColorModeValue("gray.50", "gray.800");
 
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const video5Ref = useRef(null);
 
   const toggleMute = () => {
@@ -153,9 +153,10 @@ const Home = () => {
         ref={ref}
         loading="lazy"
         src={src}
+        type="video/webm"
         autoPlay
         loop
-        muted={!showMuteButton}
+        muted={isMuted}
         playsInline
         style={{
           width: "100%",
