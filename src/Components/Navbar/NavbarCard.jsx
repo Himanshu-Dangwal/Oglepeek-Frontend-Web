@@ -42,7 +42,7 @@ import { MdPayment, MdInventory, MdHistory } from "react-icons/md";
 import { FaBoxOpen } from "react-icons/fa";
 
 export const NavbarCardTopmost = () => {
-  const bgColor = useColorModeValue("white", "gray.600");
+  const bgColor = useColorModeValue("gray.100", "gray.600");
   const buttonBg = useColorModeValue("whiteAlpha.900", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.200");
   const borderColor = useColorModeValue("blackAlpha.400", "whiteAlpha.300");
@@ -56,7 +56,8 @@ export const NavbarCardTopmost = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await fetch("http://localhost:8000/api/auth/logout", {
+    let HOST = process.env.REACT_APP_HOST;
+    await fetch(`${HOST}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -123,7 +124,7 @@ export const NavbarCardTopmost = () => {
             )}
 
             {!isAuth && (
-              <Box display="flex">
+              <Box display="flex" cursor="pointer">
                 <Login />
                 <Signup />
               </Box>
@@ -195,19 +196,19 @@ export const NavbarCardTopmost = () => {
             </Link>
 
             {/* Profile Drawer Trigger */}
-            {isAuth && (
-              <Box>
-                <Avatar
-                  name={Authdata?.firstName}
-                  size="sm"
-                  cursor="pointer"
-                  onClick={onOpen}
-                  bg="teal.500"
-                  color="white"
-                  ml={3}
-                />
-              </Box>
-            )}
+            {/* {isAuth && ( */}
+            <Box>
+              <Avatar
+                name={Authdata?.firstName || "Guest"}
+                size="sm"
+                cursor="pointer"
+                onClick={onOpen}
+                bg="teal.500"
+                color="white"
+                ml={3}
+              />
+            </Box>
+            {/* )} */}
           </HStack>
         </HStack>
       </HStack>
@@ -218,7 +219,7 @@ export const NavbarCardTopmost = () => {
         <DrawerContent bg={bgColor} color={textColor}>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
-            Hello, {Authdata?.firstName}
+            Hello, {Authdata?.firstName || "Guest"}
             <Text fontSize="sm" color="gray.400">{Authdata?.email}</Text>
           </DrawerHeader>
           <DrawerBody>

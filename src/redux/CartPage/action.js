@@ -14,7 +14,8 @@ export const addToCart = (item) => async (dispatch) => {
 
     // ✅ Optimistically update backend
     console.log("Adding to cart:, addToCartFunction", item);
-    await axios.post("http://localhost:8000/api/cart/", {
+    let HOST = process.env.REACT_APP_HOST;
+    await axios.post(`${HOST}/api/cart/`, {
       productId: item.productId,
       variantId: item.variantId,
       quantity: item.quantity || 1
@@ -32,7 +33,8 @@ export const removeFromCart = (productId, variantId) => async (dispatch) => {
   });
 
   try {
-    await axios.delete("http://localhost:8000/api/cart/", {
+    let HOST = process.env.REACT_APP_HOST;
+    await axios.delete(`${HOST}/api/cart/`, {
       data: { productId, variantId }, // ✅ pass payload in `data`
       withCredentials: true           // ✅ include cookies
     });
@@ -48,7 +50,8 @@ export const increment = (productId, variantId) => async (dispatch) => {
   });
 
   try {
-    await axios.post("http://localhost:8000/api/cart/", {
+    let HOST = process.env.REACT_APP_HOST;
+    await axios.post(`${HOST}/api/cart/`, {
       productId,
       variantId,
       quantity: +1
@@ -65,7 +68,8 @@ export const decrement = (productId, variantId) => async (dispatch) => {
   });
 
   try {
-    await axios.post("http://localhost:8000/api/cart/", {
+    let HOST = process.env.REACT_APP_HOST;
+    await axios.post(`${HOST}/api/cart/`, {
       productId,
       variantId,
       quantity: -1
@@ -78,7 +82,10 @@ export const decrement = (productId, variantId) => async (dispatch) => {
 
 export const loadCartFromBackend = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://localhost:8000/api/cart", {
+    console.log("Trying to load cart from backend...");
+    let HOST = process.env.REACT_APP_HOST;
+    console.log("HOST:", HOST);
+    const res = await axios.get(`${HOST}/api/cart`, {
       withCredentials: true
     });
 

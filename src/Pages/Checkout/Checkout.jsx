@@ -33,7 +33,8 @@ const Orders = () => {
   useEffect(() => {
     const createOrder = async () => {
       try {
-        const response = await axios.post("http://localhost:8000/api/orders/", {
+        let HOST = process.env.REACT_APP_HOST;
+        const response = await axios.post(`${HOST}/api/orders/`, {
           userData
         }, { withCredentials: true })
         setOrder(response.data.order);

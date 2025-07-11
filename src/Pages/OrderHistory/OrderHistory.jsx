@@ -25,7 +25,8 @@ const OrderHistory = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/orders", {
+        let HOST = process.env.REACT_APP_HOST;
+        const response = await fetch(`${HOST}/api/orders`, {
           method: "GET",
           credentials: "include",
         });

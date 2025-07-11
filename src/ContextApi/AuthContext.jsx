@@ -15,7 +15,11 @@ const AuthProvider = ({ children }) => {
     // On first load, check session
     const checkSession = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/auth/check", {
+        console.log("Trying to check session...");
+        console.log("Environment Variables:", process.env);
+        let HOST = process.env.REACT_APP_HOST;
+        console.log("HOST:", HOST);
+        const res = await fetch(`${HOST}/api/auth/check`, {
           credentials: "include", // ✅ required to send cookie
           method: "POST",
         });

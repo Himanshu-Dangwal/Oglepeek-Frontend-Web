@@ -46,8 +46,9 @@ const NewProduct = () => {
     const fetchproduct = async () => {
       setIsLoaded(true);
       try {
+        let HOST = process.env.REACT_APP_HOST;
         const response = await fetch(
-          `http://localhost:8000/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}&material=${material}&lens=${lens}`,
+          `${HOST}/api/product?sort=${sort}&frameStyle=${frameStyle}&productType=${productType}&frameType=${frameType}&frameColor=${frameColor}&gender=${gender}&page=${page}&material=${material}&lens=${lens}`,
         );
         const postData = await response.json();
         setProducts(postData);
