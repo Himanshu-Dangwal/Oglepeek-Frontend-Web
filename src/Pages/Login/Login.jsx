@@ -52,7 +52,8 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login/email/test", {
+      let HOST = process.env.REACT_APP_HOST || "http://localhost:8000";
+      const res = await fetch(`${HOST}/api/auth/login/email/test`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
