@@ -77,7 +77,8 @@ const SingleProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/product/${id}`);
+        let HOST = process.env.REACT_APP_HOST;
+        const res = await axios.get(`${HOST}/api/product/${id}`);
         setProduct(res.data);
       } catch (error) {
         console.error("Failed to load product", error);

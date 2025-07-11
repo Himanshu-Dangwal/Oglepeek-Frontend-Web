@@ -5,7 +5,7 @@ import {
 import {
   Center, Heading, InputGroup, InputLeftAddon, useDisclosure,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
-  Button, Box, Input, InputRightElement, Text
+  Button, Box, Input, InputRightElement, Text, useColorModeValue
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthContext } from "../../ContextApi/AuthContext";
@@ -25,6 +25,8 @@ const Signup = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const textColor = useColorModeValue("#333368", "white");
 
   const validateField = (name, value) => {
     let message = "";
@@ -76,7 +78,8 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/auth/registerTest", {
+      let HOST = process.env.REACT_APP_HOST;
+      const res = await fetch(`${HOST}/api/auth/registerTest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -105,7 +108,8 @@ const Signup = () => {
       return alert("Please enter email and password");
     }
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login/email/test", {
+      let HOST = process.env.REACT_APP_HOST;
+      const res = await fetch(`${HOST}/api/auth/login/email/test`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -129,7 +133,8 @@ const Signup = () => {
     if (!otp) return alert("Please enter OTP");
 
     try {
-      const res = await fetch("http://localhost:8000/api/auth/verify-otp", {
+      let HOST = process.env.REACT_APP_HOST;
+      const res = await fetch(`${HOST}/api/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: emailForOtp, otp })
@@ -162,7 +167,7 @@ const Signup = () => {
           <ModalBody p="0px">
             {!showLoginForm ? (
               <Box m="5px 45px 20px 45px">
-                <Heading fontSize="26px" mb="20px" color="#333368">Create an Account</Heading>
+                <Heading fontSize="26px" mb="20px" color={textColor}>Create an Account</Heading>
 
                 <Input name="firstName" placeholder="First Name*" onChange={handleChange} rounded="2xl" />
                 <Text color="red.500" fontSize="sm">{errors.firstName}</Text>

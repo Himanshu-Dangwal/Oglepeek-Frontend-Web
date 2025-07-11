@@ -34,6 +34,8 @@ const Login = () => {
 
   const iconColor = useColorModeValue("gray.700", "gray.600");
   const closeBg = useColorModeValue("white", "gray.700");
+  const textColor = useColorModeValue("#333368", "gray.100");
+
 
 
   const handleChange = (e) => {
@@ -79,6 +81,7 @@ const Login = () => {
     }
   };
 
+
   return (
     <div>
       <Center onClick={onOpen} fontWeight="400" fontSize="15px" w="80px">
@@ -102,7 +105,7 @@ const Login = () => {
             />
 
             <Box m="34px 45px 50px 45px">
-              <Heading fontWeight="100" fontSize="28px" mb="24px" color="#333368">
+              <Heading fontSize="28px" mb="24px" color={textColor}>
                 Sign In
               </Heading>
 

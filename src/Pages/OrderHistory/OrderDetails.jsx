@@ -30,7 +30,8 @@ const OrderDetails = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/orders/${orderId}`, {
+                let HOST = process.env.REACT_APP_HOST;
+                const res = await fetch(`${HOST}/api/orders/${orderId}`, {
                     method: "GET",
                     credentials: "include",
                 });
