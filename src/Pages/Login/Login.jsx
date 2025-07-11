@@ -22,6 +22,10 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 
+import { useDispatch } from "react-redux";
+import { loadCartFromBackend } from "../../redux/CartPage/action";
+import { loadWishlistFromLocalStorage } from "../../redux/wishlist/wishlist.actions";
+
 const Login = () => {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +40,7 @@ const Login = () => {
   const closeBg = useColorModeValue("white", "gray.700");
   const textColor = useColorModeValue("#333368", "gray.100");
 
-
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,15 +67,13 @@ const Login = () => {
       const data = await res.json();
 
       if (res.ok) {
-        const { firstName } = data;
         setisAuth(true);
-        setAuthData({ firstName });
+        setAuthData({ firstName: data.firstName, peekCoins: data.peekCoins });
+        dispatch(loadCartFromBackend());
+        dispatch(loadWishlistFromLocalStorage());
 
         onClose();
 
-        if (loginData.email === process.env.REACT_APP_ADMIN_EMAIL) {
-          navigate("/productlist");
-        }
       } else {
         setErrorMsg(data.message || "Invalid credentials");
       }
