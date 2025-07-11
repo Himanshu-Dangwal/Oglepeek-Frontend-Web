@@ -9,6 +9,12 @@ export const loadWishlistFromLocalStorage = () => (dispatch) => {
   }
 };
 
+export const clearWishlist = () => {
+  return {
+    type: RESET
+  };
+};
+
 
 export const addToWishlist = (item) => async (dispatch) => {
   try {
