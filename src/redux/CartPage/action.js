@@ -8,6 +8,12 @@ import {
   applyCoupon,
 } from "./actionType";
 
+export const clearCart = () => {
+  return {
+    type: RESET
+  };
+};
+
 export const addToCart = (item) => async (dispatch) => {
   try {
     dispatch({ type: ADD_TO_CART, payload: item });

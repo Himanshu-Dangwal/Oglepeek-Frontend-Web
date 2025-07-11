@@ -7,10 +7,12 @@ import { AuthContext } from "../../ContextApi/AuthContext";
 import { FiPhoneCall } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
 import { CgShoppingCart } from "react-icons/cg";
-// import { TriangleDownIcon } from "@chakra-ui/icons";
 import Oglepeek from './Oglepeek.png';
 import { useSelector } from "react-redux";
 import { BsHeartFill } from "react-icons/bs";
+import { clearCart } from "../../redux/CartPage/action";
+import { clearWishlist } from "../../redux/wishlist/wishlist.actions";
+import { useDispatch } from "react-redux";
 import {
   Box,
   Text,
@@ -19,10 +21,6 @@ import {
   Input,
   Button,
   HStack,
-  // Popover,
-  // PopoverTrigger,
-  // PopoverContent,
-  // PopoverBody,
   useColorModeValue,
   useColorMode,
   Switch,
@@ -42,6 +40,7 @@ import { MdPayment, MdInventory, MdHistory } from "react-icons/md";
 import { FaBoxOpen } from "react-icons/fa";
 
 export const NavbarCardTopmost = () => {
+  const dispatch = useDispatch();
   const bgColor = useColorModeValue("gray.100", "gray.600");
   const buttonBg = useColorModeValue("whiteAlpha.900", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.200");
@@ -57,14 +56,31 @@ export const NavbarCardTopmost = () => {
 
   const handleLogout = async () => {
     let HOST = process.env.REACT_APP_HOST;
-    await fetch(`${HOST}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-    setisAuth(false);
-    setAuthData(null);
-    onClose();
-    navigate("/");
+
+    try {
+      await fetch(`${HOST}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include", // ✅ ensure cookie is cleared
+      });
+
+      // Clear redux states
+      dispatch(clearCart());
+      dispatch(clearWishlist());
+
+      localStorage.removeItem("wishlist"); // Clear wishlist from local storage
+
+      // Clear cookie
+      // document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Clear auth token cookie
+
+      // Clear auth context
+      setisAuth(false);
+      setAuthData(null);
+
+      onClose(); // close the drawer
+      navigate("/"); // redirect to homepage
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
