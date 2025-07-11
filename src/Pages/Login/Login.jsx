@@ -73,7 +73,7 @@ const Login = () => {
         dispatch(loadWishlistFromLocalStorage());
 
         onClose();
-
+        navigate("/"); // Redirect to home page after successful login
       } else {
         setErrorMsg(data.message || "Invalid credentials");
       }
