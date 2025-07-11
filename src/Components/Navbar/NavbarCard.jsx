@@ -122,41 +122,6 @@ export const NavbarCardTopmost = () => {
               </Button>
             )}
 
-            {/* {isAuth ? (
-              <Popover trigger="hover">
-                <PopoverTrigger>
-                  <Box
-                    fontWeight="600"
-                    fontSize="15px"
-                    m="auto"
-                    mt="12px"
-                    w="90px"
-                    textAlign="center"
-                    cursor="pointer"
-                  >
-                    {Authdata.firstName}
-                    <TriangleDownIcon ml="2px" fontSize="9px" />
-                  </Box>
-                </PopoverTrigger>
-                <PopoverContent w="120px" boxShadow="md" bg={bgColor} color={textColor}>
-                  <PopoverBody
-                    h="40px"
-                    pl="6"
-                    fontSize="15px"
-                    _hover={{ fontWeight: "bold", cursor: "pointer" }}
-                    onClick={handleLogout}
-                  >
-                    Sign Out
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            ) : (
-              <Box display="flex">
-                <Login />
-                <Signup />
-              </Box>
-            )} */}
-
             {!isAuth && (
               <Box display="flex">
                 <Login />
