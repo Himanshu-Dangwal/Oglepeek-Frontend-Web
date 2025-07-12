@@ -14,7 +14,7 @@ const SaleBox = () => {
       cursor={"pointer"}
     >
       <Flex flexDirection={"column"}>
-        <Heading as={"h1"} fontSize="15px" fontWeight={700}>
+        <Heading as={"h1"} fontSize="15px" fontWeight={700} color={"#333368"}>
           THE OPENING SALE
         </Heading>
         <Text fontSize={"14px"} color="#333368">
