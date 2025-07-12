@@ -9,6 +9,7 @@ import { BsHeartFill } from "react-icons/bs";
 import { CiHeart } from "react-icons/ci";
 import { CgShoppingCart } from "react-icons/cg";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   DrawerCloseButton,
@@ -17,7 +18,6 @@ import {
   useDisclosure,
   HStack,
   Image,
-  // Input,
   Drawer,
   DrawerHeader,
   DrawerOverlay,
@@ -38,14 +38,16 @@ import {
   useColorMode,
   Switch
 } from "@chakra-ui/react";
+import { clearCart } from "../../redux/CartPage/action";
+import { clearWishlist } from "../../redux/wishlist/wishlist.actions";
 
 function Nav() {
+  const dispatch = useDispatch();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
   const { isAuth, setisAuth, Authdata, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
-  // const placeholder = useBreakpointValue({ sm: "What are you looking for", base: "Search for products" });
 
   // 🌙 Dark Mode Colors
   const bgColor = useColorModeValue("#fbf9f7", "gray.600");
@@ -63,6 +65,32 @@ function Nav() {
   //Cart and Wishlist
   const { cart } = useSelector((state) => state.CartReducer);
   const { wishlist } = useSelector((state) => state.wishlistReducer);
+
+  const handleLogout = async () => {
+    let HOST = process.env.REACT_APP_HOST;
+
+    try {
+      await fetch(`${HOST}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include", // ✅ ensure cookie is cleared
+      });
+
+      // Clear redux states
+      dispatch(clearCart());
+      dispatch(clearWishlist());
+
+      localStorage.removeItem("wishlist"); // Clear wishlist from local storage
+
+      // Clear auth context
+      setisAuth(false);
+      setAuthData(null);
+
+      onClose(); // close the drawer
+      navigate("/"); // redirect to homepage
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <Box display={{ lg: "inherit", xl: "none" }} cursor="pointer" bg={bgColor} p={2.5}>
       <HStack m="auto" justifyContent="space-between">
@@ -76,72 +104,7 @@ function Nav() {
             />
           </Link>
         </Box>
-        {/* <Box w="70%" display="flex" justifyContent={{ base: "center", md: "flex-end" }} alignItems="flex-end" margin="0px">
-          <Box position="relative" margin={"auto"} >
-            <Button
-              leftIcon={wishlist.length > 0 ? <BsHeartFill color="red" /> : <CiHeart />}
-              size={buttonSize}
-              bg={buttonBg}
-              fontSize="10px"
-              fontWeight="400"
-              onClick={() => navigate("/wishlist")}
-            >
-              Wishlist
-            </Button>
-            {wishlist.length > 0 && (
-              <Box
-                position="absolute"
-                top="0"
-                right="5"
-                bg="red.500"
-                color="white"
-                fontSize="8px"
-                borderRadius="full"
-                px="2"
-                h="18px"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                {wishlist.length}
-              </Box>
-            )}
-          </Box>
 
-          <Link to="/cart">
-            <Box position="relative">
-              <Button
-                leftIcon={<CgShoppingCart />}
-                size={buttonSize}
-                bg={buttonBg}
-                fontSize="10px"
-                fontWeight="400"
-              >
-                Cart
-              </Button>
-              {cart.length > 0 && (
-                <Box
-                  position="absolute"
-                  top="0"
-                  right="5"
-                  bg="red.500"
-                  color="white"
-                  fontSize="8px"
-                  borderRadius="full"
-                  px="1.5"
-                  minW="18px"
-                  h="18px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  zIndex="1"
-                >
-                  {cart.length}
-                </Box>
-              )}
-            </Box>
-          </Link>
-        </Box> */}
         <Flex
           w="70%"
           justify="flex-end"
@@ -260,7 +223,7 @@ function Nav() {
                       >
                         <Text mt="10px" fontSize="20px">{Authdata.firstName}</Text>
                         <Text color="gray.400" mt="5%" fontSize="sm">
-                          Enjoy Buy 1 Get 1 offer for 365 days
+                          Enjoy Buy 10 Get 1 free for every 10th order
                         </Text>
                       </Flex>
                     </Flex>
@@ -321,11 +284,11 @@ function Nav() {
                       </Box>
                     </Link>
                   ))}
-                  <Link>
+                  {/* <Link>
                     <Box borderBottom="1px solid" borderColor={borderColor} fontSize="15px" p="4% 0%" _hover={{ fontWeight: hoverFontWeight }}>
                       Manage Notification
                     </Box>
-                  </Link>
+                  </Link> */}
                   <Link>
                     <Box borderBottom="1px solid" borderColor={borderColor} fontSize="15px" p="4% 0%" _hover={{ fontWeight: hoverFontWeight }}>
                       Contact Us
@@ -384,7 +347,6 @@ function Nav() {
                 {[
                   "Frequently Asked Questions",
                   "Cancellation & Return Policy",
-                  "Cobrowsing"
                 ].map((text, i) => (
                   <Link key={i}>
                     <Box
@@ -408,13 +370,7 @@ function Nav() {
                     colorScheme="blue"
                     p="6% 15%"
                     _hover={{ bg: "blue.200" }}
-                    onClick={() => {
-                      setisAuth(false);
-                      localStorage.removeItem("token");
-                      localStorage.removeItem("firstName");
-                      setAuthData(null);
-                      navigate("/");
-                    }}
+                    onClick={handleLogout}
                   >
                     Sign Out
                   </Button>

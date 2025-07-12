@@ -100,19 +100,23 @@ const CartItem = () => {
 
               <Flex justify="space-between" align="center" paddingRight={4}>
                 <Flex align="center" gap={4}>
-                  <Text fontSize="16px" fontWeight="500">
+                  <Text fontSize={{ base: "13px", md: "14px" }} fontWeight="500">
                     Qty:
                   </Text>
                   <Flex align="center" border="1px" borderColor="gray.300" borderRadius="md">
                     <Button
-                      size="sm"
+                      size={{ base: "xs", md: "sm" }}
+                      px={{ base: 2, md: 3 }}
+                      fontSize={{ base: "13px", md: "14px" }}
                       onClick={() => handleDecrementChange(item.productId, item.variantId)}
                     >
                       −
                     </Button>
-                    <Box px={3}>{item.quantity}</Box>
+                    <Box px={{ base: 2, md: 3 }} fontSize={{ base: "13px", md: "14px" }}>{item.quantity}</Box>
                     <Button
-                      size="sm"
+                      size={{ base: "xs", md: "sm" }}
+                      px={{ base: 2, md: 3 }}
+                      fontSize={{ base: "13px", md: "14px" }}
                       onClick={() => handleIncrementChange(item.productId, item.variantId)}
                     >
                       +
@@ -120,7 +124,7 @@ const CartItem = () => {
                   </Flex>
                 </Flex>
 
-                <Text fontSize="16px" fontWeight="600" color="teal.600">
+                <Text fontSize={{ base: "13px", md: "14px" }} fontWeight="600" color="teal.600">
                   Subtotal: NPR {item.price * item.quantity}
                 </Text>
               </Flex>
