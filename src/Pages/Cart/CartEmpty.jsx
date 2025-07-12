@@ -36,7 +36,7 @@ const CartEmpty = () => {
           fontSize={"16px"}
           w="64"
           fontWeight={"700"}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/products")}
         >
           Continue Shopping
         </Button>

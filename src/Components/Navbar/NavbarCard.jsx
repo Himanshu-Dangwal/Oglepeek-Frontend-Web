@@ -34,12 +34,15 @@ import {
   DrawerCloseButton,
   List,
   ListItem,
-  ListIcon
+  ListIcon,
+  useToast
 } from "@chakra-ui/react";
+
 import { MdPayment, MdInventory, MdHistory } from "react-icons/md";
 import { FaBoxOpen } from "react-icons/fa";
 
 export const NavbarCardTopmost = () => {
+  const toast = useToast();
   const dispatch = useDispatch();
   const bgColor = useColorModeValue("gray.100", "gray.600");
   const buttonBg = useColorModeValue("whiteAlpha.900", "gray.700");
@@ -243,6 +246,17 @@ export const NavbarCardTopmost = () => {
               <ListItem
                 _hover={{ fontWeight: "bold", color: "teal.400", cursor: "pointer" }}
                 onClick={() => {
+                  if (!isAuth) {
+                    toast({
+                      title: "Login Required",
+                      description: "Please log in to view your orders.",
+                      status: "warning",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top-center",
+                    });
+                    return;
+                  }
                   navigate("/orderhistory");
                   onClose();
                 }}
@@ -253,6 +267,17 @@ export const NavbarCardTopmost = () => {
               <ListItem
                 _hover={{ fontWeight: "bold", color: "teal.400", cursor: "pointer" }}
                 onClick={() => {
+                  if (!isAuth) {
+                    toast({
+                      title: "Login Required",
+                      description: "Please log in to track your orders.",
+                      status: "warning",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top-center",
+                    });
+                    return;
+                  }
                   navigate("/orderhistory");
                   onClose();
                 }}
@@ -263,6 +288,17 @@ export const NavbarCardTopmost = () => {
               <ListItem
                 _hover={{ fontWeight: "bold", color: "teal.400", cursor: "pointer" }}
                 onClick={() => {
+                  if (!isAuth) {
+                    toast({
+                      title: "Login Required",
+                      description: "Please log in to view your payments.",
+                      status: "warning",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top-center",
+                    });
+                    return;
+                  }
                   navigate("/payments");
                   onClose();
                 }}
@@ -273,6 +309,17 @@ export const NavbarCardTopmost = () => {
               <ListItem
                 _hover={{ fontWeight: "bold", color: "teal.400", cursor: "pointer" }}
                 onClick={() => {
+                  if (!isAuth) {
+                    toast({
+                      title: "Login Required",
+                      description: "Please log in to view your purchased items.",
+                      status: "warning",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top-center",
+                    });
+                    return;
+                  }
                   navigate("/purchased");
                   onClose();
                 }}

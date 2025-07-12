@@ -5,6 +5,7 @@ import { addToCart } from "../../redux/CartPage/action";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 import { useToast } from "@chakra-ui/react"
+import WishlistEmpty from "./WishlistEmpty";
 
 const Wishlist = () => {
   const toast = useToast();
@@ -71,33 +72,25 @@ const Wishlist = () => {
       <Navbar />
       <br />
       <br />
-      <Box
-        minHeight="635"
-        w={{ lg: "80%", md: "90%", sm: "90%", base: "95%" }}
-        m="auto"
-      >
-        <Heading
-          fontSize="25px"
-          textAlign="left"
-          p="2"
-          bg="teal.400"
-          color="whiteAlpha.900"
+      {wishlist.length === 0 ? (
+        <WishlistEmpty />
+      ) : (
+        <Box
+          minHeight="635"
           w={{ lg: "80%", md: "90%", sm: "90%", base: "95%" }}
           m="auto"
         >
-          Wishlist
-        </Heading>
-        {wishlist.length === 0 ? (
-          <Text
-            textAlign="center"
-            fontSize="28px"
-            color="gray"
-            mt="1%"
-            fontWeight="bolder"
+          <Heading
+            fontSize="25px"
+            textAlign="left"
+            p="2"
+            bg="teal.400"
+            color="whiteAlpha.900"
+            w={{ lg: "80%", md: "90%", sm: "90%", base: "95%" }}
+            m="auto"
           >
-            Your wishlist is empty.
-          </Text>
-        ) : (
+            Wishlist
+          </Heading>
           <Box>
             <Grid templateColumns="repeat(1,1fr)" gap={18} w={"100%"}>
               {wishlist &&
@@ -228,8 +221,9 @@ const Wishlist = () => {
                 ))}
             </Grid>
           </Box>
-        )}
-      </Box>
+        </Box>
+      )}
+
       <Footer />
     </Box>
   );
