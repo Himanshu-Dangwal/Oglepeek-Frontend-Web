@@ -12,6 +12,8 @@ import Confirm from "../Pages/Confirm/Confirm";
 import OrderHistory from "../Pages/OrderHistory/OrderHistory";
 import Wishlist from "../Pages/Wishlist/Wishlist";
 import OrderDetails from "../Pages/OrderHistory/OrderDetails";
+import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
+import PaymentFailure from "../Pages/Payment/PaymentFailure";
 // import Productlist from "../Pages/Admin/Productlist";
 // import ProductPost from "../Pages/Admin/ProductPost";
 // import EditProduct from "../Pages/Admin/EditProduct";
@@ -30,7 +32,9 @@ const AllRoutes = () => {
       <Route path="/cart" element={<Privateroutes><Cart /></Privateroutes>} />
       <Route path="/shipping" element={<Privateroutes><Shipping /></Privateroutes>} />
       <Route path="/checkout" element={<Privateroutes><Checkout /></Privateroutes>} />
-      <Route path="/payment" element={<Privateroutes><Payment /></Privateroutes>} />
+      <Route path="/payment/:orderId" element={<Privateroutes><Payment /></Privateroutes>} />
+      <Route path="/payment-success" element={<Privateroutes><PaymentSuccess /></Privateroutes>} />
+      <Route path="/payment-failure" element={<Privateroutes><PaymentFailure /></Privateroutes>} />
       <Route path="/confirm" element={<Privateroutes><Confirm /></Privateroutes>} />
       <Route path="/orderhistory" element={<Privateroutes><OrderHistory /></Privateroutes>} />
       <Route path="/orders/:orderId" element={<OrderDetails />} />
