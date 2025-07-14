@@ -10,12 +10,14 @@ import {
     Spinner,
     Divider,
     Flex,
+    Button,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 
 const OrderDetails = () => {
+    const navigate = useNavigate();
     const { orderId } = useParams();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -78,8 +80,18 @@ const OrderDetails = () => {
                     Placed on: {new Date(order.placedAt).toLocaleString()}
                 </Text>
                 <Text color={textColor}>
-                    Status: <Text as="span" color={highlight}>{order.orderStatus}</Text>
+                    Status: <Text as="span" color={highlight}>Payment {order.orderStatus}</Text>
                 </Text>
+                {order.orderStatus === "Pending" && (
+                    <Button
+                        colorScheme="teal"
+                        size="sm"
+                        mt={2}
+                        onClick={() => navigate(`/payment/${order._id}`)}
+                    >
+                        Complete Payment
+                    </Button>
+                )}
 
                 <Divider my={4} borderColor={borderColor} />
 

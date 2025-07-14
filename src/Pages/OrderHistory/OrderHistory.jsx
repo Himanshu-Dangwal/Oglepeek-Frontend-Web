@@ -9,11 +9,14 @@
 //   useColorModeValue,
 //   Flex,
 //   Divider,
+//   Button,
 // } from "@chakra-ui/react";
 // import Navbar from "../../Components/Navbar/Navbar";
 // import Footer from "../../Components/Footer/Footer";
+// import { useNavigate } from "react-router-dom";
 
 // const OrderHistory = () => {
+//   const navigate = useNavigate();
 //   const [orders, setOrders] = useState([]);
 
 //   const bg = useColorModeValue("whiteAlpha.900", "gray.800");
@@ -45,6 +48,14 @@
 //     fetchOrders();
 //   }, []);
 
+//   // Filter out "Pending" orders with empty cart
+//   const validOrders = orders.filter((order) => {
+//     if (order.orderStatus === "Pending") {
+//       return order.cartId?.items?.length > 0;
+//     }
+//     return true;
+//   });
+
 //   return (
 //     <Box>
 //       <Navbar />
@@ -65,38 +76,24 @@
 //           Order History
 //         </Heading>
 
-//         {(orders.length === 0) ? (
+//         {validOrders.length === 0 ? (
 //           <Text
 //             textAlign="center"
 //             fontSize="28px"
 //             color="gray"
-//             mt="1%"
+//             mt="2%"
 //             fontWeight="bolder"
 //           >
 //             No Order History Found
 //           </Text>
 //         ) : (
 //           <Stack spacing={6} mt={4}>
-//             {orders.map((order) => {
-
-//               if (order.cartId.items.length === 0) {
-//                 return (
-//                   <Text
-//                     textAlign="center"
-//                     fontSize="28px"
-//                     color="gray"
-//                     mt="1%"
-//                     fontWeight="bolder"
-//                   >
-//                     No Items Found
-//                   </Text>
-//                 );
-//               }
-
+//             {validOrders.map((order) => {
 //               const firstItem = order.cartId?.items?.[0];
 //               const variant = firstItem?.variantId;
 //               const product = firstItem?.productId;
-//               const image = variant?.images?.[0] || "https://via.placeholder.com/150";
+//               const image =
+//                 variant?.images?.[0] || "https://via.placeholder.com/150";
 
 //               return (
 //                 <Grid
@@ -128,7 +125,6 @@
 //                         objectFit="cover"
 //                       />
 //                     </Box>
-
 //                   </Box>
 
 //                   {/* Order Details */}
@@ -150,6 +146,16 @@
 //                       <strong>Placed At:</strong>{" "}
 //                       {new Date(order.placedAt).toLocaleDateString()}
 //                     </Text>
+//                     {order.orderStatus === "Pending" && (
+//                       <Button
+//                         colorScheme="teal"
+//                         size="sm"
+//                         mt={2}
+//                         onClick={() => navigate(`/payment/${order._id}`)}
+//                       >
+//                         Complete Payment
+//                       </Button>
+//                     )}
 
 //                     <Divider my={2} borderColor={borderColor} />
 
@@ -159,15 +165,27 @@
 //                       {order.name}, {order.address}, {order.city}, {order.state},{" "}
 //                       {order.country} - {order.pincode}
 //                     </Text>
+
 //                     <Text fontSize="sm">
 //                       <strong>Phone:</strong> {order.phone}
 //                     </Text>
+//                     {/* Need a button to edit shipping details, I want to open a form on the screen itself like a popup and fill the details, call the API and update the address */}
+//                     <Button
+//                       colorScheme="blue"
+//                       size="sm"
+//                       mt={2}
+//                       onClick={() => {
+//                         // Open a form to edit shipping details
+//                       }}
+//                     >
+//                       Edit Shipping Details
+//                     </Button>
 
 //                     <Divider my={2} borderColor={borderColor} />
 
 //                     <Flex align="center">
 //                       <Text fontWeight="bold" fontSize="md">
-//                         Total Paid: &nbsp;
+//                         Total Amount: &nbsp;
 //                       </Text>
 //                       <Text fontWeight="bold" fontSize="lg" color={highlightColor}>
 //                         ₹{Number(order.totalAmount).toFixed(2)}
@@ -199,12 +217,35 @@ import {
   useColorModeValue,
   Flex,
   Divider,
+  IconButton,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  useToast,
 } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
+import axios from "axios";
 
 const OrderHistory = () => {
+  const navigate = useNavigate();
+  const toast = useToast();
+
   const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [userData, setUserData] = useState({});
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const bg = useColorModeValue("whiteAlpha.900", "gray.800");
   const textColor = useColorModeValue("gray.700", "gray.200");
@@ -235,7 +276,52 @@ const OrderHistory = () => {
     fetchOrders();
   }, []);
 
-  // Filter out "Pending" orders with empty cart
+  const openEditModal = (order) => {
+    setSelectedOrder(order);
+    setUserData({
+      first_name: order.name,
+      address: order.address,
+      city: order.city,
+      state: order.state,
+      country: order.country,
+      pincode: order.pincode,
+      phone: order.phone,
+    });
+    onOpen();
+  };
+
+  const handleUpdateShipping = async () => {
+    try {
+      let HOST = process.env.REACT_APP_HOST;
+      const res = await axios.post(`${HOST}/api/orders/`, { userData }, { withCredentials: true })
+
+      if (!res.data.success) {
+        throw new Error(res.data.message || "Failed to update shipping");
+      }
+
+      const updatedOrders = orders.map((o) =>
+        o._id === selectedOrder._id ? { ...o, ...userData } : o
+      );
+
+      setOrders(updatedOrders);
+      onClose();
+      toast({
+        title: "Shipping details updated.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: "Error updating shipping.",
+        description: err.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+
   const validOrders = orders.filter((order) => {
     if (order.orderStatus === "Pending") {
       return order.cartId?.items?.length > 0;
@@ -333,6 +419,16 @@ const OrderHistory = () => {
                       <strong>Placed At:</strong>{" "}
                       {new Date(order.placedAt).toLocaleDateString()}
                     </Text>
+                    {order.orderStatus === "Pending" && (
+                      <Button
+                        colorScheme="teal"
+                        size="sm"
+                        mt={2}
+                        onClick={() => navigate(`/payment/${order._id}`)}
+                      >
+                        Complete Payment
+                      </Button>
+                    )}
 
                     <Divider my={2} borderColor={borderColor} />
 
@@ -342,15 +438,26 @@ const OrderHistory = () => {
                       {order.name}, {order.address}, {order.city}, {order.state},{" "}
                       {order.country} - {order.pincode}
                     </Text>
-                    <Text fontSize="sm">
-                      <strong>Phone:</strong> {order.phone}
-                    </Text>
+
+                    <Flex align="center" mt={2}>
+                      <Text fontSize="sm" mr={2}>
+                        <strong>Phone:</strong> {order.phone}
+                      </Text>
+                      <IconButton
+                        icon={<EditIcon />}
+                        size="sm"
+                        variant="ghost"
+                        colorScheme="blue"
+                        onClick={() => openEditModal(order)}
+                        aria-label="Edit Shipping"
+                      />
+                    </Flex>
 
                     <Divider my={2} borderColor={borderColor} />
 
                     <Flex align="center">
                       <Text fontWeight="bold" fontSize="md">
-                        Total Paid: &nbsp;
+                        Total Amount: &nbsp;
                       </Text>
                       <Text fontWeight="bold" fontSize="lg" color={highlightColor}>
                         ₹{Number(order.totalAmount).toFixed(2)}
@@ -364,6 +471,39 @@ const OrderHistory = () => {
         )}
       </Box>
       <Footer />
+
+      {/* Modal for Editing Shipping Details */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Shipping Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {["first_name", "address", "city", "state", "country", "pincode", "phone"].map((field) => (
+              <FormControl key={field} mb={3}>
+                <FormLabel textTransform="capitalize">{field}</FormLabel>
+                <Input
+                  value={userData[field] || ""}
+                  onChange={(e) =>
+                    setUserData((prev) => ({
+                      ...prev,
+                      [field]: e.target.value,
+                    }))
+                  }
+                />
+              </FormControl>
+            ))}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="teal" mr={3} onClick={handleUpdateShipping}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

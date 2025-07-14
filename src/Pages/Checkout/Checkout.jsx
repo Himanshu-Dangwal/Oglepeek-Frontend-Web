@@ -275,7 +275,7 @@ const Orders = () => {
                   borderRadius="4px"
                   p="15px 35px"
                   _hover={{ backgroundColor: "teal" }}
-                  onClick={() => navigate("/payment")}
+                  onClick={() => navigate(`/payment/${order._id}`)}
                 >
                   PAY NOW
                 </Button>
