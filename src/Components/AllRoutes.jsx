@@ -33,7 +33,7 @@ const AllRoutes = () => {
       <Route path="/shipping" element={<Privateroutes><Shipping /></Privateroutes>} />
       <Route path="/checkout" element={<Privateroutes><Checkout /></Privateroutes>} />
       <Route path="/payment/:orderId" element={<Privateroutes><Payment /></Privateroutes>} />
-      <Route path="/payment-success" element={<Privateroutes><PaymentSuccess /></Privateroutes>} />
+      <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/payment-failure" element={<Privateroutes><PaymentFailure /></Privateroutes>} />
       <Route path="/confirm" element={<Privateroutes><Confirm /></Privateroutes>} />
       <Route path="/orderhistory" element={<Privateroutes><OrderHistory /></Privateroutes>} />
